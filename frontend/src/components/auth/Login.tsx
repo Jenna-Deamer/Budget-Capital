@@ -1,16 +1,12 @@
 import { useState } from "react";
 
 interface LoginFormState {
-    firstname: string;
-    lastname: string;
     email: string;
     password: string;
 }
 
 function Login() {
     const [values, setValues] = useState<LoginFormState>({
-        firstname: "",
-        lastname: "",
         email: "",
         password: "",
     });
