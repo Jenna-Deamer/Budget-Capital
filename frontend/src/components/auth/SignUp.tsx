@@ -20,22 +20,22 @@ function Signup() {
                 <h1>Sign Up</h1>
                 <div className="form-error-container"></div>
 
-                <form className="signup-form">
+                <form className="signup-form" action="" method="POST">
                     <div className="form-group">
                         <label>First Name:</label>
-                        <input type="text" placeholder="John" />
+                        <input type="text" placeholder="John" required />
                     </div>
                     <div className="form-group">
                         <label>Last Name:</label>
-                        <input type="text" placeholder="Doe" />
+                        <input type="text" placeholder="Doe" required />
                     </div>
                     <div className="form-group">
                         <label>Email:</label>
-                        <input type="email" placeholder="someEmail@gmail.com" />
+                        <input type="email" placeholder="someEmail@gmail.com" required />
                     </div>
                     <div className="form-group">
                         <label>Password:</label>
-                        <input type="password" placeholder="Password" />
+                        <input type="password" placeholder="Password" required />
                     </div>
 
                     <div className="form-btn-wrapper">

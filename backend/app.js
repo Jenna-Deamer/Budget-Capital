@@ -1,14 +1,30 @@
+const cors = require("cors");
+const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 const port = 3000;
+const indexRouter = require("./routes/index");
 
 // passport
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 
-const mongoose = require("mongoose");
-const uri =
-    "mongodb+srv://hamdonught47:b9W9JKEusAJYgehW@cluster0.udc8h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+
+    // CORS in dev mode to accept requests from localhost:4200
+    // not needed in prod as angular app runs on same domain
+    const cors = require("cors");
+    app.use(
+        cors({
+            // origin: process.env.CLIENT_URL,
+            origin: "*",
+            methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
+        })
+    );
+}
+
+const uri = process.env.CONNECTION_STRING;
 const clientOptions = {
     serverApi: { version: "1", strict: true, deprecationErrors: true },
 };
@@ -27,6 +43,10 @@ async function run() {
 }
 run().catch(console.dir);
 
+app.use("/", indexRouter);
+app.use(cors());
+app.use(express.json());
+
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
@@ -34,3 +54,5 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
+
+app.get("");

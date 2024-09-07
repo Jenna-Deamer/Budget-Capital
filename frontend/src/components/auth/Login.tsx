@@ -1,26 +1,34 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 
-interface LoginFormState {
-    email: string;
-    password: string;
-}
+const Login: React.FC = () => {
+    const [response, setResponse] = useState<string>('');
 
-function Login() {
-    const [values, setValues] = useState<LoginFormState>({
-        email: "",
-        password: "",
-    });
-
-    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
         try {
-        } catch (error) {}
+            const res = await fetch('http://localhost:3000/resources', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            const result = await res.json();
+            setResponse(JSON.stringify(result));
+        } catch (error) {
+            setResponse('Error: ' + (error as Error).message);
+        }
     };
+
     return (
-        <>
-            <form action=""></form>
-        </>
+        <div>
+            <h1>Test POST /resources</h1>
+            <form onSubmit={handleSubmit}>
+                <button type="submit">Send POST Request</button>
+            </form>
+            <div>{response}</div>
+        </div>
     );
-}
+};
 
 export default Login;
