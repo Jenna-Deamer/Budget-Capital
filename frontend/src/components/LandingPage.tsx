@@ -4,10 +4,10 @@ function LandingPage() {
             <h1>Budget App Title</h1>
             <h2>Create an Account or Login to Begin</h2>
             <div className="landing-button-container">
-                <a href="/login" className="btn btn-primary">
+                <a href="/login" className="button primary-button">
                     Login
                 </a>
-                <a href="/signup" className="btn btn-secondary">
+                <a href="/signup" className="button secondary-button">
                     Sign Up
                 </a>
             </div>

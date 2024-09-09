@@ -26,7 +26,7 @@ router.post("/signup", function (req, res) {
                 });
             } else {
                 req.login(user, (er) => {
-                    console.log("Login error:", er); // Add this line to log the error
+                    console.log("Login error:", er); 
                     if (er) {
                         res.json({ success: false, message: er });
                     } else {
