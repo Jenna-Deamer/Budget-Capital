@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function Signup() {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -28,6 +31,14 @@ function Signup() {
             });
     
             console.log('Success:', response.data);
+
+            if (response.data.success) {
+                // Redirect to the homepage
+                navigate('/');
+            }
+            else{
+                console.log("Signup Failed: ", response.data.message )
+            }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Error message:', error.message);
@@ -89,7 +100,7 @@ function Signup() {
                     </div>
 
                     <div className="form-btn-wrapper">
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="button primary-button">
                             Sign Up
                         </button>
                     </div>
