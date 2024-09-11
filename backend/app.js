@@ -4,24 +4,6 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const indexRouter = require("./routes/index");
-
-// passport
-const User = require("./models/user");
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
-var session = require("express-session");
-app.use(
-    session({
-        secret: "your_secret_key", // Replace with your secret key
-        resave: false,
-        saveUninitialized: false,
-    })
-);
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-app.use(passport.initialize());
-
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
@@ -34,6 +16,23 @@ if (process.env.NODE_ENV !== "production") {
         })
     );
 }
+
+// passport
+const User = require("./models/user");
+var passport = require("passport");
+var LocalStrategy = require("passport-local");
+var session = require("express-session");
+app.use(
+    session({
+        secret: process.env.SECRET_KEY,
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+app.use(passport.initialize());
 
 // Use JSON middleware and URL-encoded parser
 app.use(express.json());
