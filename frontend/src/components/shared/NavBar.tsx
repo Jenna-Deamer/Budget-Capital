@@ -29,6 +29,9 @@ function NavBar() {
             Transactions
           </Link>
         </li>
+        <li className="nav-item">
+          <p className="nav-link">Hello, </p>
+        </li>
       </ul>
     </div>
   </nav>

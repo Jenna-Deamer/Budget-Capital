@@ -2,15 +2,29 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-const Login: React.FC = () => {
+function Login() {
     const navigate = useNavigate();
     const [response, setResponse] = useState<string>('');
+
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    });
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     
         try {
-            const response = await axios.post('http://localhost:3000/login', {
+            const response = await axios.post('http://localhost:3000/login', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -47,6 +61,8 @@ const Login: React.FC = () => {
                             type="email" 
                             placeholder="someEmail@gmail.com" 
                             name="username"   
+                            onChange={handleChange}
+                            value={formData.username}
                             required 
                         />
                     </div>
@@ -55,8 +71,9 @@ const Login: React.FC = () => {
                         <input 
                             type="password" 
                             placeholder="Password" 
+                            onChange={handleChange}
                             name="password" 
-                            
+                            value={formData.password}
                             required />
                     </div>
 
