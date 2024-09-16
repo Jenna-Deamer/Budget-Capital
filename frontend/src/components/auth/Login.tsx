@@ -1,49 +1,50 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Login() {
     const navigate = useNavigate();
-    const [response, setResponse] = useState<string>('');
-
     const [formData, setFormData] = useState({
-        username: '',
-        password: ''
+        username: "",
+        password: "",
     });
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: value
+            [name]: value,
         });
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+
         try {
-            const response = await axios.post('http://localhost:3000/login', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            console.log('Success:', response.data);
+            const response = await axios.post(
+                "http://localhost:3000/login",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            console.log("Success:", response.data);
+            localStorage.setItem("token", response.data.token);
 
             if (response.data.success) {
                 // Redirect to the homepage
-                navigate('/');
-            }
-            else{
-                console.log("Login Failed: ", response.data.message )
+                navigate("/");
+            } else {
+                console.log("Login Failed: ", response.data.message);
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error('Error message:', error.message);
+                console.error("Error message:", error.message);
             } else {
-                console.error('Unexpected error:', error);
+                console.error("Unexpected error:", error);
             }
         }
     };
@@ -57,24 +58,25 @@ function Login() {
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Email:</label>
-                        <input 
-                            type="email" 
-                            placeholder="someEmail@gmail.com" 
-                            name="username"   
+                        <input
+                            type="email"
+                            placeholder="someEmail@gmail.com"
+                            name="username"
                             onChange={handleChange}
                             value={formData.username}
-                            required 
+                            required
                         />
                     </div>
                     <div className="form-group">
                         <label>Password:</label>
-                        <input 
-                            type="password" 
-                            placeholder="Password" 
+                        <input
+                            type="password"
+                            placeholder="Password"
                             onChange={handleChange}
-                            name="password" 
+                            name="password"
                             value={formData.password}
-                            required />
+                            required
+                        />
                     </div>
 
                     <div className="form-btn-wrapper">
@@ -88,6 +90,6 @@ function Login() {
             </div>
         </section>
     );
-};
+}
 
 export default Login;
