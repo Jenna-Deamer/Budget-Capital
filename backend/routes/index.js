@@ -5,6 +5,14 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+}
+
 router.post("/resources", (req, res) => {
     res.json({ success: true });
     console.log("success");

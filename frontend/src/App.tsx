@@ -7,6 +7,7 @@ import LandingPage from "./components/LandingPage";
 import Transactions from "./components/Transactions";
 import SignUp from "./components/auth/SignUp";
 import Login from "./components/auth/Login";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 // Shared
 import NavBar from "./components/shared/NavBar";
@@ -60,7 +61,11 @@ function App() {
                         <Route path="/" element={<LandingPage />} />
                         <Route
                             path="/transactions"
-                            element={<Transactions />}
+                            element={
+                                <ProtectedRoute user={user}>
+                                    <Transactions />
+                                </ProtectedRoute>
+                            }
                         />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/login" element={<Login />} />
