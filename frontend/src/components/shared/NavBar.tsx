@@ -44,9 +44,9 @@ function NavBar({ user }: NavBarProps) {
                     </li>
                     <li className="nav-item">
                         {user ? (
-                            <p>Welcome, {user.username}</p>
+                            <p className="usernameNav">Welcome, {user.username}</p>
                         ) : (
-                            <p>Please log in</p>
+                            <p className="usernameNav">Please log in</p>
                         )}
                     </li>
                 </ul>
