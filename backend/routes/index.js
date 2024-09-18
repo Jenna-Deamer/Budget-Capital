@@ -74,6 +74,19 @@ router.post("/login", function (req, res) {
     }
 });
 
+router.post("/logout", (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        // Successfully logged out
+        res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+    });
+});
+
 router.get("/api/user", (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ success: true, user: req.user });

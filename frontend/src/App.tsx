@@ -29,7 +29,6 @@ function App() {
         if (token) {
             const decoded: any = jwtDecode(token);
             const currentTime = Date.now() / 1000;
-            console.log(decoded);
 
             if (decoded.exp < currentTime) {
                 localStorage.removeItem("token");
@@ -40,8 +39,20 @@ function App() {
             console.log("No token found");
         }
     }, [location]);
+
+    function LocationListener() {
+        const location = useLocation();
+
+        useEffect(() => {
+            console.log("Location changed to: ", location.pathname);
+        }, [location]);
+
+        return null;
+    }
+
     return (
         <BrowserRouter>
+        <LocationListener />
             <div>
                 <NavBar user={user} />
                 <main>

@@ -37,6 +37,7 @@ function Login() {
             if (response.data.success) {
                 // Redirect to the homepage
                 navigate("/");
+                window.location.reload();
             } else {
                 console.log("Login Failed: ", response.data.message);
             }

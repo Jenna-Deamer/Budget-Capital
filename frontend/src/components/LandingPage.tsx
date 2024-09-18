@@ -1,3 +1,5 @@
+import LogoutButton from './auth/Logout'; // Adjust the import path as necessary
+
 function LandingPage() {
     return (
         <section className="landing-container">
@@ -10,6 +12,7 @@ function LandingPage() {
                 <a href="/signup" className="button secondary-button">
                     Sign Up
                 </a>
+                <LogoutButton />
             </div>
         </section>
     );
