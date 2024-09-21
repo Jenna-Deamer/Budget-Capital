@@ -1,0 +1,50 @@
+/*Auth Forms*/
+.form-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--background);
+    color: var(--white);
+}
+
+.form-container {
+    background-color: var(--foreground);
+    padding: 2em;
+    box-shadow: var(--shadow);
+    width: 700px;
+}
+
+.form-container h1,
+.form-container h3 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.signup-form,
+.login-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.form-btn-wrapper {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+    margin-top: 12px;
+}
+
+.google-btn {
+    display: block;
+    margin: 0 auto;
+
+}
