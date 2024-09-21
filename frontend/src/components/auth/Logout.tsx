@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Logout() {
     const navigate = useNavigate();
@@ -7,35 +7,35 @@ function Logout() {
     const handleLogout = async () => {
         try {
             const response = await axios.post(
-                'http://localhost:3000/logout',
+                "http://localhost:3000/logout",
                 {},
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 }
             );
 
             if (response.status === 200) {
                 // Clear token from localstorage
-                localStorage.removeItem('token');
+                localStorage.removeItem("token");
                 // Redirect to the homepage
-                navigate('/');
+                navigate("/");
                 window.location.reload();
             } else {
-                console.error('Logout failed');
+                console.error("Logout failed");
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error('Error message:', error.message);
+                console.error("Error message:", error.message);
             } else {
-                console.error('Unexpected error during logout', error);
+                console.error("Unexpected error during logout", error);
             }
         }
     };
 
     return (
-        <button onClick={handleLogout} className="button primary-button">
+        <button onClick={handleLogout} className="nav-link logout-btn">
             Logout
         </button>
     );

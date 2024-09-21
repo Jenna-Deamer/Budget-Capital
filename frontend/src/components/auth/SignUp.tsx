@@ -1,49 +1,53 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
+import "../../styles/forms/AuthForms.css";
 
 function Signup() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        username: '',
-        password: ''
+        firstName: "",
+        lastName: "",
+        username: "",
+        password: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: value
+            [name]: value,
         });
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+
         try {
-            const response = await axios.post('http://localhost:3000/signup', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            console.log('Success:', response.data);
+            const response = await axios.post(
+                "http://localhost:3000/signup",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            console.log("Success:", response.data);
 
             if (response.data.success) {
                 // Redirect to the homepage
-                navigate('/');
-            }
-            else{
-                console.log("Signup Failed: ", response.data.message )
+                navigate("/");
+            } else {
+                console.log("Signup Failed: ", response.data.message);
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error('Error message:', error.message);
+                console.error("Error message:", error.message);
             } else {
-                console.error('Unexpected error:', error);
+                console.error("Unexpected error:", error);
             }
         }
     };
@@ -55,48 +59,49 @@ function Signup() {
                 <div className="form-error-container"></div>
 
                 <form className="signup-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>First Name:</label>
-                    <input
-                        type="text"
-                        placeholder="John"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+                    <div className="form-group">
+                        <label>First Name:</label>
+                        <input
+                            type="text"
+                            placeholder="John"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                     <div className="form-group">
                         <label>Last Name:</label>
-                        <input 
-                            type="text" 
-                            placeholder="Doe" 
-                            name="lastName" 
+                        <input
+                            type="text"
+                            placeholder="Doe"
+                            name="lastName"
                             value={formData.lastName}
                             onChange={handleChange}
-                            required 
+                            required
                         />
                     </div>
                     <div className="form-group">
                         <label>Email:</label>
-                        <input 
-                            type="email" 
-                            placeholder="someEmail@gmail.com" 
-                            name="username" 
+                        <input
+                            type="email"
+                            placeholder="someEmail@gmail.com"
+                            name="username"
                             value={formData.username}
                             onChange={handleChange}
-                            required 
+                            required
                         />
                     </div>
                     <div className="form-group">
                         <label>Password:</label>
-                        <input 
-                            type="password" 
-                            placeholder="Password" 
-                            name="password" 
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            required />
+                            required
+                        />
                     </div>
 
                     <div className="form-btn-wrapper">

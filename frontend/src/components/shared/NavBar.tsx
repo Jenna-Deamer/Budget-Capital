@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import LogoutButton from "../auth/Logout";
 
 interface User {
     username: string | null;
@@ -17,7 +18,7 @@ function NavBar({ user }: NavBarProps) {
                 id="home"
                 title="Go to Homepage"
             >
-                <img src="" alt="Logo Placeholder" />
+                <img src="/images/logo.png" alt="Logo placeholder" />
             </Link>
 
             <button
@@ -31,24 +32,55 @@ function NavBar({ user }: NavBarProps) {
             >
                 <span className="navbar-toggler-icon custom-toggler-icon"></span>
             </button>
+
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav ms-3">
-                    <li className="nav-item">
-                        <Link
-                            to="/transactions"
-                            className="nav-link"
-                            id="transactions"
-                        >
-                            Transactions
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        {user ? (
-                            <p className="usernameNav">Welcome, {user.username}</p>
-                        ) : (
-                            <p className="usernameNav">Please log in</p>
-                        )}
-                    </li>
+                    {user && (
+                        <li className="nav-item">
+                            <Link
+                                to="/transactions"
+                                className="nav-link"
+                                id="transactions"
+                            >
+                                Transactions
+                            </Link>
+                        </li>
+                    )}
+                </ul>
+
+                {/* Right-aligned username and auth buttons */}
+                <ul className="navbar-nav ms-auto me-4">
+                    {user ? (
+                        <>
+                            <li className="nav-item username-nav">
+                                <span>Welcome, {user.username}</span>
+                            </li>
+                            <li className="nav-item">
+                                <LogoutButton />
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li className="nav-item">
+                                <Link
+                                    to="/login"
+                                    className="nav-link"
+                                    id="login"
+                                >
+                                    Login
+                                </Link>
+                            </li>
+                            <li className="nav-item me-4">
+                                <Link
+                                    to="/signup"
+                                    className="nav-link"
+                                    id="signup"
+                                >
+                                    Sign-up
+                                </Link>
+                            </li>
+                        </>
+                    )}
                 </ul>
             </div>
         </nav>
