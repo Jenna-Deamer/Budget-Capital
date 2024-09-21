@@ -33,18 +33,22 @@ function NavBar({ user }: NavBarProps) {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav ms-3">
-                    <li className="nav-item">
-                        <Link
-                            to="/transactions"
-                            className="nav-link"
-                            id="transactions"
-                        >
-                            Transactions
-                        </Link>
-                    </li>
+                    {user && (
+                        <li className="nav-item">
+                            <Link
+                                to="/transactions"
+                                className="nav-link"
+                                id="transactions"
+                            >
+                                Transactions
+                            </Link>
+                        </li>
+                    )}
                     <li className="nav-item">
                         {user ? (
-                            <p className="usernameNav">Welcome, {user.username}</p>
+                            <p className="usernameNav">
+                                Welcome, {user.username}
+                            </p>
                         ) : (
                             <p className="usernameNav">Please log in</p>
                         )}
