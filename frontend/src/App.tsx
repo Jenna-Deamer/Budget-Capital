@@ -8,6 +8,7 @@ import Transactions from "./components/Transactions";
 import SignUp from "./components/auth/SignUp";
 import Login from "./components/auth/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ErrorPage from "./components/ErrorPage";
 
 // Shared
 import NavBar from "./components/shared/NavBar";
@@ -65,9 +66,9 @@ function App() {
     return (
         <BrowserRouter>
             <LocationListener />
-            <div>
+            <div className="app-container">
                 <NavBar user={user} />
-                <main>
+                <main className="main-content">
                     <Routes>
                         <Route path="/" element={<LandingPage />} />
                         <Route
