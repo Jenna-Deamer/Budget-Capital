@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ user, children }: ProtectedRouteProps) {
-    if (!user) {
+    if (user === null) {
         // Redirect to login if user is not authenticated
         return <Navigate to="/login" />;
     }

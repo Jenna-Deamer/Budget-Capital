@@ -92,18 +92,6 @@ router.post("/logout", (req, res, next) => {
     });
 });
 
-router.post('/create-transaction', async (req, res) => {
-    console.log("Received request to create transaction:", req.body)
-    try {
-        const transaction = await Transaction.create(req.body);
-        console.log("Transaction created:", transaction); // Log the created transaction
-        return res.status(201).json(transaction); // Set status before sending response
-    } catch (err) {
-        console.error("Error creating transaction:", err); // Log any errors that occur
-        return res.status(400).json({ error: "Error creating transaction" }); // Send a custom error message
-    }
-});
-
 router.get("/api/user", (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ success: true, user: req.user });

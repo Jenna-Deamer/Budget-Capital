@@ -29,7 +29,7 @@ const CreateTransaction = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                "http://localhost:3000/create-transaction",
+                "http://localhost:3000/transaction/create-transaction",
                 formData,
                 {
                     headers: {
@@ -40,7 +40,8 @@ const CreateTransaction = () => {
 
             console.log("Success:", response.data);
 
-            if (response.data.success) {
+            // if _id is returned, it means the transaction was created successfully
+            if (response.data._id) {
                 // Redirect to the homepage
                 navigate("/transactions");
             } else {

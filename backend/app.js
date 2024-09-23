@@ -63,7 +63,7 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.use("/", authRouter);
+app.use("/auth", authRouter);
 app.use("/transaction", transactionRouter);
 
 app.get("/", (req, res) => {

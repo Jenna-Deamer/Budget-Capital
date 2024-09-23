@@ -15,7 +15,13 @@ import Footer from "./components/shared/Footer";
 // Forms
 import CreateTransaction from "./components/transactions/Create";
 // Libraries
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate,
+    useLocation,
+} from "react-router-dom";
 
 interface User {
     username: string;
@@ -23,9 +29,9 @@ interface User {
 
 function App() {
     // User state
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    // Check if user is logged in
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -34,13 +40,15 @@ function App() {
 
             if (decoded.exp < currentTime) {
                 localStorage.removeItem("token");
+                setUser(null);
             } else {
                 setUser(decoded);
             }
         } else {
             console.log("No token found");
         }
-    }, [location]);
+        setLoading(false);
+    }, []);
 
     function LocationListener() {
         const location = useLocation();
@@ -48,6 +56,10 @@ function App() {
         useEffect(() => {}, [location]);
 
         return null;
+    }
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -66,11 +78,30 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/login" element={<Login />} />
+                        {!user ? (
+                            <>
+                                <Route path="/signup" element={<SignUp />} />
+                                <Route path="/login" element={<Login />} />
+                            </>
+                        ) : (
+                            <>
+                                <Route
+                                    path="/signup"
+                                    element={<Navigate to="/" />}
+                                />
+                                <Route
+                                    path="/login"
+                                    element={<Navigate to="/" />}
+                                />
+                            </>
+                        )}
                         <Route
                             path="/create-transaction"
-                            element={<CreateTransaction />}
+                            element={
+                                <ProtectedRoute user={user}>
+                                    <CreateTransaction />
+                                </ProtectedRoute>
+                            }
                         />
                     </Routes>
                 </main>
