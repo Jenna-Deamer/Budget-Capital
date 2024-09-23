@@ -3,11 +3,13 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 const port = 3000;
-const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
+const transactionRouter = require("./routes/transaction");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var session = require("express-session");
 const User = require("./models/user");
+const transaction = require("./models/transaction");
 
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
@@ -61,7 +63,8 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.use("/", indexRouter);
+app.use("/", authRouter);
+app.use("/transaction", transactionRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

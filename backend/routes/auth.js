@@ -4,6 +4,8 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
+const Transaction = require("../models/transaction"); // Correct model name
+
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -12,11 +14,6 @@ function isAuthenticated(req, res, next) {
         res.status(401).json({ success: false, message: "Unauthorized" });
     }
 }
-
-router.post("/resources", (req, res) => {
-    res.json({ success: true });
-    console.log("success");
-});
 
 router.post("/signup", function (req, res) {
     console.log(req.body);
@@ -93,6 +90,18 @@ router.post("/logout", (req, res, next) => {
             message: "Logged out successfully",
         });
     });
+});
+
+router.post('/create-transaction', async (req, res) => {
+    console.log("Received request to create transaction:", req.body)
+    try {
+        const transaction = await Transaction.create(req.body);
+        console.log("Transaction created:", transaction); // Log the created transaction
+        return res.status(201).json(transaction); // Set status before sending response
+    } catch (err) {
+        console.error("Error creating transaction:", err); // Log any errors that occur
+        return res.status(400).json({ error: "Error creating transaction" }); // Send a custom error message
+    }
 });
 
 router.get("/api/user", (req, res) => {

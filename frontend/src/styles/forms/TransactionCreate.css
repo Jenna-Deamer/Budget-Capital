@@ -1,0 +1,63 @@
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.crud-page-wrapper {
+    background-color: var(--background);
+    color: var(--white);
+    min-height: calc(100vh - 60px - 60px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+}
+
+.crud-form-container {
+    max-width: 800px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 28px 38px;
+    margin: 24px;
+    background-color: var(--foreground);
+    border-radius: var(--border-radius);
+}
+
+.crud-form {
+    display: grid;
+    grid-template-columns: repeat(1fr, 2);
+    gap: 20px;
+}
+
+.form-button-wrapper {
+    /*Put button in last row, span 2 cols*/
+    grid-column: 1 / span 2;
+    /*Center it in the middle of the row*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 800px) {
+    .crud-form {
+        grid-template-columns: 1fr;
+        gap: unset;
+    }
+
+    .form-button-wrapper {
+        /* Span all columns when screen width <= 800px */
+        grid-column: 1 / -1;
+        margin-top: 2em;
+    }
+
+}

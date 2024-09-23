@@ -12,7 +12,8 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 // Shared
 import NavBar from "./components/shared/NavBar";
 import Footer from "./components/shared/Footer";
-
+// Forms
+import CreateTransaction from "./components/transactions/Create";
 // Libraries
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
@@ -44,16 +45,14 @@ function App() {
     function LocationListener() {
         const location = useLocation();
 
-        useEffect(() => {
-            console.log("Location changed to: ", location.pathname);
-        }, [location]);
+        useEffect(() => {}, [location]);
 
         return null;
     }
 
     return (
         <BrowserRouter>
-        <LocationListener />
+            <LocationListener />
             <div>
                 <NavBar user={user} />
                 <main>
@@ -69,6 +68,10 @@ function App() {
                         />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/login" element={<Login />} />
+                        <Route
+                            path="/create-transaction"
+                            element={<CreateTransaction />}
+                        />
                     </Routes>
                 </main>
                 <Footer />
