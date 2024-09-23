@@ -4,6 +4,8 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
+const Transaction = require("../models/transaction"); // Correct model name
+
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -12,11 +14,6 @@ function isAuthenticated(req, res, next) {
         res.status(401).json({ success: false, message: "Unauthorized" });
     }
 }
-
-router.post("/resources", (req, res) => {
-    res.json({ success: true });
-    console.log("success");
-});
 
 router.post("/signup", function (req, res) {
     console.log(req.body);

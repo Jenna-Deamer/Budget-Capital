@@ -8,13 +8,21 @@ import Transactions from "./components/Transactions";
 import SignUp from "./components/auth/SignUp";
 import Login from "./components/auth/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ErrorPage from "./components/ErrorPage";
 
 // Shared
 import NavBar from "./components/shared/NavBar";
 import Footer from "./components/shared/Footer";
-
+// Forms
+import CreateTransaction from "./components/transactions/Create";
 // Libraries
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate,
+    useLocation,
+} from "react-router-dom";
 
 interface User {
     username: string;
@@ -22,9 +30,9 @@ interface User {
 
 function App() {
     // User state
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    // Check if user is logged in
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -33,30 +41,34 @@ function App() {
 
             if (decoded.exp < currentTime) {
                 localStorage.removeItem("token");
+                setUser(null);
             } else {
                 setUser(decoded);
             }
         } else {
             console.log("No token found");
         }
-    }, [location]);
+        setLoading(false);
+    }, []);
 
     function LocationListener() {
         const location = useLocation();
 
-        useEffect(() => {
-            console.log("Location changed to: ", location.pathname);
-        }, [location]);
+        useEffect(() => {}, [location]);
 
         return null;
     }
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <BrowserRouter>
-        <LocationListener />
-            <div>
+            <LocationListener />
+            <div className="app-container">
                 <NavBar user={user} />
-                <main>
+                <main className="main-content">
                     <Routes>
                         <Route path="/" element={<LandingPage />} />
                         <Route
@@ -67,8 +79,33 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/login" element={<Login />} />
+                        {!user ? (
+                            <>
+                                <Route path="/signup" element={<SignUp />} />
+                                <Route path="/login" element={<Login />} />
+                            </>
+                        ) : (
+                            <>
+                                <Route
+                                    path="/signup"
+                                    element={<Navigate to="/" />}
+                                />
+                                <Route
+                                    path="/login"
+                                    element={<Navigate to="/" />}
+                                />
+                            </>
+                        )}
+                        <Route
+                            path="/create-transaction"
+                            element={
+                                <ProtectedRoute user={user}>
+                                    <CreateTransaction />
+                                </ProtectedRoute>
+                            }
+                        />
+                        {/* Catch-all route for undefined routes */}
+                        <Route path="*" element={<ErrorPage />} />
                     </Routes>
                 </main>
                 <Footer />

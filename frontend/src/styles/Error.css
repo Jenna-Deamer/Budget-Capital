@@ -1,0 +1,58 @@
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2rem;
+    background-image: url(../assets/error.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+}
+
+.error-page h1 {
+    font-size: 4rem;
+    color: #dc3545;
+    margin-bottom: 0.5rem;
+}
+
+.error-page p {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.error-page .home-link {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.error-page .home-link:hover {
+    background-color: #0056b3;
+}
+
+@media (max-height: 600px) {
+    .error-page {
+        justify-content: flex-start;
+        padding-top: 1rem;
+    }
+
+    .error-page h1 {
+        font-size: 3rem;
+    }
+
+    .error-page p {
+        font-size: 1rem;
+    }
+
+    .error-page .error-image {
+        width: 200px;
+    }
+}

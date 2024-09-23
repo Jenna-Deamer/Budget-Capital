@@ -1,0 +1,5 @@
+.transactions-container {
+    min-height: calc(100vh - 60px - 60px);
+    background-color: var(--background);
+    color: var(--white);
+}
