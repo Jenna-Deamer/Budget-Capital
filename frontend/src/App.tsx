@@ -104,6 +104,8 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+                        {/* Catch-all route for undefined routes */}
+                        <Route path="*" element={<ErrorPage />} />
                     </Routes>
                 </main>
                 <Footer />
