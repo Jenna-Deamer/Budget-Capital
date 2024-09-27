@@ -70,7 +70,7 @@ function App() {
                 <NavBar user={user} />
                 <main className="main-content">
                     <Routes>
-                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/" element={<LandingPage user={user} />} />
                         <Route
                             path="/transactions"
                             element={

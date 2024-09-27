@@ -10,6 +10,7 @@ var LocalStrategy = require("passport-local");
 var session = require("express-session");
 const User = require("./models/user");
 const transaction = require("./models/transaction");
+const auth = require('./middleware/auth');
 
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
@@ -64,7 +65,7 @@ async function run() {
 run().catch(console.dir);
 
 app.use("/auth", authRouter);
-app.use("/transaction", transactionRouter);
+app.use("/transaction", auth, transactionRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

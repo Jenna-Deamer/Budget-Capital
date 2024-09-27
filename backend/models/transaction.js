@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+const user = require("./user");
 var Schema = mongoose.Schema;
 
 const transaction = new mongoose.Schema({
@@ -24,6 +25,7 @@ const transaction = new mongoose.Schema({
             "Other"
         ],
     },
+    user: { type: Schema.Types.ObjectId, ref: user, required: true, unqiue: false },
 
 });
 
