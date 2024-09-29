@@ -3,7 +3,8 @@ import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
 
-function Login() {
+function Login({ setUser }: { setUser: (user: any) => void }) {
+    // Pass setUser as a prop
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
@@ -29,13 +30,15 @@ function Login() {
                     headers: {
                         "Content-Type": "application/json",
                     },
+                    withCredentials: true, // Send cookies with the request
                 }
             );
 
             console.log("Success:", response.data);
-            localStorage.setItem("token", response.data.token);
 
             if (response.data.success) {
+                console.log(response.data.user);
+                setUser(response.data.user); // Update the user state
                 // Redirect to the homepage
                 navigate("/");
                 window.location.reload();

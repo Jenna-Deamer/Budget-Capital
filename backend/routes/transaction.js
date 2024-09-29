@@ -2,6 +2,15 @@ const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/transaction");
 
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        res.send('You are authenticated');
+    } else {
+        res.send('You are not authenticated');
+    }
+    console.log(req.user);
+}
+
 /**GET: /api/transactions => show all transactions */
 router.get("/", async (req, res) => {
     try {
@@ -14,7 +23,7 @@ router.get("/", async (req, res) => {
 });
 
 /**POST: /api/transactions/create => create new transaction from request body */
-router.post('/create-transaction', async (req, res) => {
+router.post('/create-transaction', isAuthenticated, async (req, res) => {
     console.log("Received request to create transaction:", req.body)
     try {
         const transaction = await Transaction.create(req.body);

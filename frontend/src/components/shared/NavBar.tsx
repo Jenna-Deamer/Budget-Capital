@@ -2,14 +2,17 @@ import { Link } from "react-router-dom";
 import LogoutButton from "../auth/Logout";
 
 interface User {
+    id: string;
     username: string | null;
+    firstName: string;
+    lastName: string;
 }
-
 interface NavBarProps {
     user: User | null;
+    setUser: (user: User | null) => void;
 }
 
-function NavBar({ user }: NavBarProps) {
+function NavBar({ user, setUser }: NavBarProps) {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark shadow">
             <Link
@@ -56,7 +59,7 @@ function NavBar({ user }: NavBarProps) {
                                 <span>Welcome, {user.username}</span>
                             </li>
                             <li className="nav-item">
-                                <LogoutButton />
+                                <LogoutButton setUser={setUser} />
                             </li>
                         </>
                     ) : (

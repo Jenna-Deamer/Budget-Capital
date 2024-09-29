@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Logout() {
+interface LogoutButtonProps {
+    setUser: (user: null) => void;
+}
+
+function Logout({ setUser }: LogoutButtonProps) {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -10,20 +14,16 @@ function Logout() {
                 "http://localhost:3000/auth/logout",
                 {},
                 {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    withCredentials: true,
                 }
             );
 
+            console.log(response.data);
             if (response.status === 200) {
-                // Clear token from localstorage
-                localStorage.removeItem("token");
-                // Redirect to the homepage
-                navigate("/");
+                navigate("/"); // Redirect to the homepage
                 window.location.reload();
             } else {
-                console.error("Logout failed");
+                console.error("Logout failed:", response.data.message);
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {

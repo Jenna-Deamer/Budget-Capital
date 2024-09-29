@@ -9,15 +9,17 @@ function LandingPage({ user }: LandingPageProps) {
         <section className="landing-container">
             <h1>Budget Capital</h1>
             {!user && (
-                <div className="landing-button-container">
+                <>
                     <h2>Create an Account or Login to Begin:</h2>
-                    <a href="/login" className="button primary-button">
-                        Login
-                    </a>
-                    <a href="/signup" className="button secondary-button">
-                        Sign Up
-                    </a>
-                </div>
+                    <div className="landing-button-container">
+                        <a href="/login" className="button primary-button">
+                            Login
+                        </a>
+                        <a href="/signup" className="button secondary-button">
+                            Sign Up
+                        </a>
+                    </div>
+                </>
             )}
         </section>
     );
