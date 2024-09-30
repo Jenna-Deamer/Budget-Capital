@@ -9,7 +9,6 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var session = require("express-session");
 const User = require("./models/user");
-const transaction = require("./models/transaction");
 
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
@@ -33,7 +32,7 @@ app.use(
         cookie: {
             secure: false, // Set to true if using HTTPS
             httpOnly: true, // Mitigates the risk of client-side script accessing the cookie
-            sameSite: 'None', // Allow cross-origin cookie usage
+            sameSite: 'lax', // Allow cross-origin cookie usage
             maxAge: 3600000, // 1 hour
         },
     })

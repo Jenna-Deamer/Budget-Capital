@@ -2,36 +2,41 @@ const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/transaction");
 
+// Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        res.send('You are authenticated');
-    } else {
-        res.send('You are not authenticated');
+        console.log('User is authenticated:', req.user); 
+        return next(); // Proceed to the next middleware or route handler
     }
-    console.log(req.user);
+    console.log('User is not authenticated');
+    return res.status(401).json({ message: "Not authorized" }); 
 }
 
-/**GET: /api/transactions => show all transactions */
+/** GET: /api/transactions => show all transactions */
 router.get("/", async (req, res) => {
     try {
         let transactions = await Transaction.find().sort({ date: -1 });
         return res.status(200).json(transactions); // Set status before sending response
     } catch (err) {
         console.error("Error fetching transactions:", err);
-        return res.status(400).json({ error: "Error fetching transactions" }); // Respond with an error message
+        return res.status(400).json({ error: "Error fetching transactions" }); 
     }
 });
 
-/**POST: /api/transactions/create => create new transaction from request body */
+/** POST: /api/transactions/create => create new transaction from request body */
 router.post('/create-transaction', isAuthenticated, async (req, res) => {
     console.log("Received request to create transaction:", req.body)
     try {
-        const transaction = await Transaction.create(req.body);
-        console.log("Transaction created:", transaction); // Log the created transaction
-        return res.status(201).json(transaction); // Set status before sending response
+        // Create the transaction and associate it with the logged-in user
+        const transaction = await Transaction.create({
+            ...req.body,
+            user: req.user._id // Ensure the transaction is associated with the authenticated user
+        });
+        console.log("Transaction created:", transaction); 
+        return res.status(201).json(transaction); // Respond with the created transaction
     } catch (err) {
-        console.error("Error creating transaction:", err); // Log any errors that occur
-        return res.status(400).json({ error: "Error creating transaction" }); // Send a custom error message
+        console.error("Error creating transaction:", err); 
+        return res.status(400).json({ error: "Error creating transaction" }); 
     }
 });
 
