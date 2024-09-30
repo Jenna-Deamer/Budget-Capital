@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 import "./App.css";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate,
+    useLocation,
+} from "react-router-dom";
 
 // Views
 import LandingPage from "./components/LandingPage";
@@ -15,42 +22,42 @@ import NavBar from "./components/shared/NavBar";
 import Footer from "./components/shared/Footer";
 // Forms
 import CreateTransaction from "./components/transactions/Create";
-// Libraries
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Navigate,
-    useLocation,
-} from "react-router-dom";
 
 interface User {
-    username: string;
+    id: string;
+    username: string | null;
+    firstName: string;
+    lastName: string;
 }
 
 function App() {
-    // User state
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            const decoded: any = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-
-            if (decoded.exp < currentTime) {
-                localStorage.removeItem("token");
-                setUser(null);
-            } else {
-                setUser(decoded);
+        const fetchAuthStatus = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get(
+                    "http://localhost:3000/auth/check-auth",
+                    {
+                        withCredentials: true,
+                    }
+                );
+                if (response.data.isAuthenticated) {
+                    setUser(response.data.user); // Update user state
+                } else {
+                    setUser(null);
+                }
+            } catch (error) {
+                console.log("Error fetching auth status:", error);
+            } finally {
+                setLoading(false); // Stop loading after fetching
             }
-        } else {
-            console.log("No token found");
-        }
-        setLoading(false);
-    }, []);
+        };
 
+        fetchAuthStatus();
+    }, []);
     function LocationListener() {
         const location = useLocation();
 
@@ -67,10 +74,10 @@ function App() {
         <BrowserRouter>
             <LocationListener />
             <div className="app-container">
-                <NavBar user={user} />
+                <NavBar user={user} setUser={setUser} />
                 <main className="main-content">
                     <Routes>
-                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/" element={<LandingPage user={user} />} />
                         <Route
                             path="/transactions"
                             element={
@@ -82,7 +89,10 @@ function App() {
                         {!user ? (
                             <>
                                 <Route path="/signup" element={<SignUp />} />
-                                <Route path="/login" element={<Login />} />
+                                <Route
+                                    path="/login"
+                                    element={<Login setUser={setUser} />}
+                                />
                             </>
                         ) : (
                             <>

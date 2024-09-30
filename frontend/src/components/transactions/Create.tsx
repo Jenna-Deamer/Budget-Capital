@@ -29,13 +29,14 @@ const CreateTransaction = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                "http://localhost:3000/transaction/create-transaction",
-                formData,
+                "http://localhost:3000/transaction/create-transaction", formData,
                 {
                     headers: {
                         "Content-Type": "application/json",
                     },
+                    withCredentials: true
                 }
+               
             );
 
             console.log("Success:", response.data);

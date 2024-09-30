@@ -9,7 +9,6 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var session = require("express-session");
 const User = require("./models/user");
-const transaction = require("./models/transaction");
 
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
@@ -18,8 +17,9 @@ if (process.env.NODE_ENV !== "production") {
     // CORS in dev mode to accept requests from localhost:4200
     app.use(
         cors({
-            origin: "*", // Adjust CORS settings as needed
+            origin: "http://localhost:5173",
             methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
+            credentials: true,
         })
     );
 }
@@ -29,7 +29,12 @@ app.use(
         secret: process.env.SECRET_KEY,
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: false },
+        cookie: {
+            secure: false, // Set to true if using HTTPS
+            httpOnly: true, // Mitigates the risk of client-side script accessing the cookie
+            sameSite: 'lax', // Allow cross-origin cookie usage
+            maxAge: 3600000, // 1 hour
+        },
     })
 );
 
