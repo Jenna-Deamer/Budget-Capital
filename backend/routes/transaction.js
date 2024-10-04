@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/transaction");
+const mongoose = require("mongoose");
 
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
@@ -12,10 +13,11 @@ function isAuthenticated(req, res, next) {
     return res.status(401).json({ message: "Not authorized" }); 
 }
 
-/** GET: /api/transactions => show all transactions */
-router.get("/", async (req, res) => {
+/** GET: /transactions => show all transactions */
+router.get("/transactions", async (req, res) => {
+    const userId = req.query.userId; // Get userId from query parameters
     try {
-        let transactions = await Transaction.find().sort({ date: -1 });
+        let transactions = await Transaction.find({user: userId}).sort({ date: -1 });
         return res.status(200).json(transactions); // Set status before sending response
     } catch (err) {
         console.error("Error fetching transactions:", err);
@@ -23,7 +25,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-/** POST: /api/transactions/create => create new transaction from request body */
+/** POST: /transactions/create => create new transaction from request body */
 router.post('/create-transaction', isAuthenticated, async (req, res) => {
     console.log("Received request to create transaction:", req.body)
     try {

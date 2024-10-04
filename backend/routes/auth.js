@@ -110,4 +110,11 @@ router.get("/check-auth", (req, res) => {
     }
 });
 
+router.get("/current-user", (req, res) => {
+    if (req.isAuthenticated()) {
+       return res.status(200).json({userId: req.user._id});
+    } 
+    return res.status(401).json({ message: "Not authorized" });
+});
+
 module.exports = router;
