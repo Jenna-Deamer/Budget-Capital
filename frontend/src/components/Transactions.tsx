@@ -9,7 +9,8 @@ interface Transaction {
     type: string;
     amount: number;
     category: string;
-    date: string; 
+    date: string;
+    formattedDate?: string;
 }
 
 function Transactions() {
@@ -21,7 +22,6 @@ function Transactions() {
             try {
                 axios.defaults.withCredentials = true;
                 const response = await axios.get('http://localhost:3000/auth/current-user');
-                console.log('Current User Response:', response.data); 
                 if (response.data) {
                     setUserId(response.data.userId);
                     console.log('User ID:', response.data.userId);
@@ -35,15 +35,26 @@ function Transactions() {
 
     useEffect(() => {
         const fetchTransactions = async () => {
-            console.log('Fetching transactions for User ID:', userId);
             if (userId) {
                 try {
                     const response = await axios.get(`http://localhost:3000/transaction/transactions?userId=${userId}`, {
                         headers: { "Content-Type": "application/json" },
                         withCredentials: true
-                    });                    
-                    setTransactions(response.data);
-                    console.log('Transactions:', response.data);
+                    });
+
+                    // Format the date for each transaction
+                    const formattedTransactions = response.data.map((transaction: Transaction) => {
+                        return {
+                            ...transaction,
+                            formattedDate: new Date(transaction.date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            }),
+                        };
+                    });
+
+                    setTransactions(formattedTransactions);
                 } catch (error) {
                     console.error('Failed to fetch transactions:', error);
                 }
@@ -51,9 +62,10 @@ function Transactions() {
         };
         fetchTransactions();
     }, [userId]);
-    
 
-   
+
+
+
     return (
         <section className="transactions-page">
             <div className="header-container">
@@ -90,13 +102,13 @@ function Transactions() {
                         </tr>
                     </thead>
                     <tbody>
-                        {transactions.map((transaction: Transaction) => (
+                        {transactions.map(transaction => (
                             <tr key={transaction._id}>
                                 <td>{transaction.name}</td>
                                 <td>{transaction.type}</td>
-                                <td>{transaction.amount}</td>
+                                <td>{transaction.amount.toFixed(2)}</td>
                                 <td>{transaction.category}</td>
-                                <td>{transaction.date}</td>
+                                <td>{transaction.formattedDate}</td>
                                 <td className="button-cell">
                                     <Link
                                         to={`/edit-transaction/${transaction._id}`}

@@ -17,7 +17,7 @@ function isAuthenticated(req, res, next) {
 router.get("/transactions", async (req, res) => {
     const userId = req.query.userId; // Get userId from query parameters
     try {
-        let transactions = await Transaction.find({userId}).sort({ date: -1 });
+        let transactions = await Transaction.find({user: userId}).sort({ date: -1 });
         return res.status(200).json(transactions); // Set status before sending response
     } catch (err) {
         console.error("Error fetching transactions:", err);
