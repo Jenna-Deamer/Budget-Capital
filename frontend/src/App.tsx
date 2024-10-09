@@ -22,6 +22,7 @@ import NavBar from "./components/shared/NavBar";
 import Footer from "./components/shared/Footer";
 // Forms
 import CreateTransaction from "./components/transactions/Create";
+import EditTransaction from "./components/transactions/Edit";
 
 interface User {
     id: string;
@@ -114,6 +115,14 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+                    <Route 
+                        path="/edit-transaction/:id"
+                        element={
+                            <ProtectedRoute user={user}>
+                                <EditTransaction />
+                            </ProtectedRoute>
+                        }
+                    />
                         {/* Catch-all route for undefined routes */}
                         <Route path="*" element={<ErrorPage />} />
                     </Routes>

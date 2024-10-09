@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import "../styles/Transactions.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -14,6 +14,7 @@ interface Transaction {
 }
 
 function Transactions() {
+    const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -21,6 +22,7 @@ function Transactions() {
         const fetchUserId = async () => {
             try {
                 axios.defaults.withCredentials = true;
+                console.log('Fetching user ID...');
                 const response = await axios.get('http://localhost:3000/auth/current-user');
                 if (response.data) {
                     setUserId(response.data.userId);
@@ -64,8 +66,22 @@ function Transactions() {
     }, [userId]);
 
 
+    const handleDelete = async (transactionId: string) => {
+         //popup message to confirm deletion
+         const confirmed = window.confirm('Are you sure you want to delete this transaction?');
+         if(confirmed){
+            try{
+                await axios.delete(`http://localhost:3000/transaction/delete-transaction/${transactionId}`); 
+                setTransactions(transactions.filter(transaction => transaction._id !== transactionId)); // Remove the deleted transaction from state
+            } catch(error){
+                console.error('Failed to delete transaction:', error);
+            }
+         }
+    };
 
-
+    const handleEdit =  async (transactionId: string) => {
+       navigate(`/edit-transaction/${transactionId}`);
+    };
     return (
         <section className="transactions-page">
             <div className="header-container">
@@ -111,7 +127,7 @@ function Transactions() {
                                 <td>{transaction.formattedDate}</td>
                                 <td className="button-cell">
                                     <Link
-                                        to={`/edit-transaction/${transaction._id}`}
+                                      to={`/edit-transaction/${transaction._id}`}
                                         className="edit-button table-button"
                                         id="edit-button"
                                     >
@@ -119,13 +135,13 @@ function Transactions() {
                                     </Link>
                                 </td>
                                 <td className="button-cell">
-                                    <Link
-                                        to={`/delete-transaction/${transaction._id}`}
+                                    <button
+                                        onClick={() => handleDelete(transaction._id)}
                                         className="delete-button table-button"
                                         id="delete-button"
                                     >
                                         <i className="bi bi-x-lg"></i>
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                         ))}
