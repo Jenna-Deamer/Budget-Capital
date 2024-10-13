@@ -158,6 +158,18 @@ main {
   border-color: var(--secondary-action-hover);
 }
 
+.loading-container {
+  background-color: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  color: var(--white);
+  font-size: 4em;
+}
+
+
 footer {
   background-color: var(--foreground);
   color: var(--white);

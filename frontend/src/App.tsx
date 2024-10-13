@@ -22,6 +22,7 @@ import NavBar from "./components/shared/NavBar";
 import Footer from "./components/shared/Footer";
 // Forms
 import CreateTransaction from "./components/transactions/Create";
+import EditTransaction from "./components/transactions/Edit";
 
 interface User {
     id: string;
@@ -32,11 +33,11 @@ interface User {
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
+    // Check authentication status on component mount
     useEffect(() => {
         const fetchAuthStatus = async () => {
-            setLoading(true);
             try {
                 const response = await axios.get(
                     "http://localhost:3000/auth/check-auth",
@@ -44,35 +45,31 @@ function App() {
                         withCredentials: true,
                     }
                 );
-                if (response.data.isAuthenticated) {
-                    setUser(response.data.user); // Update user state
+                if (response.data.user) {
+                    setUser(response.data.user); // Set the user state if authenticated
                 } else {
                     setUser(null);
                 }
             } catch (error) {
-                console.log("Error fetching auth status:", error);
+                console.error("Error fetching auth status:", error);
+                setUser(null);
             } finally {
-                setLoading(false); // Stop loading after fetching
+                // Timeout to avoid flickering
+                setTimeout(() => {
+                    setLoading(false);
+                }, 250);
             }
         };
 
         fetchAuthStatus();
     }, []);
-    function LocationListener() {
-        const location = useLocation();
-
-        useEffect(() => {}, [location]);
-
-        return null;
-    }
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="loading-container">Loading...</div>;
     }
 
     return (
         <BrowserRouter>
-            <LocationListener />
             <div className="app-container">
                 <NavBar user={user} setUser={setUser} />
                 <main className="main-content">
@@ -111,6 +108,14 @@ function App() {
                             element={
                                 <ProtectedRoute user={user}>
                                     <CreateTransaction />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/edit-transaction/:id"
+                            element={
+                                <ProtectedRoute user={user}>
+                                    <EditTransaction />
                                 </ProtectedRoute>
                             }
                         />

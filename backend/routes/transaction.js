@@ -14,7 +14,7 @@ function isAuthenticated(req, res, next) {
 }
 
 /** GET: /transactions => show all transactions */
-router.get("/transactions", async (req, res) => {
+router.get("/transactions", isAuthenticated, async (req, res) => {
     const userId = req.query.userId; // Get userId from query parameters
     try {
         let transactions = await Transaction.find({user: userId}).sort({ date: -1 });
@@ -27,19 +27,45 @@ router.get("/transactions", async (req, res) => {
 
 /** POST: /transactions/create => create new transaction from request body */
 router.post('/create-transaction', isAuthenticated, async (req, res) => {
-    console.log("Received request to create transaction:", req.body)
     try {
         // Create the transaction and associate it with the logged-in user
         const transaction = await Transaction.create({
             ...req.body,
             user: req.user._id // Ensure the transaction is associated with the authenticated user
-        });
-        console.log("Transaction created:", transaction); 
+        }); 
         return res.status(201).json(transaction); // Respond with the created transaction
     } catch (err) {
         console.error("Error creating transaction:", err); 
         return res.status(400).json({ error: "Error creating transaction" }); 
     }
 });
+
+/*PUT: /api/transactions/abc123 => update selected transaction */
+router.put('/edit-transaction/:_id', isAuthenticated, async (req, res, next) => {
+    console.log("Got request to edit transaction")
+    const transactionId = req.params._id;
+    try {
+        const transaction = await Transaction.findByIdAndUpdate(transactionId, req.body, { new: true });
+        if (!transaction) {
+        return res.status(404).json({ error: 'Transaction not found' });
+      }
+      return res.json(transaction).status(200);
+    } catch (err) {
+        console.error("Error updating transaction:", err);
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+/* DELETE: /api/transaction/abc123 => delete selected transaction */
+router.delete('/delete-transaction/:id', isAuthenticated, async (req, res) => {
+    const transactionId = req.params.id;
+    try {
+      await Transaction.findByIdAndDelete(transactionId);
+      return res.json({}).status(204); // 204: No Content
+    }
+    catch (err) {
+      return res.json(err).status(404); //not Found
+    }
+  });
 
 module.exports = router;
