@@ -56,7 +56,7 @@ function NavBar({ user, setUser }: NavBarProps) {
                     {user ? (
                         <>
                             <li className="nav-item username-nav">
-                                <span>Welcome, {user.username}</span>
+                                <span>Welcome, {user.firstName}</span>
                             </li>
                             <li className="nav-item">
                                 <LogoutButton setUser={setUser} />
