@@ -1,32 +1,47 @@
-
 .transactions-page {
     min-height: calc(100vh - 60px - 60px);
     background-color: var(--background);
     color: var(--white);
 }
 
+
 .header-container {
-    margin-top: 26px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    text-align: center;
-    padding: 0 26px;
+    position: relative;
+    padding-top: 24px;
 }
 
-.header-container h1 {
+.header {
     flex-grow: 1;
     text-align: center;
 }
 
+.calendar-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+}
+
+#transaction-titles,
+.calendar-button-container>button {
+    position: absolute;
+}
+
+.calendar-button-container>button {
+    margin-right: 70px;
+}
+
 /*TABLE*/
 .table-wrapper {
-    max-width: 2000px; 
-    width: 100%; 
+    max-width: 2000px;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    margin: 20px auto; 
+    align-items: center;
+    margin: 20px auto;
     padding: 0 70px;
 }
 
@@ -35,10 +50,10 @@
 }
 
 .transactions-table {
-    width: 100%; 
+    width: 100%;
     margin-top: 20px;
     background-color: var(--foreground);
-    border-radius: var(--border-radius); 
+    border-radius: var(--border-radius);
 }
 
 .transactions-table th {
@@ -55,10 +70,14 @@
 
 /*Center the 2 buttons in each cell.*/
 .transactions-table .button-cell {
-    text-align: center; 
-    vertical-align: middle; /* Center content vertically */
+    text-align: center;
+    vertical-align: middle;
+    /* Center content vertically */
 }
-.table-button{
+
+.table-button {
+    transition: background-color 0.2s ease;
+    color: var(--white);
     /* Make buttons a perfect circle */
     width: 36px;
     height: 36px;
@@ -69,20 +88,22 @@
     /* Ensures button takes up the width and height */
     justify-content: center;
     align-items: center;
+
 }
-.edit-button{
+
+.edit-button {
     background-color: var(--secondary-action);
-    color: var(--white);
-    transition: background-color 0.2s ease;
 }
-.edit-button:hover{
+
+.edit-button:hover {
     background-color: var(--secondary-action-hover);
 }
-.delete-button{
+
+.delete-button {
     background-color: var(--red-label);
-    color: var(--white);
-    transition: background-color 0.2s ease;
+
 }
-.delete-button:hover{
+
+.delete-button:hover {
     background-color: var(--red-hover);
 }

@@ -1,0 +1,40 @@
+.dashboard-page {
+    min-height: calc(100vh - 60px - 60px);
+    background-color: var(--background);
+    color: var(--white);
+}
+
+
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding-top: 24px;
+}
+
+.header {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.calendar-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+}
+
+#transaction-titles,
+.calendar-button-container>button {
+    position: absolute;
+}
+
+.calendar-button-container>button {
+    margin-right: 70px;
+}
+
+/*Expense breakdown section*/
+.breakdown-container {
+    background-color: var(--foreground);
+}

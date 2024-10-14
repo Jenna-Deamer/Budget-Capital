@@ -12,6 +12,7 @@ import {
 // Views
 import LandingPage from "./components/LandingPage";
 import Transactions from "./components/Transactions";
+import Dashboard from "./components/Dashboard";
 import SignUp from "./components/auth/SignUp";
 import Login from "./components/auth/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -80,6 +81,14 @@ function App() {
                             element={
                                 <ProtectedRoute user={user}>
                                     <Transactions />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/dashboard"
+                            element={
+                                <ProtectedRoute user={user}>
+                                    <Dashboard />
                                 </ProtectedRoute>
                             }
                         />

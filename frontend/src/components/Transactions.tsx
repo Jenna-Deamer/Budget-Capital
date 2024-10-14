@@ -22,14 +22,16 @@ function Transactions() {
         const fetchUserId = async () => {
             try {
                 axios.defaults.withCredentials = true;
-                console.log('Fetching user ID...');
-                const response = await axios.get('http://localhost:3000/auth/current-user');
+                console.log("Fetching user ID...");
+                const response = await axios.get(
+                    "http://localhost:3000/auth/current-user"
+                );
                 if (response.data) {
                     setUserId(response.data.userId);
-                    console.log('User ID:', response.data.userId);
+                    console.log("User ID:", response.data.userId);
                 }
             } catch (error) {
-                console.error('Failed to fetch user ID:', error);
+                console.error("Failed to fetch user ID:", error);
             }
         };
         fetchUserId();
@@ -39,68 +41,87 @@ function Transactions() {
         const fetchTransactions = async () => {
             if (userId) {
                 try {
-                    const response = await axios.get(`http://localhost:3000/transaction/transactions?userId=${userId}`, {
-                        headers: { "Content-Type": "application/json" },
-                        withCredentials: true
-                    });
+                    const response = await axios.get(
+                        `http://localhost:3000/transaction/transactions?userId=${userId}`,
+                        {
+                            headers: { "Content-Type": "application/json" },
+                            withCredentials: true,
+                        }
+                    );
 
                     // Format the date for each transaction
-                    const formattedTransactions = response.data.map((transaction: Transaction) => {
-                        return {
-                            ...transaction,
-                            formattedDate: new Date(transaction.date).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                timeZone: 'UTC'
-                            }),
-                        };
-                    });
+                    const formattedTransactions = response.data.map(
+                        (transaction: Transaction) => {
+                            return {
+                                ...transaction,
+                                formattedDate: new Date(
+                                    transaction.date
+                                ).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                }),
+                            };
+                        }
+                    );
 
                     setTransactions(formattedTransactions);
                 } catch (error) {
-                    console.error('Failed to fetch transactions:', error);
+                    console.error("Failed to fetch transactions:", error);
                 }
             }
         };
         fetchTransactions();
     }, [userId]);
 
-
     const handleDelete = async (transactionId: string) => {
-         //popup message to confirm deletion
-         const confirmed = window.confirm('Are you sure you want to delete this transaction?');
-         if(confirmed){
-            try{
-                await axios.delete(`http://localhost:3000/transaction/delete-transaction/${transactionId}`); 
-                setTransactions(transactions.filter(transaction => transaction._id !== transactionId)); // Remove the deleted transaction from state
-            } catch(error){
-                console.error('Failed to delete transaction:', error);
+        //popup message to confirm deletion
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this transaction?"
+        );
+        if (confirmed) {
+            try {
+                await axios.delete(
+                    `http://localhost:3000/transaction/delete-transaction/${transactionId}`
+                );
+                setTransactions(
+                    transactions.filter(
+                        (transaction) => transaction._id !== transactionId
+                    )
+                ); // Remove the deleted transaction from state
+            } catch (error) {
+                console.error("Failed to delete transaction:", error);
             }
-         }
+        }
     };
 
     return (
         <section className="transactions-page">
             <div className="header-container">
-                <h1>Transactions CRUD Page</h1>
-                <button className="primary-button button">September 2024</button>
+                <div className="header">
+                    <h1 id="transactions-title">
+                        <span>Month/Year</span> Overview
+                    </h1>
+                </div>
+                <div className="calendar-button-container">
+                    <button
+                        className="secondary-button button"
+                        title="Change month/year"
+                    >
+                        Change Date <i className="bi bi-calendar-fill"></i>
+                    </button>
+                </div>
             </div>
+
             <div className="table-wrapper">
                 <div className="table-buttons">
                     <Link
                         to="/create-transaction"
                         className="primary-button button me-3"
                         id="transactions"
+                        title="Create transaction"
                     >
                         Create
-                    </Link>
-                    <Link
-                        to="/create-transaction"
-                        className="primary-button button"
-                        id="transactions"
-                    >
-                        Sort By
                     </Link>
                 </div>
                 <table className="transactions-table">
@@ -116,7 +137,7 @@ function Transactions() {
                         </tr>
                     </thead>
                     <tbody>
-                        {transactions.map(transaction => (
+                        {transactions.map((transaction) => (
                             <tr key={transaction._id}>
                                 <td>{transaction.name}</td>
                                 <td>{transaction.type}</td>
@@ -124,19 +145,23 @@ function Transactions() {
                                 <td>{transaction.category}</td>
                                 <td>{transaction.formattedDate}</td>
                                 <td className="button-cell">
-                                    <button
-                                        onClick={() => navigate(`/edit-transaction/${transaction._id}`, { state: { transaction } })}
+                                    <Link
+                                        to={`/edit-transaction/${transaction._id}`}
                                         className="edit-button table-button"
                                         id="edit-button"
+                                        title="Edit transaction"
                                     >
                                         <i className="bi bi-pencil"></i>
-                                    </button>
+                                    </Link>
                                 </td>
                                 <td className="button-cell">
                                     <button
-                                        onClick={() => handleDelete(transaction._id)}
+                                        onClick={() =>
+                                            handleDelete(transaction._id)
+                                        }
                                         className="delete-button table-button"
                                         id="delete-button"
+                                        title="Delete transaction"
                                     >
                                         <i className="bi bi-x-lg"></i>
                                     </button>
@@ -153,8 +178,7 @@ function Transactions() {
                     </tbody>
                 </table>
             </div>
-        </section >
-
+        </section>
     );
 }
 
