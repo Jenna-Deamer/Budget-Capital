@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "../../styles/forms/TransactionEdit.css";
+import axios from "axios";
 
 const EditTransaction = () => {
+    const location = useLocation();
+    const { transaction } = location.state;
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: "",
@@ -12,11 +14,27 @@ const EditTransaction = () => {
         type: "",
         category: "",
         date: "",
+        id: "",
     });
 
     // Fetch current transaction data
+    useEffect(() => {
+        if (transaction) 
+            console.log(transaction);
+        {
+            setFormData({
+                name: transaction.name,
+                amount: transaction.amount,
+                type: transaction.type,
+                category: transaction.category,
+                date: transaction.date,
+                id: transaction._id,
+            });
+        }
+    }, [transaction]);
+    
 
-   const handleChange = (e) => {
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -26,6 +44,34 @@ const EditTransaction = () => {
 
     const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        try {
+            const response = await axios.put(
+                "http://localhost:3000/transaction/edit-transaction", formData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true
+                }
+               
+            );
+
+            console.log("Success:", response.data);
+
+            // if _id is returned, it means the transaction was created successfully
+            if (response.data._id) {
+                // Redirect to the homepage
+                navigate("/transactions");
+            } else {
+                console.log("Edit Failed: ", response.data.message);
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Error message:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
     };
     return (
         <>

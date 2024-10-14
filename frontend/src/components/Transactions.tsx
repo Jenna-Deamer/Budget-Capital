@@ -1,4 +1,4 @@
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Transactions.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -52,6 +52,7 @@ function Transactions() {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
+                                timeZone: 'UTC'
                             }),
                         };
                     });
@@ -79,9 +80,6 @@ function Transactions() {
          }
     };
 
-    const handleEdit =  async (transactionId: string) => {
-       navigate(`/edit-transaction/${transactionId}`);
-    };
     return (
         <section className="transactions-page">
             <div className="header-container">
@@ -126,13 +124,13 @@ function Transactions() {
                                 <td>{transaction.category}</td>
                                 <td>{transaction.formattedDate}</td>
                                 <td className="button-cell">
-                                    <Link
-                                      to={`/edit-transaction/${transaction._id}`}
+                                    <button
+                                        onClick={() => navigate(`/edit-transaction/${transaction._id}`, { state: { transaction } })}
                                         className="edit-button table-button"
                                         id="edit-button"
                                     >
                                         <i className="bi bi-pencil"></i>
-                                    </Link>
+                                    </button>
                                 </td>
                                 <td className="button-cell">
                                     <button
