@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import "../../styles/forms/TransactionCreate.css";
 
+const incomeCategories = [
+  "Salary",
+  "Investments",
+  "Bonus",
+  "Freelancing",
+  "Gifts",
+  "Other",
+];
+const expenseCategories = [
+  "Housing",
+  "Food",
+  "Healthcare",
+  "Transportation",
+  "Entertainment",
+  "Education",
+  "Debt Payments",
+  "Personal Care",
+  "Taxes",
+  "Other",
+];
+
 const CreateTransaction = () => {
   const navigate = useNavigate();
+  const [categories, setCategories] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -14,6 +36,16 @@ const CreateTransaction = () => {
     category: "",
     date: "",
   });
+
+  useEffect(() => {
+    if (formData.type === "Income") {
+      setCategories(incomeCategories);
+    } else if (formData.type === "Expense") {
+      setCategories(expenseCategories);
+    } else {
+      setCategories([]);
+    }
+  }, [formData.type]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -117,16 +149,11 @@ const CreateTransaction = () => {
               required
             >
               <option value="">Select Category</option>
-              <option value="Housing">Housing</option>
-              <option value="Food">Food</option>
-              <option value="Healthcare">Healthcare</option>
-              <option value="Transportation">Transportation</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Education">Education</option>
-              <option value="Debt Payments">Debt Payments</option>
-              <option value="Personal Care">Personal Care</option>
-              <option value="Taxes">Taxes</option>
-              <option value="Other">Other</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-group">
