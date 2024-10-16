@@ -1,8 +1,13 @@
 import "../styles/Dashboard.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import DatePicker from "./DatePicker";
 
 function Dashboard() {
+
+    //Get current month and year
+
+    //Get all transactions for the time-frame
     return (
         <section className="dashboard-page">
             <div className="header-container">
@@ -12,12 +17,7 @@ function Dashboard() {
                     </h1>
                 </div>
                 <div className="calendar-button-container">
-                    <button
-                        className="secondary-button button"
-                        title="Change month/year"
-                    >
-                        Change Date <i className="bi bi-calendar-fill"></i>
-                    </button>
+                <DatePicker />
                 </div>
             </div>
 
@@ -25,7 +25,9 @@ function Dashboard() {
 
             <div className="breakdown-container">
                 <p>Total Expenses for Month</p>
-                <div className="graph-container"></div>
+                <div className="graph-container">
+               
+                </div>
                 <div className="categories-list"></div>
             </div>
         </section>
