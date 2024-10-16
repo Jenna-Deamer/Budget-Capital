@@ -17,7 +17,7 @@ function NavBar({ user, setUser }: NavBarProps) {
         <nav className="navbar navbar-expand-lg navbar-dark shadow">
             <Link
                 to="/"
-                className="navbar-brand mx-4"
+                className="navbar-brand mx-3"
                 id="home"
                 title="Go to Homepage"
             >
@@ -25,7 +25,7 @@ function NavBar({ user, setUser }: NavBarProps) {
             </Link>
 
             <button
-                className="navbar-toggler me-2"
+                className="navbar-toggler me-3"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbarNav"

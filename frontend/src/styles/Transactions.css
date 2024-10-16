@@ -107,3 +107,19 @@
 .delete-button:hover {
     background-color: var(--red-hover);
 }
+
+/*MOBILE*/
+@media screen and (max-width: 980px) {
+  .header-container,
+  .calendar-button-container{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .calendar-button-container{
+    margin-top: 48px;
+  }
+  .calendar-button-container > button{
+    margin: unset !important;
+  }
+}

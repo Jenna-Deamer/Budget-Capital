@@ -70,12 +70,15 @@ nav {
   align-items: center;
 }
 
-.username-nav,
-.logout-btn,
-.auth-item {
-  margin-left: 16px;
-}
 
+@media (max-width: 991px) {
+ .nav-item{
+    margin-left: 16px;
+  }
+  .username-nav {
+    display: none;
+  }
+}
 .navbar-nav .nav-item .nav-link:hover {
   color: var(--action-hover);
   transition: ease-in-out 0.3s;
@@ -182,4 +185,27 @@ footer {
 
 footer p {
   text-align: center;
+}
+
+/*Mobile*/
+@media screen and (max-width: 980px) {
+  body{
+    font-size: 16px;
+  }
+  
+h1 {
+  font-size: 38px;
+}
+
+h2 {
+  font-size: 28px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 18px;
+}
 }
