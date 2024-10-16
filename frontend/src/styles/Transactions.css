@@ -123,3 +123,26 @@
     margin: unset !important;
   }
 }
+
+
+@media screen and (max-width: 700px) {
+    .table-buttons{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .table-buttons > a{
+        margin: unset !important;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .table-wrapper {
+      overflow-x: auto;
+    }
+  
+    .transactions-table {
+      width: 100%;
+      white-space: nowrap;
+    }
+  }
