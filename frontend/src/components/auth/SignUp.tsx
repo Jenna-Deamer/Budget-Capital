@@ -5,7 +5,7 @@ import "../../styles/forms/AuthForms.css";
 
 function Signup() {
     const navigate = useNavigate();
-
+    const [formError, setFormError] = useState("");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -23,7 +23,11 @@ function Signup() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        // Validate password length
+        if (formData.password.length < 8) {
+            setFormError("Password must be at least 8 characters long.");
+            return;
+        }
         try {
             const response = await axios.post(
                 "http://localhost:3000/auth/signup",
@@ -38,16 +42,17 @@ function Signup() {
             console.log("Success:", response.data);
 
             if (response.data.success) {
-                // Redirect to the homepage
-                navigate("/");
+                navigate("/login");
             } else {
                 console.log("Signup Failed: ", response.data.message);
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error("Error message:", error.message);
+                // error message returned from the backend
+                const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+                setFormError(errorMessage);  // Set the error message to display to the user
             } else {
-                console.error("Unexpected error:", error);
+                setFormError("An unexpected error occurred. Please try again.");
             }
         }
     };
@@ -56,7 +61,9 @@ function Signup() {
         <section className="form-page">
             <div className="form-container">
                 <h1>Sign Up</h1>
-                <div className="form-error-container"></div>
+                <div className="form-error-container">
+                    {formError && <p className="error-message text-center">{formError}</p>}
+                </div>
 
                 <form className="signup-form" onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -100,6 +107,7 @@ function Signup() {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
+                            min={8}
                             required
                         />
                     </div>

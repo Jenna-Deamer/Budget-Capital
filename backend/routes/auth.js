@@ -4,8 +4,27 @@ const passport = require("passport");
 const User = require("../models/user");
 
 // Signup route
-router.post("/signup", (req, res) => {
+router.post("/signup", async (req, res) => {
     const { firstName, lastName, username, password } = req.body;
+
+    // Validate password length
+    if (!password || password.length < 8) {
+        return res.status(400).json({
+            success: false,
+            message: "Password must be at least 8 characters long."
+        });
+    }
+
+    // Check if the email already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+        return res.status(400).json({
+            success: false,
+            message: "Email is already registered."
+        });
+    }
+
+    // Create new user
     const newUser = new User({ firstName, lastName, username });
 
     User.register(newUser, password, (err, user) => {
@@ -13,17 +32,19 @@ router.post("/signup", (req, res) => {
             console.error("Error in user registration:", err);
             return res.status(500).json({
                 success: false,
-                message: "Your account could not be saved. Error: " + err.message
+                message: "An error occurred during registration."
             });
         }
+
         passport.authenticate("local")(req, res, () => {
             res.status(201).json({
                 success: true,
-                message: "Your account has been saved"
+                message: "Your account has been created successfully."
             });
         });
     });
 });
+
 
 // Login route
 router.post("/login", (req, res, next) => {
