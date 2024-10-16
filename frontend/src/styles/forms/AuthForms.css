@@ -48,7 +48,11 @@
     margin: 0 auto;
 
 }
-
+.error-message{
+    color: var(--red-label);
+    font-size: 18px;
+    font-weight: 600;
+}
 /*Mobile*/
 @media screen and (max-width: 800px) {
     .form-container {

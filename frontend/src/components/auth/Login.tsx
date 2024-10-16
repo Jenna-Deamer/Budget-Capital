@@ -10,6 +10,7 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
         username: "",
         password: "",
     });
+    const [formError, setFormError] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -34,23 +35,21 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
                 }
             );
 
-            console.log("Success:", response.data);
-
             if (response.data.success) {
                 console.log(response.data.user);
                 setUser(response.data.user); // Update the user state
                 // Redirect to the homepage
                 navigate("/");
                 window.location.reload();
-            } else {
-                console.log("Login Failed: ", response.data.message);
-            }
+            } 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error("Error message:", error.message);
-            } else {
-                console.error("Unexpected error:", error);
-            }
+        if (axios.isAxiosError(error)) {
+            // error message returned from the backend
+            const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+            setFormError(errorMessage);  // Set the error message to display to the user
+        } else {
+            setFormError("An unexpected error occurred. Please try again.");
+        }
         }
     };
 
@@ -58,7 +57,9 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
         <section className="form-page">
             <div className="form-container">
                 <h1>Login</h1>
-                <div className="form-error-container"></div>
+                <div className="form-error-container">
+                {formError && <p className="error-message text-center">{formError}</p>}
+                </div>
 
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
