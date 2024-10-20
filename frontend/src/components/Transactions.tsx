@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../styles/Transactions.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import DatePicker from "./DatePicker";
 
 interface Transaction {
   _id: string;
@@ -14,7 +15,7 @@ interface Transaction {
 }
 
 function Transactions() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -105,9 +106,7 @@ function Transactions() {
           </h1>
         </div>
         <div className="calendar-button-container">
-          <button className="secondary-button button" title="Change month/year">
-            Change Date <i className="bi bi-calendar-fill"></i>
-          </button>
+          <DatePicker />
         </div>
       </div>
 
