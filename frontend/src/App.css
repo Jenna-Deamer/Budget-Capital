@@ -49,7 +49,7 @@
 body {
   font-family: "Poppins", sans-serif;
   font-size: 18px;
-  
+
 }
 
 /*NAV*/
@@ -72,13 +72,15 @@ nav {
 
 
 @media (max-width: 991px) {
- .nav-item{
+  .nav-item {
     margin-left: 16px;
   }
+
   .username-nav {
     display: none;
   }
 }
+
 .navbar-nav .nav-item .nav-link:hover {
   color: var(--action-hover);
   transition: ease-in-out 0.3s;
@@ -189,23 +191,23 @@ footer p {
 
 /*Mobile*/
 @media screen and (max-width: 980px) {
-  body{
+  body {
     font-size: 16px;
   }
-  
-h1 {
-  font-size: 38px;
-}
 
-h2 {
-  font-size: 28px;
-}
+  h1 {
+    font-size: 38px;
+  }
 
-h3 {
-  font-size: 20px;
-}
+  h2 {
+    font-size: 28px;
+  }
 
-h4 {
-  font-size: 18px;
-}
+  h3 {
+    font-size: 20px;
+  }
+
+  h4 {
+    font-size: 18px;
+  }
 }

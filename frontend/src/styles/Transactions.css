@@ -2,6 +2,8 @@
     min-height: calc(100vh - 60px - 60px);
     background-color: var(--background);
     color: var(--white);
+    padding-left: 48px;
+    padding-right: 48px;
 }
 
 
@@ -30,9 +32,7 @@
     position: absolute;
 }
 
-.calendar-button-container>button {
-    margin-right: 70px;
-}
+
 
 /*TABLE*/
 .table-wrapper {
@@ -42,7 +42,7 @@
     flex-direction: column;
     align-items: center;
     margin: 20px auto;
-    padding: 0 70px;
+    /* padding: 0 70px; */
 }
 
 .table-buttons {
@@ -110,16 +110,19 @@
 
 /*MOBILE*/
 @media screen and (max-width: 980px) {
-  .header-container,
-  .calendar-button-container{
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .calendar-button-container{
-    margin-top: 48px;
-  }
-  .calendar-button-container > button{
-    margin: unset !important;
-  }
+
+    .header-container,
+    .calendar-button-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .calendar-button-container {
+        margin-top: 48px;
+    }
+
+    .calendar-button-container>button {
+        margin: unset !important;
+    }
 }
