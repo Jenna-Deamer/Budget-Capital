@@ -4,9 +4,10 @@ import "../styles/DatePicker.css";
 import dayjs from "dayjs";
 
 interface DatePickerProps {
-  selectedDate: Date | null;
-  setSelectedDate: (date: Date | null) => void;
-}
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+};
+
 
 function DatePicker({ selectedDate, setSelectedDate }: DatePickerProps) {
   // Set the min and max dates for the date picker

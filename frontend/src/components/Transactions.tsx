@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../styles/Transactions.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -19,7 +19,6 @@ interface TransactionsProps {
 }
 
 function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
-  const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
