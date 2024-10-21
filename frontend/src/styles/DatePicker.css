@@ -1,0 +1,37 @@
+.date-picker-container {
+    width: 200px;
+    background-color: var(--action);
+    color: var(--white);
+    border-radius: 0.25em;
+    padding: unset;
+    cursor: pointer;
+}
+
+
+.date-picker-container .MuiInputBase-root {
+    background-color: var(--action);
+    color: var(--white);
+}
+
+.date-picker-container .MuiSvgIcon-root {
+    color: var(--white);
+}
+
+
+.date-picker-container .MuiInputLabel-root {
+    color: var(--white);
+}
+
+.date-picker-container .MuiInputBase-input {
+    color: var(--white);
+}
+
+
+.date-picker-container .MuiInputLabel-root.Mui-focused {
+    color: var(--white);
+
+}
+
+.date-picker-container .MuiInputLabel-root.Mui-shrink {
+    color: var(--white);
+}

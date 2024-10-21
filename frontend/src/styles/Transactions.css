@@ -2,6 +2,8 @@
     min-height: calc(100vh - 60px - 60px);
     background-color: var(--background);
     color: var(--white);
+    padding-left: 70px;
+    padding-right: 70px;
 }
 
 
@@ -42,7 +44,6 @@
     flex-direction: column;
     align-items: center;
     margin: 20px auto;
-    padding: 0 70px;
 }
 
 .table-buttons {
@@ -110,6 +111,10 @@
 
 /*MOBILE*/
 @media screen and (max-width: 980px) {
+.transactions-page{
+    padding-left: 20px;
+    padding-right: 20px;
+}
   .header-container,
   .calendar-button-container{
     flex-direction: column;

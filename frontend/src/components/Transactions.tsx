@@ -13,8 +13,12 @@ interface Transaction {
   date: string;
   formattedDate?: string;
 }
+interface TransactionsProps {
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+}
 
-function Transactions() {
+function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -106,7 +110,7 @@ function Transactions() {
           </h1>
         </div>
         <div className="calendar-button-container">
-          <DatePicker />
+        <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         </div>
       </div>
 

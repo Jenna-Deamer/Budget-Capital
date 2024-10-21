@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "./App.css";
 import {
     BrowserRouter,
@@ -32,9 +34,11 @@ interface User {
     lastName: string;
 }
 
+
 function App() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     // Check authentication status on component mount
     useEffect(() => {
@@ -70,71 +74,73 @@ function App() {
     }
 
     return (
-        <BrowserRouter>
-            <div className="app-container">
-                <NavBar user={user} setUser={setUser} />
-                <main className="main-content">
-                    <Routes>
-                        <Route path="/" element={<LandingPage user={user} />} />
-                        <Route
-                            path="/transactions"
-                            element={
-                                <ProtectedRoute user={user}>
-                                    <Transactions />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/dashboard"
-                            element={
-                                <ProtectedRoute user={user}>
-                                    <Dashboard />
-                                </ProtectedRoute>
-                            }
-                        />
-                        {!user ? (
-                            <>
-                                <Route path="/signup" element={<SignUp />} />
-                                <Route
-                                    path="/login"
-                                    element={<Login setUser={setUser} />}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <Route
-                                    path="/signup"
-                                    element={<Navigate to="/" />}
-                                />
-                                <Route
-                                    path="/login"
-                                    element={<Navigate to="/" />}
-                                />
-                            </>
-                        )}
-                        <Route
-                            path="/create-transaction"
-                            element={
-                                <ProtectedRoute user={user}>
-                                    <CreateTransaction />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/edit-transaction/:id"
-                            element={
-                                <ProtectedRoute user={user}>
-                                    <EditTransaction />
-                                </ProtectedRoute>
-                            }
-                        />
-                        {/* Catch-all route for undefined routes */}
-                        <Route path="*" element={<ErrorPage />} />
-                    </Routes>
-                </main>
-                <Footer />
-            </div>
-        </BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <BrowserRouter>
+                <div className="app-container">
+                    <NavBar user={user} setUser={setUser} />
+                    <main className="main-content">
+                        <Routes>
+                            <Route path="/" element={<LandingPage user={user} />} />
+                            <Route
+                                path="/transactions"
+                                element={
+                                    <ProtectedRoute user={user}>
+                                        <Transactions selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/dashboard"
+                                element={
+                                    <ProtectedRoute user={user}>
+                                        <Dashboard selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            {!user ? (
+                                <>
+                                    <Route path="/signup" element={<SignUp />} />
+                                    <Route
+                                        path="/login"
+                                        element={<Login setUser={setUser} />}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Route
+                                        path="/signup"
+                                        element={<Navigate to="/" />}
+                                    />
+                                    <Route
+                                        path="/login"
+                                        element={<Navigate to="/" />}
+                                    />
+                                </>
+                            )}
+                            <Route
+                                path="/create-transaction"
+                                element={
+                                    <ProtectedRoute user={user}>
+                                        <CreateTransaction />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/edit-transaction/:id"
+                                element={
+                                    <ProtectedRoute user={user}>
+                                        <EditTransaction />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            {/* Catch-all route for undefined routes */}
+                            <Route path="*" element={<ErrorPage />} />
+                        </Routes>
+                    </main>
+                    <Footer />
+                </div>
+            </BrowserRouter>
+        </LocalizationProvider>
     );
 }
 

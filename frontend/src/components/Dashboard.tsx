@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "./DatePicker";
 
-function Dashboard() {
+interface DashboardProps {
+    selectedDate: Date;
+    setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+}
 
-    //Get current month and year
-
-    //Get all transactions for the time-frame
+function Dashboard({ selectedDate, setSelectedDate }: DashboardProps) {
+   
     return (
         <section className="dashboard-page">
             <div className="header-container">
@@ -17,7 +19,7 @@ function Dashboard() {
                     </h1>
                 </div>
                 <div className="calendar-button-container">
-                <DatePicker />
+              <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                 </div>
             </div>
 
