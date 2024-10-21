@@ -23,6 +23,8 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
   const [userId, setUserId] = useState(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
+
+
   useEffect(() => {
     const fetchUserId = async () => {
       try {
@@ -46,8 +48,12 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
     const fetchTransactions = async () => {
       if (userId) {
         try {
+          //Extract month and year from selected date
+          const selectedMonth = selectedDate.getMonth() + 1; // getMonth() is zero-indexed, so add 1
+          const selectedYear = selectedDate.getFullYear();
+
           const response = await axios.get(
-            `http://localhost:3000/transaction/transactions?userId=${userId}`,
+            `http://localhost:3000/transaction/transactions?userId=${userId}&month=${selectedMonth}&year=${selectedYear}`,
             {
               headers: { "Content-Type": "application/json" },
               withCredentials: true,
@@ -78,7 +84,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
       }
     };
     fetchTransactions();
-  }, [userId]);
+  }, [userId, selectedDate]);
 
   const handleDelete = async (transactionId: string) => {
     //popup message to confirm deletion
@@ -102,7 +108,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
   };
 
   return (
-    <section className="transactions-page">
+    <div className="transactions-page">
       <div className="header-container">
         <div className="header">
           <h1 id="transactions-title">
@@ -110,11 +116,12 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
           </h1>
         </div>
         <div className="calendar-button-container">
-        <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+          <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         </div>
       </div>
 
-      <div className="table-buttons mt-3">
+      <section className="table-section">
+        <div className="table-buttons mt-3">
           <Link
             to="/create-transaction"
             className="primary-button button me-3"
@@ -124,61 +131,62 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
             Create
           </Link>
         </div>
-      <div className="table-wrapper">
-        <table className="transactions-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Amount</th>
-              <th>Category</th>
-              <th>Date</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction._id}>
-                <td>{transaction.name}</td>
-                <td>{transaction.type}</td>
-                <td>{transaction.amount.toFixed(2)}</td>
-                <td>{transaction.category}</td>
-                <td>{transaction.formattedDate}</td>
-                <td className="button-cell">
-                  <Link
-                    to={`/edit-transaction/${transaction._id}`}
-                    state={{ transaction }} // Pass transaction data as state
-                    className="edit-button table-button"
-                    id="edit-button"
-                    title="Edit transaction"
-                  >
-                    <i className="bi bi-pencil"></i>
-                  </Link>
-                </td>
-                <td className="button-cell">
-                  <button
-                    onClick={() => handleDelete(transaction._id)}
-                    className="delete-button table-button"
-                    id="delete-button"
-                    title="Delete transaction"
-                  >
-                    <i className="bi bi-x-lg"></i>
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {transactions.length === 0 && ( // Render when there are no transactions
+        <div className="table-wrapper">
+          <table className="transactions-table">
+            <thead>
               <tr>
-                <td colSpan={7} className="text-center">
-                  No transactions found.
-                </td>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Edit</th>
+                <th>Delete</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </section>
+            </thead>
+            <tbody>
+              {transactions.map((transaction) => (
+                <tr key={transaction._id}>
+                  <td>{transaction.name}</td>
+                  <td>{transaction.type}</td>
+                  <td>{transaction.amount.toFixed(2)}</td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.formattedDate}</td>
+                  <td className="button-cell">
+                    <Link
+                      to={`/edit-transaction/${transaction._id}`}
+                      state={{ transaction }} // Pass transaction data as state
+                      className="edit-button table-button"
+                      id="edit-button"
+                      title="Edit transaction"
+                    >
+                      <i className="bi bi-pencil"></i>
+                    </Link>
+                  </td>
+                  <td className="button-cell">
+                    <button
+                      onClick={() => handleDelete(transaction._id)}
+                      className="delete-button table-button"
+                      id="delete-button"
+                      title="Delete transaction"
+                    >
+                      <i className="bi bi-x-lg"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {transactions.length === 0 && ( // Render when there are no transactions
+                <tr>
+                  <td colSpan={7} className="text-center">
+                    No transactions found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   );
 }
 

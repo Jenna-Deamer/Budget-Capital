@@ -40,6 +40,7 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
+   
     // Check authentication status on component mount
     useEffect(() => {
         const fetchAuthStatus = async () => {
@@ -85,7 +86,10 @@ function App() {
                                 path="/transactions"
                                 element={
                                     <ProtectedRoute user={user}>
-                                        <Transactions selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                                        <Transactions
+                                            selectedDate={selectedDate}
+                                            setSelectedDate={setSelectedDate}
+                                        />
                                     </ProtectedRoute>
                                 }
                             />
