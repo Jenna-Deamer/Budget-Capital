@@ -114,8 +114,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <div className="table-buttons">
+      <div className="table-buttons mt-3">
           <Link
             to="/create-transaction"
             className="primary-button button me-3"
@@ -125,6 +124,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
             Create
           </Link>
         </div>
+      <div className="table-wrapper">
         <table className="transactions-table">
           <thead>
             <tr>

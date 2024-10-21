@@ -24,7 +24,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    position: relative;
+    position: relative;;
 }
 
 #transaction-titles,
@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px auto;
+    margin: 0 auto 20px;
 }
 
 .table-buttons {
