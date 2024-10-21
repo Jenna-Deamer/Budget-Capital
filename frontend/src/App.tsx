@@ -17,6 +17,7 @@ import Transactions from "./components/Transactions";
 import Dashboard from "./components/Dashboard";
 import SignUp from "./components/auth/SignUp";
 import Login from "./components/auth/Login";
+import DemoLogin from "./components/auth/DemoLogin";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ErrorPage from "./components/ErrorPage";
 
@@ -102,13 +103,11 @@ function App() {
                                 }
                             />
                             {!user ? (
-                                <>
-                                    <Route path="/signup" element={<SignUp />} />
-                                    <Route
-                                        path="/login"
-                                        element={<Login setUser={setUser} />}
-                                    />
-                                </>
+                                 <>
+                                 <Route path="/signup" element={<SignUp />} />
+                                 <Route path="/login" element={<Login setUser={setUser} />} />
+                                 <Route path="/demoLogin" element={<DemoLogin setUser={setUser} />} />
+                             </>
                             ) : (
                                 <>
                                     <Route

@@ -64,7 +64,7 @@ function Signup() {
                 <div className="form-error-container">
                     {formError && <p className="error-message text-center">{formError}</p>}
                 </div>
-                <p className="text-center">Don't want to create an account?  <Link to="/login"  id="demo-link">Login as a Demo Account</Link></p>
+                <p className="text-center">Don't want to create an account?  <Link to="/demoLogin"  id="demo-link">Login as a Demo Account</Link></p>
 
 
                 <form className="signup-form" onSubmit={handleSubmit}>

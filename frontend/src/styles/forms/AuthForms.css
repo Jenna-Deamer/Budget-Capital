@@ -62,4 +62,14 @@
     .form-group {
         grid-column: span 2;
     }
+   
+    .form-btn-wrapper {
+        flex-direction: column; 
+        align-items: center; 
+    }
+    .form-btn-wrapper button:first-of-type{
+        margin-right: unset !important;
+        margin-bottom: 16px;
+    }
+
 }

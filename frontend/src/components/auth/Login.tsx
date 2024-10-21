@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
 
-function Login({ setUser }: { setUser: (user: any) => void }) {
+interface User {
+    id: string;
+    username: string;
+    email: string;
+}
+
+function Login({ setUser }: { setUser: (user: User) => void }) {
     // Pass setUser as a prop
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -60,12 +66,6 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
                 <div className="form-error-container">
                 {formError && <p className="error-message text-center">{formError}</p>}
                 </div>
-                <p className="text-center">
-  You can test the app using the demo account: 
-  <br />
-  Email: <strong>Demo@gmail.com</strong> Password: <strong>demouser</strong>
-</p>
-
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Email:</label>
@@ -91,9 +91,12 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
                     </div>
 
                     <div className="form-btn-wrapper">
-                        <button type="submit" className="button primary-button">
+                        <button type="submit" className="button primary-button me-2">
                             Login
                         </button>
+                        <Link to="/demoLogin" className="button secondary-button">
+                            Demo user
+                        </Link>
                     </div>
                 </form>
                 <h3>- OR -</h3>
