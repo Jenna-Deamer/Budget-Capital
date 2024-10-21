@@ -162,6 +162,14 @@ main {
   border-color: var(--secondary-action-hover);
 }
 
+#demo-link{
+  color: var(--white);
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+#demo-link:hover{
+  color: var(--action);
+}
 .loading-container {
   background-color: var(--background);
   display: flex;

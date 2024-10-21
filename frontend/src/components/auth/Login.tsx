@@ -60,6 +60,11 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
                 <div className="form-error-container">
                 {formError && <p className="error-message text-center">{formError}</p>}
                 </div>
+                <p className="text-center">
+  You can test the app using the demo account: 
+  <br />
+  Email: <strong>Demo@gmail.com</strong> Password: <strong>demouser</strong>
+</p>
 
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">

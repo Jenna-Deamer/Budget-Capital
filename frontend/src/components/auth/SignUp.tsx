@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
 
 function Signup() {
@@ -64,6 +64,8 @@ function Signup() {
                 <div className="form-error-container">
                     {formError && <p className="error-message text-center">{formError}</p>}
                 </div>
+                <p className="text-center">Don't want to create an account?  <Link to="/login"  id="demo-link">Login as a Demo Account</Link></p>
+
 
                 <form className="signup-form" onSubmit={handleSubmit}>
                     <div className="form-group">
