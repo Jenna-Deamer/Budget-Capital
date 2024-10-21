@@ -23,6 +23,9 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
   const [userId, setUserId] = useState(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
+  // Extract month and year from selected date for displaying in the header
+  const selectedMonth = selectedDate.toLocaleString('default', { month: 'long' });
+  const selectedYear = selectedDate.getFullYear();
 
 
   useEffect(() => {
@@ -48,7 +51,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
     const fetchTransactions = async () => {
       if (userId) {
         try {
-          //Extract month and year from selected date
+          //Extract month and year from selected date to send to the backend
           const selectedMonth = selectedDate.getMonth() + 1; // getMonth() is zero-indexed, so add 1
           const selectedYear = selectedDate.getFullYear();
 
@@ -112,7 +115,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
       <div className="header-container">
         <div className="header">
           <h1 id="transactions-title">
-            <span>Month/Year</span> Overview
+            <span>{selectedMonth} {selectedYear}</span> Transactions
           </h1>
         </div>
         <div className="calendar-button-container">
