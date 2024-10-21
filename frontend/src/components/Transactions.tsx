@@ -102,7 +102,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
   };
 
   return (
-    <section className="transactions-page">
+    <div className="transactions-page">
       <div className="header-container">
         <div className="header">
           <h1 id="transactions-title">
@@ -114,6 +114,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
         </div>
       </div>
 
+<section className="table-section">
       <div className="table-buttons mt-3">
           <Link
             to="/create-transaction"
@@ -178,7 +179,8 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
           </tbody>
         </table>
       </div>
-    </section>
+      </section>
+    </div>
   );
 }
 
