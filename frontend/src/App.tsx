@@ -8,7 +8,6 @@ import {
     Routes,
     Route,
     Navigate,
-    useLocation,
 } from "react-router-dom";
 
 // Views

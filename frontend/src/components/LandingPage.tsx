@@ -1,7 +1,7 @@
 import "../styles/landing.css";
 
 interface LandingPageProps {
-    user: any;
+    user: { id: string; name: string } | null;
 }
 
 function LandingPage({ user }: LandingPageProps) {
