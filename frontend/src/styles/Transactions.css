@@ -7,18 +7,18 @@
 }
 
 
-.header-container {
+/* .header-container {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     padding-top: 24px;
-}
+} */
 
-.header {
+/* .header {
     flex-grow: 1;
     text-align: center;
-}
+} */
 
 .calendar-button-container {
     display: flex;
@@ -40,6 +40,8 @@
 .table-section{
     max-width: 2000px;
     width: 100%;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 .table-wrapper {
     display: flex;
@@ -49,7 +51,7 @@
 }
 
 .table-buttons {
-    width: 100%
+    width: 100%;
 }
 
 .transactions-table {
@@ -111,6 +113,11 @@
     background-color: var(--red-hover);
 }
 
+.goal-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /*MOBILE*/
 @media screen and (max-width: 980px) {
 .transactions-page{

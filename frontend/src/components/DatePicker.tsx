@@ -2,12 +2,19 @@ import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers";
 import { Box } from "@mui/material";
 import "../styles/DatePicker.css";
 import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
 
 interface DatePickerProps {
   selectedDate: Date;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
 };
 
+dayjs.extend(updateLocale);
+
+// Update locale to use short month names
+dayjs.updateLocale("en", {
+  monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+});
 
 function DatePicker({ selectedDate, setSelectedDate }: DatePickerProps) {
   // Set the min and max dates for the date picker
