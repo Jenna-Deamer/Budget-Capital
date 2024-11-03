@@ -3,12 +3,7 @@ import axios from "axios";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "./App.css";
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Views
 import LandingPage from "./components/LandingPage";
@@ -34,13 +29,22 @@ interface User {
     lastName: string;
 }
 
+interface Transaction {
+    _id: string;
+    name: string;
+    type: string;
+    amount: number;
+    category: string;
+    date: string;
+    formattedDate?: string;
+}
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-   
     // Check authentication status on component mount
     useEffect(() => {
         const fetchAuthStatus = async () => {
@@ -81,7 +85,10 @@ function App() {
                     <NavBar user={user} setUser={setUser} />
                     <main className="main-content">
                         <Routes>
-                            <Route path="/" element={<LandingPage user={user} />} />
+                            <Route
+                                path="/"
+                                element={<LandingPage user={user} />}
+                            />
                             <Route
                                 path="/transactions"
                                 element={
@@ -89,6 +96,8 @@ function App() {
                                         <Transactions
                                             selectedDate={selectedDate}
                                             setSelectedDate={setSelectedDate}
+                                            transactions={transactions}
+                                            setTransactions={setTransactions}
                                         />
                                     </ProtectedRoute>
                                 }
@@ -97,16 +106,31 @@ function App() {
                                 path="/dashboard"
                                 element={
                                     <ProtectedRoute user={user}>
-                                        <Dashboard selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                                        <Dashboard
+                                            selectedDate={selectedDate}
+                                            setSelectedDate={setSelectedDate}
+                                            transactions={transactions}
+                                        />
                                     </ProtectedRoute>
                                 }
                             />
                             {!user ? (
-                                 <>
-                                 <Route path="/signup" element={<SignUp />} />
-                                 <Route path="/login" element={<Login setUser={setUser} />} />
-                                 <Route path="/demoLogin" element={<DemoLogin setUser={setUser} />} />
-                             </>
+                                <>
+                                    <Route
+                                        path="/signup"
+                                        element={<SignUp />}
+                                    />
+                                    <Route
+                                        path="/login"
+                                        element={<Login setUser={setUser} />}
+                                    />
+                                    <Route
+                                        path="/demoLogin"
+                                        element={
+                                            <DemoLogin setUser={setUser} />
+                                        }
+                                    />
+                                </>
                             ) : (
                                 <>
                                     <Route
