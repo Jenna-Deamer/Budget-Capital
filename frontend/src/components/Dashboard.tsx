@@ -24,9 +24,6 @@ function Dashboard({
     setSelectedDate,
     transactions,
 }: DashboardProps) {
-    console.log(transactions.map((transaction) => transaction.type));
-    console.log(transactions.map((transaction) => transaction.amount));
-
     //calcuate total expense & income
     const totalIncome = transactions
         .filter((transaction) => transaction.type.toLowerCase() === "income")
@@ -36,8 +33,20 @@ function Dashboard({
         .filter((transaction) => transaction.type.toLowerCase() === "expense")
         .reduce((acc, transaction) => acc + transaction.amount, 0);
 
-    console.log("total income " + totalIncome);
-    console.log("total expense " + totalExpense);
+    // get all categories & their totals
+    const categories: { [key: string]: number } = {};
+    // loop through transactions and add to categories object
+    transactions
+        .filter((transaction) => transaction.type.toLowerCase() === "expense")
+        .forEach((transaction) => {
+            // if category exists, add amount to category total
+            if (categories[transaction.category]) {
+                categories[transaction.category] += transaction.amount;
+            } else {
+                // if category does not exist, create category and set amount as initial value
+                categories[transaction.category] = transaction.amount;
+            }
+        });
     return (
         <section className="dashboard-page">
             <div className="header-container">
@@ -68,7 +77,16 @@ function Dashboard({
             <div className="breakdown-container">
                 <p>Total Expenses for Month</p>
                 <div className="graph-container"></div>
-                <div className="categories-list"></div>
+                <div className="categories-list">
+                    <ul>
+                        {Object.entries(categories).map(([category, total]) => (
+                            <li key={category}>
+                                <span>{category}</span>
+                                <span>${total}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </section>
     );
