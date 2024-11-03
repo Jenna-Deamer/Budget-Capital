@@ -34,17 +34,30 @@ function Dashboard({
         .reduce((acc, transaction) => acc + transaction.amount, 0);
 
     // get all categories & their totals
-    const categories: { [key: string]: number } = {};
+    const incomeCategories: { [key: string]: number } = {};
+    const expenseCategories: { [key: string]: number } = {};
     // loop through transactions and add to categories object
     transactions
         .filter((transaction) => transaction.type.toLowerCase() === "expense")
         .forEach((transaction) => {
             // if category exists, add amount to category total
-            if (categories[transaction.category]) {
-                categories[transaction.category] += transaction.amount;
+            if (expenseCategories[transaction.category]) {
+                expenseCategories[transaction.category] += transaction.amount;
             } else {
                 // if category does not exist, create category and set amount as initial value
-                categories[transaction.category] = transaction.amount;
+                expenseCategories[transaction.category] = transaction.amount;
+            }
+        });
+
+    transactions
+        .filter((transaction) => transaction.type.toLowerCase() === "income")
+        .forEach((transaction) => {
+            // if category exists, add amount to category total
+            if (incomeCategories[transaction.category]) {
+                incomeCategories[transaction.category] += transaction.amount;
+            } else {
+                // if category does not exist, create category and set amount as initial value
+                incomeCategories[transaction.category] = transaction.amount;
             }
         });
     return (
@@ -79,12 +92,14 @@ function Dashboard({
                 <div className="graph-container"></div>
                 <div className="categories-list">
                     <ul>
-                        {Object.entries(categories).map(([category, total]) => (
-                            <li key={category}>
-                                <span>{category}</span>
-                                <span>${total}</span>
-                            </li>
-                        ))}
+                        {Object.entries(expenseCategories).map(
+                            ([category, total]) => (
+                                <li key={category}>
+                                    <span>{category}</span>
+                                    <span>${total}</span>
+                                </li>
+                            )
+                        )}
                     </ul>
                 </div>
             </div>
