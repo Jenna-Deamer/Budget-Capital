@@ -2,8 +2,9 @@
     min-height: calc(100vh - 60px - 60px);
     background-color: var(--background);
     color: var(--white);
+    padding-left: 70px;
+    padding-right: 70px;
 }
-
 
 .header-container {
     display: flex;
@@ -25,7 +26,10 @@
     position: relative;
 }
 
-#transaction-titles,
+#dashboard-title{
+    margin: unset !important;
+}
+
 .calendar-button-container>button {
     position: absolute;
 }
@@ -34,7 +38,97 @@
     margin-right: 70px;
 }
 
-/*Expense breakdown section*/
+.highlight-container{
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 48px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  
+}
+
+.highlight-box,
+.goal-container{
+    background-color: var(--foreground);
+    border-radius: 8px;
+    padding: 1em;
+    /*Center Content*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.goal-container p,
+.highlight-box strong{
+    font-size: 20px;
+}
+
+.highlight-box p,
+.goal-container p{
+    margin: unset !important;
+}
+.expense-label{
+    color: var(--red-label);
+    font-size: 18px;
+}
+.income-label{
+    color: var(--green-label);
+    font-size: 18px;
+}
+/*breakdown section*/
 .breakdown-container {
     background-color: var(--foreground);
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.breakdown-container p {
+    grid-column: 1 / -1;
+}
+.categories-list-container {
+    padding: 16px;
+}
+
+.expense-category-breakdown {
+    list-style-type: none;
+    padding: unset;
+    margin: unset;
+    width: 400px;
+    border: 2px blue solid;
+}
+
+.expense-category-breakdown li {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  
+}
+
+.expense-category-breakdown li span {
+    text-align: left;
+    border:  solid 1px red;
+    width: 100%;
+}
+
+@media screen and (max-width: 1100px) {
+    .breakdown-container {
+        grid-template-columns: 1fr;
+    }
+    .expense-category-breakdown{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+    .expense-category-breakdown li span {
+        width: 150px;
+      
+    }
+    
+}
+
+@media screen and (max-width: 700px) {
+   
 }

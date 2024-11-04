@@ -24,7 +24,13 @@ function Dashboard({
     setSelectedDate,
     transactions,
 }: DashboardProps) {
-    //calcuate total expense & income
+    // Extract month and year from selected date for displaying in the header
+    const selectedMonth = selectedDate.toLocaleString("default", {
+        month: "long",
+    });
+    const selectedYear = selectedDate.getFullYear();
+
+    //calculate total expense & income
     const totalIncome = transactions
         .filter((transaction) => transaction.type.toLowerCase() === "income")
         .reduce((acc, transaction) => acc + transaction.amount, 0);
@@ -60,12 +66,13 @@ function Dashboard({
                 incomeCategories[transaction.category] = transaction.amount;
             }
         });
+
     return (
         <section className="dashboard-page">
             <div className="header-container">
                 <div className="header">
-                    <h1 id="transactions-title">
-                        <span>Month/Year</span> Overview
+                    <h1 id="dashboard-title">
+                        {selectedMonth} {selectedYear} Overview
                     </h1>
                 </div>
                 <div className="calendar-button-container">
@@ -78,28 +85,36 @@ function Dashboard({
 
             <div className="highlight-container">
                 <div className="highlight-box">
-                    <p>Income</p>
                     <p>${totalIncome}</p>
+                    <p className="income-label">Income</p>
                 </div>
-                <div className="goal-container"></div>
+                <div className="goal-container">
+                    <p>You are <strong>$99999.99</strong> <span className="expense-label"> Over Budget!</span></p>
+                    <button className="button primary-button mt-2">Manage Goal</button>
+                </div>
+                <div className="highlight-box">
+                    <strong>${totalExpense}</strong>
+                    <p className="expense-label">Expense</p>
+                </div>
             </div>
-            <div className="highlight-box">
-                <p>Expense</p>
-                <p>${totalExpense}</p>
-            </div>
+
             <div className="breakdown-container">
                 <p>Total Expenses for Month</p>
-                <div className="graph-container"></div>
-                <div className="categories-list">
-                    <ul>
-                        {Object.entries(expenseCategories).map(
-                            ([category, total]) => (
+                <div className="graph-container">
+                    
+                </div>
+                <div className="categories-list-container">
+                    <ul className="expense-category-breakdown">
+                        {Object.entries(expenseCategories).map(([category, total]) => {
+                            const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
+                            return (
                                 <li key={category}>
-                                    <span>{category}</span>
-                                    <span>${total}</span>
+                                    <span> {category}</span>
+                                    <span> ${total}</span>
+                                    <span> {percentage}%</span>
                                 </li>
-                            )
-                        )}
+                            );
+                        })}
                     </ul>
                 </div>
             </div>
