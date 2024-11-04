@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
@@ -47,24 +47,47 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                 // Redirect to the homepage
                 navigate("/");
                 window.location.reload();
-            } 
+            }
         } catch (error) {
-        if (axios.isAxiosError(error)) {
-            // error message returned from the backend
-            const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
-            setFormError(errorMessage);  // Set the error message to display to the user
-        } else {
-            setFormError("An unexpected error occurred. Please try again.");
-        }
+            if (axios.isAxiosError(error)) {
+                // error message returned from the backend
+                const errorMessage =
+                    error.response?.data?.message ||
+                    "An error occurred. Please try again.";
+                setFormError(errorMessage); // Set the error message to display to the user
+            } else {
+                setFormError("An unexpected error occurred. Please try again.");
+            }
         }
     };
+
+    useEffect(() => {
+        // On component mount (when views change) add event listener to Google button
+        const googleButton = document.querySelector(".google-btn");
+        if (googleButton) {
+            googleButton.addEventListener("click", () => {
+                window.location.href = "http://localhost:3000/auth/google";
+            });
+        }
+
+        // If there was already an event listener on the Google button, remove it to avoid duplicates
+        return () => {
+            if (googleButton) {
+                googleButton.removeEventListener("click", () => {
+                    window.location.href = "http://localhost:3000/auth/google";
+                });
+            }
+        };
+    }, []);
 
     return (
         <section className="form-page">
             <div className="form-container">
                 <h1>Login</h1>
                 <div className="form-error-container">
-                {formError && <p className="error-message text-center">{formError}</p>}
+                    {formError && (
+                        <p className="error-message text-center">{formError}</p>
+                    )}
                 </div>
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -91,16 +114,22 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                     </div>
 
                     <div className="form-btn-wrapper">
-                        <button type="submit" className="button primary-button me-2">
+                        <button
+                            type="submit"
+                            className="button primary-button me-2"
+                        >
                             Login
                         </button>
-                        <Link to="/demoLogin" className="button secondary-button">
+                        <Link
+                            to="/demoLogin"
+                            className="button secondary-button"
+                        >
                             Demo user
                         </Link>
                     </div>
                 </form>
                 <h3>- OR -</h3>
-                <button className="google-btn">GOOGLE LOGIN</button>
+                <button className="google-btn">Sign in with Google</button>
             </div>
         </section>
     );
