@@ -136,7 +136,7 @@ function Transactions({
 
     return (
         <div className="transactions-page">
-            <div className="header-container">
+            <section className="header-container">
                 <div className="header">
                     <h1 id="transactions-title">
                         {selectedMonth} {selectedYear} Transactions
@@ -148,7 +148,7 @@ function Transactions({
                         setSelectedDate={setSelectedDate}
                     />
                 </div>
-            </div>
+            </section>
 
             <section className="table-section">
                 <div className="table-buttons mt-3">

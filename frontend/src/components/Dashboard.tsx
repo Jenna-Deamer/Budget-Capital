@@ -112,7 +112,7 @@ function Dashboard({
 
             <section className="highlight-container">
                 <div className="highlight-box">
-                    <strong>${totalIncome}</strong>
+                    <strong>${totalIncome.toFixed(2)}</strong>
                     <p className="income-label">Income</p>
                 </div>
                 <div className="goal-container">
@@ -120,7 +120,7 @@ function Dashboard({
                     <button className="button primary-button mt-2">Manage Goal</button>
                 </div>
                 <div className="highlight-box">
-                    <strong>${totalExpense}</strong>
+                    <strong>${totalExpense.toFixed(2)}</strong>
                     <p className="expense-label">Expense</p>
                 </div>
             </section>
