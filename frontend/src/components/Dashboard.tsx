@@ -18,7 +18,6 @@ interface DashboardProps {
     setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
     transactions: Transaction[];
 }
-
 function Dashboard({
     selectedDate,
     setSelectedDate,
@@ -67,6 +66,34 @@ function Dashboard({
             }
         });
 
+    const categoryColors: string[] = [
+        "#ff6347", // Tomato
+        "#4682b4", // SteelBlue
+        "#32cd32", // LimeGreen
+        "#ff4500", // OrangeRed
+        "#ffd700", // Gold
+        "#8a2be2", // BlueViolet
+        "#d2691e", // Chocolate
+        "#ff1493", // DeepPink
+        "#1e90ff", // DodgerBlue
+        "#adff2f", // GreenYellow
+        "#ff8c00", // DarkOrange
+        "#6a5acd", // SlateBlue
+        "#00fa9a", // MediumSpringGreen
+        "#ff7f50", // Coral
+        "#4b0082", // Indigo
+        "#f0e68c", // Khaki
+        "#ff00ff", // Fuchsia
+        "#800000", // Maroon
+        "#b22222", // Firebrick
+        "#228b22", // ForestGreen
+        "#ffb6c1", // LightPink
+        "#20b2aa", // LightSeaGreen
+        "#f4a300", // Orange
+        "#483d8b", // DarkSlateBlue
+        "#ffdead", // NavajoWhite
+    ];
+
     return (
         <section className="dashboard-page">
             <div className="header-container">
@@ -101,15 +128,24 @@ function Dashboard({
             <div className="breakdown-container">
                 <p>Total Expenses for Month</p>
                 <div className="graph-container">
-                    
+
                 </div>
                 <div className="categories-list-container">
                     <ul className="expense-category-breakdown">
-                        {Object.entries(expenseCategories).map(([category, total]) => {
+                        {Object.entries(expenseCategories).map(([category, total], index) => {
                             const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
+                            const categoryColor = index < categoryColors.length
+                                ? categoryColors[index] // Use color from categoryColors if within range
+                                : "#000000"; // Default to black if there are not enough colors
                             return (
                                 <li key={category}>
-                                    <span> {category}</span>
+                                    <span>
+                                        <i
+                                            className="bi bi-circle-fill me-1"
+                                            style={{ color: categoryColor }}
+                                        ></i>
+                                        {category}
+                                    </span>
                                     <span> ${total}</span>
                                     <span> {percentage}%</span>
                                 </li>

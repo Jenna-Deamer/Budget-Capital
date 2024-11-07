@@ -92,11 +92,10 @@
 }
 
 .expense-category-breakdown {
-    list-style-type: none;
     padding: unset;
     margin: unset;
     width: 400px;
-    border: 2px blue solid;
+    /* border: 2px blue solid; */
 }
 
 .expense-category-breakdown li {
@@ -110,6 +109,7 @@
     border:  solid 1px red;
     width: 100%;
 }
+
 
 @media screen and (max-width: 1100px) {
     .breakdown-container {
