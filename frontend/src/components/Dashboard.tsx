@@ -95,7 +95,7 @@ function Dashboard({
     ];
 
     return (
-        <section className="dashboard-page">
+        <div className="dashboard-page">
             <div className="header-container">
                 <div className="header">
                     <h1 id="dashboard-title">
@@ -110,9 +110,9 @@ function Dashboard({
                 </div>
             </div>
 
-            <div className="highlight-container">
+            <section className="highlight-container">
                 <div className="highlight-box">
-                    <p>${totalIncome}</p>
+                    <strong>${totalIncome}</strong>
                     <p className="income-label">Income</p>
                 </div>
                 <div className="goal-container">
@@ -123,15 +123,16 @@ function Dashboard({
                     <strong>${totalExpense}</strong>
                     <p className="expense-label">Expense</p>
                 </div>
-            </div>
+            </section>
 
+<section className="breakdown-section">
             <div className="breakdown-container">
-                <p>Total Expenses for Month</p>
+                <p>Total Expenses</p>
                 <div className="graph-container">
 
                 </div>
                 <div className="categories-list-container">
-                    <ul className="expense-category-breakdown">
+                    <ul className="category-breakdown">
                         {Object.entries(expenseCategories).map(([category, total], index) => {
                             const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
                             const categoryColor = index < categoryColors.length
@@ -139,7 +140,7 @@ function Dashboard({
                                 : "#000000"; // Default to black if there are not enough colors
                             return (
                                 <li key={category}>
-                                    <span>
+                                    <span className="category">
                                         <i
                                             className="bi bi-circle-fill me-1"
                                             style={{ color: categoryColor }}
@@ -154,7 +155,39 @@ function Dashboard({
                     </ul>
                 </div>
             </div>
-        </section>
+
+
+            <div className="breakdown-container mt-4">
+                <p>Total Income</p>
+                <div className="graph-container">
+
+                </div>
+                <div className="categories-list-container">
+                    <ul className="category-breakdown">
+                        {Object.entries(incomeCategories).map(([category, total], index) => {
+                            const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
+                            const categoryColor = index < categoryColors.length
+                                ? categoryColors[index] // Use color from categoryColors if within range
+                                : "#000000"; // Default to black if there are not enough colors
+                            return (
+                                <li key={category}>
+                                    <span className="category">
+                                        <i
+                                            className="bi bi-circle-fill me-1"
+                                            style={{ color: categoryColor }}
+                                        ></i>
+                                        {category}
+                                    </span>
+                                    <span> ${total}</span>
+                                    <span> {percentage}%</span>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            </div>
+            </section>
+        </div>
     );
 }
 
