@@ -142,12 +142,12 @@ function Dashboard({
                                 <li key={category}>
                                     <span className="category">
                                         <i
-                                            className="bi bi-circle-fill me-1"
+                                            className="bi bi-circle-fill"
                                             style={{ color: categoryColor }}
                                         ></i>
                                         {category}
                                     </span>
-                                    <span> ${total}</span>
+                                    <span> ${total.toFixed(2)}</span>
                                     <span> {percentage}%</span>
                                 </li>
                             );
@@ -178,7 +178,7 @@ function Dashboard({
                                         ></i>
                                         {category}
                                     </span>
-                                    <span> ${total}</span>
+                                    <span> ${total.toFixed(2)}</span>
                                     <span> {percentage}%</span>
                                 </li>
                             );

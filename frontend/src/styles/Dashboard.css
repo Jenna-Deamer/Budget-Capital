@@ -110,13 +110,37 @@
     margin-top: 8px;
 
 }
-
+.category i{
+    padding-right: 8px;
+}
 .category-breakdown li span {
     text-align: left;
     width: 100%;
 }
+/*Highlight cards Mobile*/
+@media screen and (max-width: 900px){
+    .highlight-container{
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 40px;
+        margin-top: 20px;
+    }
+    .goal-container{
+        order: -1; 
+        grid-column: span 2
+    }
+}
 
-
+@media screen and (max-width: 450px){
+    .highlight-container{
+        grid-template-columns: 1fr;
+        
+    }
+    .goal-container {
+        grid-column: span 1; /* Remove spanning across columns */
+    }
+}
+/*Break down chart Mobile*/
 @media screen and (max-width: 1100px) {
     .breakdown-container {
         grid-template-columns: 1fr;
@@ -173,6 +197,7 @@
  
     .category-breakdown {
         grid-template-columns: 1fr;
+        gap: unset;
     }
 
 }
