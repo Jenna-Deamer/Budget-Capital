@@ -1,7 +1,36 @@
+require('dotenv').config();
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+// Moved this out of app.js since its an auth thing
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    // this references the callback route that we have at the bottom
+    callbackURL: "http://localhost:3000/auth/google/callback"
+},
+    async function (token, tokenSecret, profile, done) {
+        try {
+            let user = await User.findOne({ username: profile.emails[0].value });
+
+            if (!user) {
+                user = new User({
+                    firstName: profile.name.givenName || 'N/A',
+                    lastName: profile.name.familyName || 'N/A',
+                    username: profile.emails[0].value
+                });
+                await user.save();
+            }
+
+            return done(null, user);
+        } catch (err) {
+            return done(err, null);
+        }
+    }
+));
 
 // Signup route
 router.post("/signup", async (req, res) => {
@@ -44,7 +73,6 @@ router.post("/signup", async (req, res) => {
         });
     });
 });
-
 
 // Login route
 router.post("/login", (req, res, next) => {
@@ -111,6 +139,20 @@ router.post("/logout", (req, res) => {
     });
 });
 
+// Google Sign-in
+router.get('/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+router.get('/google/callback',
+    passport.authenticate('google', {
+        // if it fails, redirect to login page
+        failureRedirect: 'http://localhost:5173/login',
+        // if it succeeds, redirect to transactions page
+        successRedirect: 'http://localhost:5173/transactions'
+    })
+);
+
 // Route to check if user is authenticated
 router.get("/check-auth", (req, res) => {
     console.log("Check Auth Called");
@@ -133,8 +175,8 @@ router.get("/check-auth", (req, res) => {
 
 router.get("/current-user", (req, res) => {
     if (req.isAuthenticated()) {
-       return res.status(200).json({userId: req.user._id});
-    } 
+        return res.status(200).json({ userId: req.user._id });
+    }
     return res.status(401).json({ message: "Not authorized" });
 });
 
