@@ -37,7 +37,7 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 50px - 60px);
+  min-height: calc(100vh - 50px);
   background-color: var(--background);
 }
 
@@ -45,7 +45,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: 50px;
+
 }
 
 body {
