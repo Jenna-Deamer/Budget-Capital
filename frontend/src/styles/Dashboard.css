@@ -2,8 +2,10 @@
     min-height: calc(100vh - 60px - 60px);
     background-color: var(--background);
     color: var(--white);
+    padding-left: 70px;
+    padding-right: 70px;
+    padding-bottom: 50px;
 }
-
 
 .header-container {
     display: flex;
@@ -25,7 +27,10 @@
     position: relative;
 }
 
-#transaction-titles,
+#dashboard-title {
+    margin: unset !important;
+}
+
 .calendar-button-container>button {
     position: absolute;
 }
@@ -34,7 +39,166 @@
     margin-right: 70px;
 }
 
-/*Expense breakdown section*/
+.highlight-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+
+}
+
+.highlight-box,
+.goal-container {
+    background-color: var(--foreground);
+    border-radius: 8px;
+    padding: 1em;
+    /*Center Content*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.goal-container p,
+.highlight-box strong {
+    font-size: 20px;
+}
+
+.highlight-box p,
+.goal-container p {
+    margin: unset !important;
+}
+
+.expense-label {
+    color: var(--red-label);
+    font-size: 18px;
+}
+
+.income-label {
+    color: var(--green-label);
+    font-size: 18px;
+}
+
+/*breakdown section*/
+.breakdown-section{
+    padding: 0 100px;
+}
 .breakdown-container {
     background-color: var(--foreground);
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    max-width: 2000px;
+    width: 100%;
+   
+}
+
+.breakdown-container p {
+    grid-column: 1 / -1;
+}
+
+.category-breakdown {
+    padding: unset;
+    margin: unset;
+    width: 400px;
+}
+
+.category-breakdown li {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 8px;
+
+}
+.category i{
+    padding-right: 8px;
+}
+.category-breakdown li span {
+    text-align: left;
+    width: 100%;
+}
+/*Highlight cards Mobile*/
+@media screen and (max-width: 900px){
+    .highlight-container{
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 40px;
+        margin-top: 20px;
+    }
+    .goal-container{
+        order: -1; 
+        grid-column: span 2
+    }
+}
+
+@media screen and (max-width: 450px){
+    .highlight-container{
+        grid-template-columns: 1fr;
+        
+    }
+    .goal-container {
+        grid-column: span 1; /* Remove spanning across columns */
+    }
+}
+/*Break down chart Mobile*/
+@media screen and (max-width: 1100px) {
+    .breakdown-container {
+        grid-template-columns: 1fr;
+    }
+    .breakdown-section{
+        padding: 0 30px;
+    }
+    .category-breakdown {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .category-breakdown li span {
+        width: 150px;
+
+    }
+
+}
+
+@media screen and (max-width: 700px) {
+    .dashboard-page {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .category-breakdown {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .category-breakdown li {
+        background-color: var(--background);
+        padding: 10px; 
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+      
+    }
+
+    .category {
+        grid-column: span 2;
+    }
+
+    .category-breakdown li span {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 450px) {
+ 
+    .category-breakdown {
+        grid-template-columns: 1fr;
+        gap: unset;
+    }
+
 }

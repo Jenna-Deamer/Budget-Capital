@@ -16,11 +16,17 @@ interface Transaction {
 interface TransactionsProps {
     selectedDate: Date;
     setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+    transactions: Transaction[];
+    setTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
 }
 
-function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
+function Transactions({
+    selectedDate,
+    setSelectedDate,
+    transactions,
+    setTransactions,
+}: TransactionsProps) {
     const [userId, setUserId] = useState(null);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     // Extract month and year from selected date for displaying in the header
     const selectedMonth = selectedDate.toLocaleString("default", {
@@ -130,7 +136,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
 
     return (
         <div className="transactions-page">
-            <div className="header-container">
+            <section className="header-container">
                 <div className="header">
                     <h1 id="transactions-title">
                         {selectedMonth} {selectedYear} Transactions
@@ -142,7 +148,7 @@ function Transactions({ selectedDate, setSelectedDate }: TransactionsProps) {
                         setSelectedDate={setSelectedDate}
                     />
                 </div>
-            </div>
+            </section>
 
             <section className="table-section">
                 <div className="table-buttons mt-3">

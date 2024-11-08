@@ -29,10 +29,21 @@ interface User {
     lastName: string;
 }
 
+interface Transaction {
+    _id: string;
+    name: string;
+    type: string;
+    amount: number;
+    category: string;
+    date: string;
+    formattedDate?: string;
+}
+
 function App() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     // Check authentication status on component mount
     useEffect(() => {
@@ -85,6 +96,8 @@ function App() {
                                         <Transactions
                                             selectedDate={selectedDate}
                                             setSelectedDate={setSelectedDate}
+                                            transactions={transactions}
+                                            setTransactions={setTransactions}
                                         />
                                     </ProtectedRoute>
                                 }
@@ -96,6 +109,7 @@ function App() {
                                         <Dashboard
                                             selectedDate={selectedDate}
                                             setSelectedDate={setSelectedDate}
+                                            transactions={transactions}
                                         />
                                     </ProtectedRoute>
                                 }
