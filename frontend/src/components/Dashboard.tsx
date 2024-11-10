@@ -2,6 +2,7 @@ import "../styles/Dashboard.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "./DatePicker";
+import Budget from "./budget/Budget";
 
 interface Transaction {
     _id: string;
@@ -115,77 +116,89 @@ function Dashboard({
                     <strong>${totalIncome.toFixed(2)}</strong>
                     <p className="income-label">Income</p>
                 </div>
-                <div className="goal-container">
-                    <p>You are <strong>$99999.99</strong> <span className="expense-label"> Over Budget!</span></p>
-                    <button className="button primary-button mt-2">Manage Goal</button>
-                </div>
+                <Budget />
                 <div className="highlight-box">
                     <strong>${totalExpense.toFixed(2)}</strong>
                     <p className="expense-label">Expense</p>
                 </div>
             </section>
 
-<section className="breakdown-section">
-            <div className="breakdown-container">
-                <p>Total Expenses</p>
-                <div className="graph-container">
-
+            <section className="breakdown-section">
+                <div className="breakdown-container">
+                    <p>Total Expenses</p>
+                    <div className="graph-container"></div>
+                    <div className="categories-list-container">
+                        <ul className="category-breakdown">
+                            {Object.entries(expenseCategories).map(
+                                ([category, total], index) => {
+                                    const percentage = totalExpense
+                                        ? (
+                                              (total / totalExpense) *
+                                              100
+                                          ).toFixed(2)
+                                        : "0.00";
+                                    const categoryColor =
+                                        index < categoryColors.length
+                                            ? categoryColors[index] // Use color from categoryColors if within range
+                                            : "#000000"; // Default to black if there are not enough colors
+                                    return (
+                                        <li key={category}>
+                                            <span className="category">
+                                                <i
+                                                    className="bi bi-circle-fill"
+                                                    style={{
+                                                        color: categoryColor,
+                                                    }}
+                                                ></i>
+                                                {category}
+                                            </span>
+                                            <span> ${total.toFixed(2)}</span>
+                                            <span> {percentage}%</span>
+                                        </li>
+                                    );
+                                }
+                            )}
+                        </ul>
+                    </div>
                 </div>
-                <div className="categories-list-container">
-                    <ul className="category-breakdown">
-                        {Object.entries(expenseCategories).map(([category, total], index) => {
-                            const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
-                            const categoryColor = index < categoryColors.length
-                                ? categoryColors[index] // Use color from categoryColors if within range
-                                : "#000000"; // Default to black if there are not enough colors
-                            return (
-                                <li key={category}>
-                                    <span className="category">
-                                        <i
-                                            className="bi bi-circle-fill"
-                                            style={{ color: categoryColor }}
-                                        ></i>
-                                        {category}
-                                    </span>
-                                    <span> ${total.toFixed(2)}</span>
-                                    <span> {percentage}%</span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
 
-
-            <div className="breakdown-container mt-4">
-                <p>Total Income</p>
-                <div className="graph-container">
-
+                <div className="breakdown-container mt-4">
+                    <p>Total Income</p>
+                    <div className="graph-container"></div>
+                    <div className="categories-list-container">
+                        <ul className="category-breakdown">
+                            {Object.entries(incomeCategories).map(
+                                ([category, total], index) => {
+                                    const percentage = totalExpense
+                                        ? (
+                                              (total / totalExpense) *
+                                              100
+                                          ).toFixed(2)
+                                        : "0.00";
+                                    const categoryColor =
+                                        index < categoryColors.length
+                                            ? categoryColors[index] // Use color from categoryColors if within range
+                                            : "#000000"; // Default to black if there are not enough colors
+                                    return (
+                                        <li key={category}>
+                                            <span className="category">
+                                                <i
+                                                    className="bi bi-circle-fill me-1"
+                                                    style={{
+                                                        color: categoryColor,
+                                                    }}
+                                                ></i>
+                                                {category}
+                                            </span>
+                                            <span> ${total.toFixed(2)}</span>
+                                            <span> {percentage}%</span>
+                                        </li>
+                                    );
+                                }
+                            )}
+                        </ul>
+                    </div>
                 </div>
-                <div className="categories-list-container">
-                    <ul className="category-breakdown">
-                        {Object.entries(incomeCategories).map(([category, total], index) => {
-                            const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
-                            const categoryColor = index < categoryColors.length
-                                ? categoryColors[index] // Use color from categoryColors if within range
-                                : "#000000"; // Default to black if there are not enough colors
-                            return (
-                                <li key={category}>
-                                    <span className="category">
-                                        <i
-                                            className="bi bi-circle-fill me-1"
-                                            style={{ color: categoryColor }}
-                                        ></i>
-                                        {category}
-                                    </span>
-                                    <span> ${total.toFixed(2)}</span>
-                                    <span> {percentage}%</span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
             </section>
         </div>
     );
