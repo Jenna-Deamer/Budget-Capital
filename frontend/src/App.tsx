@@ -40,11 +40,57 @@ interface Transaction {
     formattedDate?: string;
 }
 
+// Add Budget interface
+interface Budget {
+    _id: string;
+    targetAmount: number;
+    actualAmount: number;
+    month: string;
+    year: number;
+}
+
 function App() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [budget, setBudget] = useState<Budget | null>(null);
+
+    // Fetch budget when selected date changes
+    useEffect(() => {
+        const fetchBudget = async () => {
+            try {
+                const month = selectedDate.getMonth() + 1; // getMonth() is zero-indexed
+                const year = selectedDate.getFullYear();
+
+                const response = await axios.get(
+                    `http://localhost:3000/budget/budget?month=${month}&year=${year}`,
+                    {
+                        withCredentials: true,
+                    }
+                );
+
+                if (response.status === 200) {
+                    setBudget(response.data);
+                    console.log("Budget fetched:", response.data);
+                }
+            } catch (error) {
+                if (
+                    axios.isAxiosError(error) &&
+                    error.response?.status === 404
+                ) {
+                    // No budget found for this month/year
+                    setBudget(null);
+                } else {
+                    console.error("Error fetching budget:", error);
+                }
+            }
+        };
+
+        if (user) {
+            fetchBudget();
+        }
+    }, [selectedDate, user]);
 
     // Check authentication status on component mount
     useEffect(() => {
@@ -99,6 +145,7 @@ function App() {
                                             setSelectedDate={setSelectedDate}
                                             transactions={transactions}
                                             setTransactions={setTransactions}
+                                            budget={budget}
                                         />
                                     </ProtectedRoute>
                                 }
@@ -111,6 +158,7 @@ function App() {
                                             selectedDate={selectedDate}
                                             setSelectedDate={setSelectedDate}
                                             transactions={transactions}
+                                            budget={budget}
                                         />
                                     </ProtectedRoute>
                                 }

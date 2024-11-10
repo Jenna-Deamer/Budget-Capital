@@ -18,11 +18,13 @@ interface DashboardProps {
     selectedDate: Date;
     setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
     transactions: Transaction[];
+    budget: Budget | null;
 }
 function Dashboard({
     selectedDate,
     setSelectedDate,
     transactions,
+    budget,
 }: DashboardProps) {
     // Extract month and year from selected date for displaying in the header
     const selectedMonth = selectedDate.toLocaleString("default", {
@@ -116,7 +118,11 @@ function Dashboard({
                     <strong>${totalIncome.toFixed(2)}</strong>
                     <p className="income-label">Income</p>
                 </div>
-                <Budget />
+                <Budget
+                    hasBudget={budget !== null}
+                    budget={budget}
+                    totalExpense={totalExpense}
+                />
                 <div className="highlight-box">
                     <strong>${totalExpense.toFixed(2)}</strong>
                     <p className="expense-label">Expense</p>

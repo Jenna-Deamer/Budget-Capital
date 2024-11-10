@@ -5,6 +5,7 @@ const app = express();
 const port = 3000;
 const authRouter = require("./routes/auth");
 const transactionRouter = require("./routes/transaction");
+const budgetRouter = require("./routes/budget");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var session = require("express-session");
@@ -70,6 +71,7 @@ run().catch(console.dir);
 
 app.use("/auth", authRouter);
 app.use("/transaction", transactionRouter);
+app.use("/budget", budgetRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

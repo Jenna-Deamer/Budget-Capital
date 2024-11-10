@@ -12,8 +12,8 @@ function CreateBudget() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<BudgetFormData>({
         amount: "",
-        month: new Date().getMonth() + 1 + "", // Current month as string
-        year: new Date().getFullYear() + "", // Current year as string
+        month: new Date().getMonth() + 1 + "", // Current month
+        year: new Date().getFullYear() + "", // Current year
     });
 
     const handleChange = (
@@ -28,21 +28,37 @@ function CreateBudget() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await axios.post(
-                "http://localhost:3000/budget/create",
+            // Format data to match backend expectations
+            const budgetData = {
+                amount: parseFloat(formData.amount),
+                month: formData.month,
+                year: parseInt(formData.year),
+            };
+
+            const response = await axios.post(
+                "http://localhost:3000/budget/create-budget",
+                budgetData,
                 {
-                    amount: parseFloat(formData.amount),
-                    month: parseInt(formData.month),
-                    year: parseInt(formData.year),
-                },
-                {
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                     withCredentials: true,
                 }
             );
-            navigate("/dashboard");
+
+            if (response.status === 201) {
+                navigate("/dashboard");
+            }
         } catch (error) {
-            console.error("Failed to create budget:", error);
+            if (axios.isAxiosError(error) && error.response) {
+                console.error(
+                    "Failed to create budget:",
+                    error.response.data.message
+                );
+                // Handle error message display to user here
+            } else {
+                console.error("Failed to create budget:", error);
+            }
         }
     };
 
@@ -115,10 +131,7 @@ function CreateBudget() {
                         </select>
                     </div>
 
-                    <button
-                        type="submit"
-                        className="primary-button button w-100"
-                    >
+                    <button type="submit" className="primary-button button">
                         Create Budget
                     </button>
                 </form>
