@@ -5,6 +5,7 @@ const app = express();
 const port = 3000;
 const authRouter = require("./routes/auth");
 const transactionRouter = require("./routes/transaction");
+const budgetRouter = require("./routes/budget");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var session = require("express-session");
@@ -56,20 +57,6 @@ const clientOptions = {
     serverApi: { version: "1", strict: true, deprecationErrors: true },
 };
 
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
-
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback",
-},
-    function (accessToken, refreshToken, profile, cb) {
-        User.findOrCreate({ googleId: profile.id }, function (err, user) {
-            return cb(err, user);
-        });
-    }
-));
-
 // MongoDB connection
 async function run() {
     try {
@@ -84,6 +71,7 @@ run().catch(console.dir);
 
 app.use("/auth", authRouter);
 app.use("/transaction", transactionRouter);
+app.use("/budget", budgetRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

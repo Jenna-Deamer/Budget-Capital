@@ -4,6 +4,7 @@
     color: var(--white);
     padding-left: 70px;
     padding-right: 70px;
+    padding-bottom: 50px;
 }
 
 
@@ -27,7 +28,7 @@
     position: relative;;
 }
 
-#transaction-titles,
+
 .calendar-button-container>button {
     position: absolute;
 }
