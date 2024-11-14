@@ -10,7 +10,7 @@ function LandingPage({ user }: LandingPageProps) {
             <h1>Budget Capital</h1>
             {!user && (
                 <>
-                    <h2>Create an Account or Login to Begin:</h2>
+                    <h2>Create an Account or Login to&nbsp;Begin:</h2>
                     <div className="landing-button-container">
                         <a href="/login" className="button primary-button">
                             Login
