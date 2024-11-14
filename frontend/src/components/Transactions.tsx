@@ -151,7 +151,7 @@ function Transactions({
                 </div>
             </section>
 
-         
+
 
             <section className="table-section">
                 <div className="table-buttons mt-3">
@@ -172,19 +172,27 @@ function Transactions({
                                 <th>Type</th>
                                 <th>
                                     Amount{" "}
-                                    <button
+                                    <button className="sort-button"
                                         onClick={() => handleSorting("amount")}
                                     >
-                                        {sortOrder === "asc" ? "▲" : "▼"}
+                                        {sortOrder === "asc" ? (
+                                            <i className="bi bi-caret-up-fill"></i>
+                                        ) : (
+                                            <i className="bi bi-caret-down-fill"></i>
+                                        )}
                                     </button>
                                 </th>
                                 <th>Category</th>
                                 <th>
                                     Date{" "}
-                                    <button
+                                    <button  className="sort-button"
                                         onClick={() => handleSorting("date")}
                                     >
-                                        {sortOrder === "asc" ? "▲" : "▼"}
+                                        {sortOrder === "asc" ? (
+                                            <i className="bi bi-caret-up-fill"></i>
+                                        ) : (
+                                            <i className="bi bi-caret-down-fill"></i>
+                                        )}
                                     </button>
                                 </th>
                                 <th>Edit</th>

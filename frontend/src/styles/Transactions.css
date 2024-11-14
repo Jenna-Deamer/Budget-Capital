@@ -126,7 +126,14 @@ tbody{
 .delete-button:hover {
     background-color: var(--red-hover);
 }
-
+.sort-button{
+    background: unset;
+    border: unset;
+    
+}
+.sort-button i{
+    color: var(--white);
+}
 .goal-container{
     display: flex;
     justify-content: center;
