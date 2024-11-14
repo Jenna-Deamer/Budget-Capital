@@ -3,7 +3,7 @@ import "../styles/Transactions.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "./DatePicker";
-import GoalWidget from "./goals/Goal";
+
 
 interface Transaction {
     _id: string;
@@ -151,9 +151,7 @@ function Transactions({
                 </div>
             </section>
 
-            <div className="goal-container pt-3">
-                <GoalWidget />
-            </div>
+         
 
             <section className="table-section">
                 <div className="table-buttons mt-3">
@@ -177,7 +175,7 @@ function Transactions({
                                     <button
                                         onClick={() => handleSorting("amount")}
                                     >
-                                        Sort {sortOrder === "asc" ? "▲" : "▼"}
+                                        {sortOrder === "asc" ? "▲" : "▼"}
                                     </button>
                                 </th>
                                 <th>Category</th>
@@ -186,7 +184,7 @@ function Transactions({
                                     <button
                                         onClick={() => handleSorting("date")}
                                     >
-                                        Sort {sortOrder === "asc" ? "▲" : "▼"}
+                                        {sortOrder === "asc" ? "▲" : "▼"}
                                     </button>
                                 </th>
                                 <th>Edit</th>
