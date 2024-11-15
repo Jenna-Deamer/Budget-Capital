@@ -23,26 +23,75 @@ function Dashboard({
     setSelectedDate,
     transactions,
 }: DashboardProps) {
+    const [userId, setUserId] = useState<string | null>(null);
+    const [localTransactions, setLocalTransactions] =
+        useState<Transaction[]>(transactions);
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const response = await axios.get(
+                    "http://localhost:3000/auth/current-user",
+                    { withCredentials: true }
+                );
+                if (response.data) {
+                    setUserId(response.data.userId);
+                }
+            } catch (error) {
+                console.error("Failed to fetch user ID:", error);
+            }
+        };
+        fetchUserId();
+    }, []);
+
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            // we will only get transactions if they arent already passed as props by the transaction component
+            if (userId && (!transactions || transactions.length === 0)) {
+                try {
+                    const selectedMonth = selectedDate.getMonth() + 1;
+                    const selectedYear = selectedDate.getFullYear();
+
+                    const response = await axios.get(
+                        `http://localhost:3000/transaction/transactions?userId=${userId}&month=${selectedMonth}&year=${selectedYear}`,
+                        {
+                            headers: { "Content-Type": "application/json" },
+                            withCredentials: true,
+                        }
+                    );
+
+                    setLocalTransactions(response.data);
+                } catch (error) {
+                    console.error("Failed to fetch transactions:", error);
+                }
+            } else {
+                // Use the transactions passed as props
+                setLocalTransactions(transactions);
+            }
+        };
+        fetchTransactions();
+    }, [userId, selectedDate, transactions]);
+
+    // Use localTransactions instead of transactions prop
+    const totalIncome = localTransactions
+        .filter((transaction) => transaction.type.toLowerCase() === "income")
+        .reduce((acc, transaction) => acc + transaction.amount, 0);
+
+    const totalExpense = localTransactions
+        .filter((transaction) => transaction.type.toLowerCase() === "expense")
+        .reduce((acc, transaction) => acc + transaction.amount, 0);
+
     // Extract month and year from selected date for displaying in the header
     const selectedMonth = selectedDate.toLocaleString("default", {
         month: "long",
     });
     const selectedYear = selectedDate.getFullYear();
 
-    //calculate total expense & income
-    const totalIncome = transactions
-        .filter((transaction) => transaction.type.toLowerCase() === "income")
-        .reduce((acc, transaction) => acc + transaction.amount, 0);
-
-    const totalExpense = transactions
-        .filter((transaction) => transaction.type.toLowerCase() === "expense")
-        .reduce((acc, transaction) => acc + transaction.amount, 0);
-
     // get all categories & their totals
     const incomeCategories: { [key: string]: number } = {};
     const expenseCategories: { [key: string]: number } = {};
     // loop through transactions and add to categories object
-    transactions
+    localTransactions
         .filter((transaction) => transaction.type.toLowerCase() === "expense")
         .forEach((transaction) => {
             // if category exists, add amount to category total
@@ -54,7 +103,7 @@ function Dashboard({
             }
         });
 
-    transactions
+    localTransactions
         .filter((transaction) => transaction.type.toLowerCase() === "income")
         .forEach((transaction) => {
             // if category exists, add amount to category total
@@ -116,8 +165,13 @@ function Dashboard({
                     <p className="income-label">Income</p>
                 </div>
                 <div className="goal-container">
-                    <p>You are <strong>$99999.99</strong> <span className="expense-label"> Over Budget!</span></p>
-                    <button className="button primary-button mt-2">Manage Goal</button>
+                    <p>
+                        You are <strong>$99999.99</strong>{" "}
+                        <span className="expense-label"> Over Budget!</span>
+                    </p>
+                    <button className="button primary-button mt-2">
+                        Manage Goal
+                    </button>
                 </div>
                 <div className="highlight-box">
                     <strong>${totalExpense.toFixed(2)}</strong>
@@ -125,67 +179,82 @@ function Dashboard({
                 </div>
             </section>
 
-<section className="breakdown-section">
-            <div className="breakdown-container">
-                <p>Total Expenses</p>
-                <div className="graph-container">
-
+            <section className="breakdown-section">
+                <div className="breakdown-container">
+                    <p>Total Expenses</p>
+                    <div className="graph-container"></div>
+                    <div className="categories-list-container">
+                        <ul className="category-breakdown">
+                            {Object.entries(expenseCategories).map(
+                                ([category, total], index) => {
+                                    const percentage = totalExpense
+                                        ? (
+                                              (total / totalExpense) *
+                                              100
+                                          ).toFixed(2)
+                                        : "0.00";
+                                    const categoryColor =
+                                        index < categoryColors.length
+                                            ? categoryColors[index] // Use color from categoryColors if within range
+                                            : "#000000"; // Default to black if there are not enough colors
+                                    return (
+                                        <li key={category}>
+                                            <span className="category">
+                                                <i
+                                                    className="bi bi-circle-fill"
+                                                    style={{
+                                                        color: categoryColor,
+                                                    }}
+                                                ></i>
+                                                {category}
+                                            </span>
+                                            <span> ${total.toFixed(2)}</span>
+                                            <span> {percentage}%</span>
+                                        </li>
+                                    );
+                                }
+                            )}
+                        </ul>
+                    </div>
                 </div>
-                <div className="categories-list-container">
-                    <ul className="category-breakdown">
-                        {Object.entries(expenseCategories).map(([category, total], index) => {
-                            const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
-                            const categoryColor = index < categoryColors.length
-                                ? categoryColors[index] // Use color from categoryColors if within range
-                                : "#000000"; // Default to black if there are not enough colors
-                            return (
-                                <li key={category}>
-                                    <span className="category">
-                                        <i
-                                            className="bi bi-circle-fill"
-                                            style={{ color: categoryColor }}
-                                        ></i>
-                                        {category}
-                                    </span>
-                                    <span> ${total.toFixed(2)}</span>
-                                    <span> {percentage}%</span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
 
-
-            <div className="breakdown-container mt-4">
-                <p>Total Income</p>
-                <div className="graph-container">
-
+                <div className="breakdown-container mt-4">
+                    <p>Total Income</p>
+                    <div className="graph-container"></div>
+                    <div className="categories-list-container">
+                        <ul className="category-breakdown">
+                            {Object.entries(incomeCategories).map(
+                                ([category, total], index) => {
+                                    const percentage = totalExpense
+                                        ? (
+                                              (total / totalExpense) *
+                                              100
+                                          ).toFixed(2)
+                                        : "0.00";
+                                    const categoryColor =
+                                        index < categoryColors.length
+                                            ? categoryColors[index] // Use color from categoryColors if within range
+                                            : "#000000"; // Default to black if there are not enough colors
+                                    return (
+                                        <li key={category}>
+                                            <span className="category">
+                                                <i
+                                                    className="bi bi-circle-fill me-1"
+                                                    style={{
+                                                        color: categoryColor,
+                                                    }}
+                                                ></i>
+                                                {category}
+                                            </span>
+                                            <span> ${total.toFixed(2)}</span>
+                                            <span> {percentage}%</span>
+                                        </li>
+                                    );
+                                }
+                            )}
+                        </ul>
+                    </div>
                 </div>
-                <div className="categories-list-container">
-                    <ul className="category-breakdown">
-                        {Object.entries(incomeCategories).map(([category, total], index) => {
-                            const percentage = totalExpense ? ((total / totalExpense) * 100).toFixed(2) : "0.00";
-                            const categoryColor = index < categoryColors.length
-                                ? categoryColors[index] // Use color from categoryColors if within range
-                                : "#000000"; // Default to black if there are not enough colors
-                            return (
-                                <li key={category}>
-                                    <span className="category">
-                                        <i
-                                            className="bi bi-circle-fill me-1"
-                                            style={{ color: categoryColor }}
-                                        ></i>
-                                        {category}
-                                    </span>
-                                    <span> ${total.toFixed(2)}</span>
-                                    <span> {percentage}%</span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
             </section>
         </div>
     );
