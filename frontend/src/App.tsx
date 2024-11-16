@@ -21,6 +21,8 @@ import Footer from "./components/shared/Footer";
 // Forms
 import CreateTransaction from "./components/transactions/Create";
 import EditTransaction from "./components/transactions/Edit";
+// Context
+import { TransactionProvider } from "./context/TransactionContext";
 
 interface User {
     id: string;
@@ -29,21 +31,9 @@ interface User {
     lastName: string;
 }
 
-interface Transaction {
-    _id: string;
-    name: string;
-    type: string;
-    amount: number;
-    category: string;
-    date: string;
-    formattedDate?: string;
-}
-
 function App() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     // Check authentication status on component mount
     useEffect(() => {
@@ -79,6 +69,7 @@ function App() {
     }
 
     return (
+        <TransactionProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <BrowserRouter>
                 <div className="app-container">
@@ -93,12 +84,7 @@ function App() {
                                 path="/transactions"
                                 element={
                                     <ProtectedRoute user={user}>
-                                        <Transactions
-                                            selectedDate={selectedDate}
-                                            setSelectedDate={setSelectedDate}
-                                            transactions={transactions}
-                                            setTransactions={setTransactions}
-                                        />
+                                        <Transactions />
                                     </ProtectedRoute>
                                 }
                             />
@@ -106,11 +92,7 @@ function App() {
                                 path="/dashboard"
                                 element={
                                     <ProtectedRoute user={user}>
-                                        <Dashboard
-                                            selectedDate={selectedDate}
-                                            setSelectedDate={setSelectedDate}
-                                            transactions={transactions}
-                                        />
+                                        <Dashboard/>
                                     </ProtectedRoute>
                                 }
                             />
@@ -167,6 +149,8 @@ function App() {
                 </div>
             </BrowserRouter>
         </LocalizationProvider>
+        </TransactionProvider>
+
     );
 }
 

@@ -1,78 +1,20 @@
 import "../styles/Dashboard.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
+import TransactionContext from "../context/TransactionContext";
+import { Transaction } from "../types/Transaction";
 
-interface Transaction {
-    _id: string;
-    name: string;
-    type: string;
-    amount: number;
-    category: string;
-    date: string;
-    formattedDate?: string;
-}
-
-interface DashboardProps {
-    selectedDate: Date;
-    setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
-    transactions: Transaction[];
-}
-function Dashboard({
-    selectedDate,
-    setSelectedDate,
-    transactions,
-}: DashboardProps) {
-    const [userId, setUserId] = useState<string | null>(null);
+function Dashboard() {
+    const { transactions, selectedDate, setSelectedDate } =
+        useContext(TransactionContext)!;
     const [localTransactions, setLocalTransactions] =
         useState<Transaction[]>(transactions);
 
     useEffect(() => {
-        const fetchUserId = async () => {
-            try {
-                const response = await axios.get(
-                    "http://localhost:3000/auth/current-user",
-                    { withCredentials: true }
-                );
-                if (response.data) {
-                    setUserId(response.data.userId);
-                }
-            } catch (error) {
-                console.error("Failed to fetch user ID:", error);
-            }
-        };
-        fetchUserId();
-    }, []);
+        // Update local transactions when context transactions change
+        setLocalTransactions(transactions);
+    }, [transactions]);
 
-    useEffect(() => {
-        const fetchTransactions = async () => {
-            // we will only get transactions if they arent already passed as props by the transaction component
-            if (userId && (!transactions || transactions.length === 0)) {
-                try {
-                    const selectedMonth = selectedDate.getMonth() + 1;
-                    const selectedYear = selectedDate.getFullYear();
-
-                    const response = await axios.get(
-                        `http://localhost:3000/transaction/transactions?userId=${userId}&month=${selectedMonth}&year=${selectedYear}`,
-                        {
-                            headers: { "Content-Type": "application/json" },
-                            withCredentials: true,
-                        }
-                    );
-
-                    setLocalTransactions(response.data);
-                } catch (error) {
-                    console.error("Failed to fetch transactions:", error);
-                }
-            } else {
-                // Use the transactions passed as props
-                setLocalTransactions(transactions);
-            }
-        };
-        fetchTransactions();
-    }, [userId, selectedDate, transactions]);
-
-    // Use localTransactions instead of transactions prop
     const totalIncome = localTransactions
         .filter((transaction) => transaction.type.toLowerCase() === "income")
         .reduce((acc, transaction) => acc + transaction.amount, 0);
@@ -90,7 +32,7 @@ function Dashboard({
     // get all categories & their totals
     const incomeCategories: { [key: string]: number } = {};
     const expenseCategories: { [key: string]: number } = {};
-    // loop through transactions and add to categories object
+
     localTransactions
         .filter((transaction) => transaction.type.toLowerCase() === "expense")
         .forEach((transaction) => {
