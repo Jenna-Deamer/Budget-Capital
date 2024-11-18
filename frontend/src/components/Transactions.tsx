@@ -5,7 +5,7 @@ import DatePicker from "./DatePicker";
 import axios from "axios";
 import TransactionContext from "../context/TransactionContext"; 
 import { Transaction } from "../types/Transaction";
-
+import Budget from "./budget/Budget";
 
 function Transactions() {
   // Use transaction context to set transactions & date
@@ -53,6 +53,9 @@ function Transactions() {
           <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         </div>
       </section>
+<section className="mt-4 budget-wrapper">
+<Budget/>
+</section>
 
       <section className="table-section">
         <div className="table-buttons mt-3">

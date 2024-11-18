@@ -1,0 +1,25 @@
+.budget-widget{
+  background-color: var(--foreground);
+  border-radius: 8px;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative; /* Ensure the spinner is positioned relative to the widget */
+}
+
+.budget-widget p{
+  margin:  unset !important;
+  font-size: 20px;
+}
+
+.over-budget {
+    color: var(--red-label);
+  }
+  
+  .under-budget {
+    color: var(--green-label);
+  }
+
