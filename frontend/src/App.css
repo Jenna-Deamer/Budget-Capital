@@ -181,9 +181,29 @@ main {
   min-height: 100vh;
   color: var(--white);
   font-size: 4em;
+  
 }
 
+.loader {
+  width: 58px;
+  height: 58px;
+  border: 5px solid;
+  color: var(--white);
+  border-bottom-color: var(--action);
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  }
 
+  @keyframes rotation {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+  } 
 footer {
   background-color: var(--foreground);
   color: var(--white);

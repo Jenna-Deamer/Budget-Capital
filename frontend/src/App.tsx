@@ -66,7 +66,11 @@ function App() {
     }, []);
 
     if (loading) {
-        return <div className="loading-container">Loading...</div>;
+        return (
+            <div className="loading-container">
+             <span className="loader"></span>
+            </div>
+          );
     }
 
     return (
