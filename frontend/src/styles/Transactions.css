@@ -8,18 +8,18 @@
 }
 
 
-.header-container {
+/* .header-container {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     padding-top: 24px;
-}
+} */
 
-.header {
+/* .header {
     flex-grow: 1;
     text-align: center;
-}
+} */
 
 .calendar-button-container {
     display: flex;
@@ -38,9 +38,21 @@
 }
 
 /*TABLE*/
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
 .table-section{
     max-width: 2000px;
     width: 100%;
+    padding-left: 50px;
+    padding-right: 50px;
+
 }
 .table-wrapper {
     display: flex;
@@ -48,9 +60,12 @@
     align-items: center;
     margin: 0 auto 20px;
 }
+tbody{
+    animation: fadeIn 1s ease-in forwards; 
+}
 
 .table-buttons {
-    width: 100%
+    width: 100%;
 }
 
 .transactions-table {
@@ -111,7 +126,19 @@
 .delete-button:hover {
     background-color: var(--red-hover);
 }
-
+.sort-button{
+    background: unset;
+    border: unset;
+    
+}
+.sort-button i{
+    color: var(--white);
+}
+.goal-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /*MOBILE*/
 @media screen and (max-width: 980px) {
 .transactions-page{

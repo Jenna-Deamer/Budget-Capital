@@ -6,6 +6,7 @@ import axios from "axios";
 import TransactionContext from "../context/TransactionContext"; 
 import { Transaction } from "../types/Transaction";
 
+
 function Transactions() {
   // Use transaction context to set transactions & date
   const { transactions, setTransactions, selectedDate, setSelectedDate } = useContext(TransactionContext)!; 
@@ -72,16 +73,28 @@ function Transactions() {
                 <th>Type</th>
                 <th>
                   Amount{" "}
-                  <button onClick={() => handleSorting("amount")}>
-                    Sort {sortOrder === "asc" ? "▲" : "▼"}
-                  </button>
+                  <button className="sort-button"
+                                        onClick={() => handleSorting("amount")}
+                                    >
+                                        {sortOrder === "asc" ? (
+                                            <i className="bi bi-caret-up-fill"></i>
+                                        ) : (
+                                            <i className="bi bi-caret-down-fill"></i>
+                                        )}
+                                    </button>
                 </th>
                 <th>Category</th>
                 <th>
                   Date{" "}
-                  <button onClick={() => handleSorting("date")}>
-                    Sort {sortOrder === "asc" ? "▲" : "▼"}
-                  </button>
+                  <button className="sort-button"
+                                        onClick={() => handleSorting("amount")}
+                                    >
+                                        {sortOrder === "asc" ? (
+                                            <i className="bi bi-caret-up-fill"></i>
+                                        ) : (
+                                            <i className="bi bi-caret-down-fill"></i>
+                                        )}
+                                    </button>
                 </th>
                 <th>Edit</th>
                 <th>Delete</th>

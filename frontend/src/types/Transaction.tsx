@@ -7,3 +7,4 @@ export interface Transaction {
     date: string;
     formattedDate?: string; // optional property to store the formatted date
   }
+
