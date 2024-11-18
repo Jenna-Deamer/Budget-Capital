@@ -3,60 +3,20 @@ import { useContext, useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
 import TransactionContext from "../context/TransactionContext";
 import { Transaction } from "../types/Transaction";
-import Budget from "./budget/Budget";
 
 function Dashboard() {
-    const { transactions, selectedDate, setSelectedDate } =
-        useContext(TransactionContext)!;
-    const [localTransactions, setLocalTransactions] =
-        useState<Transaction[]>(transactions);
-
-    useEffect(() => {
-        // Update local transactions when context transactions change
-        setLocalTransactions(transactions);
-    }, [transactions]);
-
-    const totalIncome = localTransactions
-        .filter((transaction) => transaction.type.toLowerCase() === "income")
-        .reduce((acc, transaction) => acc + transaction.amount, 0);
-
-    const totalExpense = localTransactions
-        .filter((transaction) => transaction.type.toLowerCase() === "expense")
-        .reduce((acc, transaction) => acc + transaction.amount, 0);
+    const {
+        totalIncome,
+        totalExpense,
+        incomeCategories,
+        expenseCategories,
+        selectedDate,
+        setSelectedDate,
+    } = useContext(TransactionContext)!;
 
     // Extract month and year from selected date for displaying in the header
-    const selectedMonth = selectedDate.toLocaleString("default", {
-        month: "long",
-    });
+    const selectedMonth = selectedDate.toLocaleString("default", { month: "long" });
     const selectedYear = selectedDate.getFullYear();
-
-    // get all categories & their totals
-    const incomeCategories: { [key: string]: number } = {};
-    const expenseCategories: { [key: string]: number } = {};
-
-    localTransactions
-        .filter((transaction) => transaction.type.toLowerCase() === "expense")
-        .forEach((transaction) => {
-            // if category exists, add amount to category total
-            if (expenseCategories[transaction.category]) {
-                expenseCategories[transaction.category] += transaction.amount;
-            } else {
-                // if category does not exist, create category and set amount as initial value
-                expenseCategories[transaction.category] = transaction.amount;
-            }
-        });
-
-    localTransactions
-        .filter((transaction) => transaction.type.toLowerCase() === "income")
-        .forEach((transaction) => {
-            // if category exists, add amount to category total
-            if (incomeCategories[transaction.category]) {
-                incomeCategories[transaction.category] += transaction.amount;
-            } else {
-                // if category does not exist, create category and set amount as initial value
-                incomeCategories[transaction.category] = transaction.amount;
-            }
-        });
 
     const categoryColors: string[] = [
         "#ff6347", // Tomato
@@ -107,7 +67,15 @@ function Dashboard() {
                     <strong>${totalIncome.toFixed(2)}</strong>
                     <p className="income-label">Income</p>
                 </div>
-               <Budget/>
+                <div className="goal-container">
+                    <p>
+                        You are <strong>$99999.99</strong>{" "}
+                        <span className="expense-label"> Over Budget!</span>
+                    </p>
+                    <button className="button primary-button mt-2">
+                        Manage Goal
+                    </button>
+                </div>
                 <div className="highlight-box">
                     <strong>${totalExpense.toFixed(2)}</strong>
                     <p className="expense-label">Expense</p>
@@ -124,9 +92,9 @@ function Dashboard() {
                                 ([category, total], index) => {
                                     const percentage = totalExpense
                                         ? (
-                                              (total / totalExpense) *
-                                              100
-                                          ).toFixed(2)
+                                            (total / totalExpense) *
+                                            100
+                                        ).toFixed(2)
                                         : "0.00";
                                     const categoryColor =
                                         index < categoryColors.length
@@ -162,9 +130,9 @@ function Dashboard() {
                                 ([category, total], index) => {
                                     const percentage = totalExpense
                                         ? (
-                                              (total / totalExpense) *
-                                              100
-                                          ).toFixed(2)
+                                            (total / totalExpense) *
+                                            100
+                                        ).toFixed(2)
                                         : "0.00";
                                     const categoryColor =
                                         index < categoryColors.length
