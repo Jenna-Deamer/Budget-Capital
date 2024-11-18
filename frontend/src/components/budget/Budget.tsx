@@ -8,8 +8,9 @@ import "../../styles/Budget.css";
 function Budget() {
     const { totalExpense, selectedDate } = useContext(TransactionContext)!;
     const [budget, setBudget] = useState<BudgetType | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    // Fetch budget for the selected month/year when selecteDate changes
+    // Fetch budget for the selected month/year when selectedDate changes
     useEffect(() => {
         const fetchBudget = async () => {
             try {
@@ -23,16 +24,27 @@ function Budget() {
             } catch (error) {
                 console.error("Failed to fetch budget:", error);
                 setBudget(null);
+            } finally {
+                setTimeout(() => setLoading(false), 300);
+             
             }
         };
 
         fetchBudget();
     }, [selectedDate]);
 
+    if (loading) {
+        return (
+            <div className="budget-widget">
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
     // If no budget is set for the selected month, display a message with a link to create a budget
     if (!budget) {
         return (
-            <div className="goal-container">
+            <div className="budget-widget">
                 <p>No budget set for this month.</p>
                 <Link to="/create-budget" className="button primary-button mt-2" title="create budget">
                     Create Budget
@@ -58,4 +70,5 @@ function Budget() {
         </div>
     );
 }
+
 export default Budget;
