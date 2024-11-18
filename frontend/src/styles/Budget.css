@@ -1,0 +1,14 @@
+.goal-widget{
+    background-color: var(--foreground);
+    text-align: center;
+    padding: 20px 28px;
+    border-radius: 8px;
+    width: 300px;
+}
+.over-budget {
+    color: var(--red-label);
+  }
+  
+  .under-budget {
+    color: var(--green-label);
+  }
