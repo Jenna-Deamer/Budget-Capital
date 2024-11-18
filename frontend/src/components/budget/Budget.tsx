@@ -45,7 +45,7 @@ function Budget() {
     const isOverBudget = difference < 0;
     // If user has a budget set for the selected month, display the difference between the total expenses and the budget target amount
     return (
-        <div className="goal-container">
+        <div className="budget-widget">
             <p>
                 You are <strong>${Math.abs(difference).toFixed(2)} </strong>
                 <span className={isOverBudget ? "over-budget" : "under-budget"}>

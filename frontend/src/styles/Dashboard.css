@@ -48,8 +48,7 @@
 
 }
 
-.highlight-box,
-.goal-container {
+.highlight-box {
     background-color: var(--foreground);
     border-radius: 8px;
     padding: 1em;
@@ -61,13 +60,12 @@
     text-align: center;
 }
 
-.goal-container p,
+
 .highlight-box strong {
     font-size: 20px;
 }
 
-.highlight-box p,
-.goal-container p {
+.highlight-box p{
     margin: unset !important;
 }
 
@@ -126,7 +124,7 @@
         margin-bottom: 40px;
         margin-top: 20px;
     }
-    .goal-container{
+    .budget-widget{
         order: -1; 
         grid-column: span 2
     }
@@ -137,7 +135,7 @@
         grid-template-columns: 1fr;
         
     }
-    .goal-container {
+    .budget-widget {
         grid-column: span 1; /* Remove spanning across columns */
     }
 }

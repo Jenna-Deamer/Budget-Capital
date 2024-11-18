@@ -134,11 +134,13 @@ tbody{
 .sort-button i{
     color: var(--white);
 }
-.goal-container{
+
+.budget-wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 /*MOBILE*/
 @media screen and (max-width: 980px) {
 .transactions-page{
