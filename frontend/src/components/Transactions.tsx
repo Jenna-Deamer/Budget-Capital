@@ -6,6 +6,7 @@ import axios from "axios";
 import TransactionContext from "../context/TransactionContext"; 
 import { Transaction } from "../types/Transaction";
 
+
 function Transactions() {
   // Use transaction context to set transactions & date
   const { transactions, setTransactions, selectedDate, setSelectedDate } = useContext(TransactionContext)!; 

@@ -21,6 +21,7 @@ import Footer from "./components/shared/Footer";
 // Forms
 import CreateTransaction from "./components/transactions/Create";
 import EditTransaction from "./components/transactions/Edit";
+import CreateBudget from "./components/budget/Create";
 // Context
 import { TransactionProvider } from "./context/TransactionContext";
 
@@ -138,6 +139,14 @@ function App() {
                                 element={
                                     <ProtectedRoute user={user}>
                                         <EditTransaction />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/create-budget"
+                                element={
+                                    <ProtectedRoute user={user}>
+                                        <CreateBudget />
                                     </ProtectedRoute>
                                 }
                             />

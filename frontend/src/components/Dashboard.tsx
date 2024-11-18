@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
 import TransactionContext from "../context/TransactionContext";
 import { Transaction } from "../types/Transaction";
+import Budget from "./budget/Budget";
 
 function Dashboard() {
     const { transactions, selectedDate, setSelectedDate } =
@@ -106,15 +107,7 @@ function Dashboard() {
                     <strong>${totalIncome.toFixed(2)}</strong>
                     <p className="income-label">Income</p>
                 </div>
-                <div className="goal-container">
-                    <p>
-                        You are <strong>$99999.99</strong>{" "}
-                        <span className="expense-label"> Over Budget!</span>
-                    </p>
-                    <button className="button primary-button mt-2">
-                        Manage Goal
-                    </button>
-                </div>
+               <Budget/>
                 <div className="highlight-box">
                     <strong>${totalExpense.toFixed(2)}</strong>
                     <p className="expense-label">Expense</p>
