@@ -19,7 +19,6 @@ if (process.env.NODE_ENV !== "production") {
 // CORS configuration
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://budget-capital-backend.onrender.com" 
 ];
 
 app.use(

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
 
 interface User {
+    id: string;
     username: string;
     email: string;
 }
@@ -21,7 +22,7 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
 
             try {
                 const response = await axios.post(
-                    `${import.meta.env.VITE_API_BASE_URL}/auth/login`, // Use the base URL from environment variables
+                    "http://localhost:3000/auth/login",
                     demoCredentials,
                     {
                         headers: {
@@ -30,22 +31,33 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
                         withCredentials: true,
                     }
                 );
-                setUser(response.data.user);
-                navigate("/dashboard");
+
+                if (response.data.success) {
+                    console.log(response.data.user);
+                    setUser(response.data.user);
+                    navigate("/transactions");
+                    window.location.reload();
+                }
             } catch (error) {
-                console.error("Failed to login as demo user:", error);
-                setFormError("Failed to login as demo user.");
+                if (axios.isAxiosError(error)) {
+                    const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+                    setFormError(errorMessage);
+                } else {
+                    setFormError("An unexpected error occurred. Please try again.");
+                }
             }
         };
 
         loginAsDemoUser();
-    }, [navigate, setUser]);
+    }, [navigate, setUser]); 
 
     return (
-        <div>
-            {formError && <p>{formError}</p>}
-            <p>Logging in as demo user...</p>
-        </div>
+        <section className="form-page">
+            <div className="form-container">
+                <h1>Logging in as Demo User...</h1>
+                {formError && <p className="error-message text-center">{formError}</p>}
+            </div>
+        </section>
     );
 }
 
