@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
 
 interface User {
-    id: string;
     username: string;
     email: string;
 }
@@ -22,7 +21,7 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
 
             try {
                 const response = await axios.post(
-                    "http://localhost:3000/auth/login",
+                    `${import.meta.env.VITE_API_BASE_URL}/auth/login`, // Use the base URL from environment variables
                     demoCredentials,
                     {
                         headers: {
@@ -31,33 +30,22 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
                         withCredentials: true,
                     }
                 );
-
-                if (response.data.success) {
-                    console.log(response.data.user);
-                    setUser(response.data.user);
-                    navigate("/transactions");
-                    window.location.reload();
-                }
+                setUser(response.data.user);
+                navigate("/dashboard");
             } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
-                    setFormError(errorMessage);
-                } else {
-                    setFormError("An unexpected error occurred. Please try again.");
-                }
+                console.error("Failed to login as demo user:", error);
+                setFormError("Failed to login as demo user.");
             }
         };
 
         loginAsDemoUser();
-    }, [navigate, setUser]); 
+    }, [navigate, setUser]);
 
     return (
-        <section className="form-page">
-            <div className="form-container">
-                <h1>Logging in as Demo User...</h1>
-                {formError && <p className="error-message text-center">{formError}</p>}
-            </div>
-        </section>
+        <div>
+            {formError && <p>{formError}</p>}
+            <p>Logging in as demo user...</p>
+        </div>
     );
 }
 

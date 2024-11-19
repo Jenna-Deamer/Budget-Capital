@@ -14,22 +14,21 @@ const User = require("./models/user");
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
-
-
-    const allowedOrigins = [
-"http://localhost:5173",
-"https://budget-capital-backend.onrender.com/"
-    ]
-    // CORS in dev mode to accept requests from localhost:4200
-    app.use(
-        cors({
-            origin: allowedOrigins,
-            https://budget-capital-backend.onrender.com/
-            methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
-            credentials: true,
-        })
-    );
 }
+
+// CORS configuration
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://budget-capital-backend.onrender.com" 
+];
+
+app.use(
+    cors({
+        origin: allowedOrigins,
+        methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
+        credentials: true,
+    })
+);
 
 app.use(
     session({
@@ -75,7 +74,7 @@ async function run() {
 }
 run().catch(console.dir);
 
-//define routers
+// Define routers
 app.use("/auth", authRouter);
 app.use("/transaction", transactionRouter);
 app.use("/budget", budgetRouter);
