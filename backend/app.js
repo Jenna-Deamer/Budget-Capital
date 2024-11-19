@@ -15,10 +15,16 @@ const User = require("./models/user");
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 
+
+    const allowedOrigins = [
+"http://localhost:5173",
+"https://budget-capital-backend.onrender.com/"
+    ]
     // CORS in dev mode to accept requests from localhost:4200
     app.use(
         cors({
-            origin: "http://localhost:5173",
+            origin: allowedOrigins,
+            https://budget-capital-backend.onrender.com/
             methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
             credentials: true,
         })
