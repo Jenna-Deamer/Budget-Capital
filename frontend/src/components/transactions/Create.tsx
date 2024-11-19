@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import TransactionContext from "../../context/TransactionContext";
+import { Transaction } from "../../types/Transaction";
 import "../../styles/forms/TransactionCreate.css";
 
 const incomeCategories = [
@@ -28,7 +29,7 @@ const expenseCategories = [
 const CreateTransaction = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<string[]>([]);
-
+  const { setTransactions } = useContext(TransactionContext)!;
   const [formData, setFormData] = useState({
     name: "",
     amount: 0,
@@ -70,12 +71,22 @@ const CreateTransaction = () => {
           withCredentials: true,
         }
       );
-
+  
       console.log("Success:", response.data);
-
+  
       // if _id is returned, it means the transaction was created successfully
       if (response.data._id) {
-        // Redirect to the homepage
+        // Add formattedDate to the new transaction
+        const newTransaction = {
+          ...response.data,
+          formattedDate: new Date(response.data.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+        };
+        // update transactions in context
+        setTransactions((prevTransactions) => [...prevTransactions, newTransaction]);
         navigate("/transactions");
       } else {
         console.log("Creation Failed: ", response.data.message);
@@ -88,6 +99,7 @@ const CreateTransaction = () => {
       }
     }
   };
+  
 
   return (
     <section className="crud-page-wrapper">
