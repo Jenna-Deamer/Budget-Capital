@@ -9,17 +9,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 function Dashboard() {
     ChartJS.register(ArcElement, Tooltip, Legend);
-
-    const prepareChartData = () => {
-        // labels
-
-        // datasets
-
-        // incomeData
-
-        // ExpenseData
-    }
-
     const {
         totalIncome,
         totalExpense,
@@ -60,6 +49,28 @@ function Dashboard() {
         "#483d8b", // DarkSlateBlue
         "#ffdead", // NavajoWhite
     ];
+
+    const incomeDataChart = {
+        labels: Object.keys(incomeCategories),
+        datasets: [{
+            data: Object.values(incomeCategories),
+             // Use the categoryColors array and map it to the categories, repeating colors if needed
+            backgroundColor: Object.keys(incomeCategories).map((_, index) => categoryColors[index % categoryColors.length]),
+            borderColor: "rgba(255, 255, 255, 0.75)",
+            borderWidth: 1,
+        }],
+    }
+
+    const expenseDataChart = {
+        labels: Object.keys(expenseCategories),
+        datasets: [{
+            data: Object.values(expenseCategories),
+              // Use the categoryColors array and map it to the categories, repeating colors if needed
+            backgroundColor: Object.keys(expenseCategories).map((_, index) => categoryColors[index % categoryColors.length]),
+            borderColor: "rgba(255, 255, 255, 0.75)",
+            borderWidth: 1,
+        }],
+    }
 
     return (
         <div className="dashboard-page">
