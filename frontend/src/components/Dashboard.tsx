@@ -49,6 +49,13 @@ function Dashboard() {
         "#483d8b", // DarkSlateBlue
         "#ffdead", // NavajoWhite
     ];
+    const options = {
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    };
 
     const incomeDataChart = {
         labels: Object.keys(incomeCategories),
@@ -103,7 +110,10 @@ function Dashboard() {
             <section className="breakdown-section">
                 <div className="breakdown-container">
                     <p>Total Expenses</p>
-                    <div className="graph-container"></div>
+                    <div className="graph-container">
+                    <Pie data={expenseDataChart} options={options} className="responsive-pie-chart" />
+
+                    </div>
                     <div className="categories-list-container">
                         <ul className="category-breakdown">
                             {Object.entries(expenseCategories).map(
@@ -141,7 +151,9 @@ function Dashboard() {
 
                 <div className="breakdown-container mt-4">
                     <p>Total Income</p>
-                    <div className="graph-container"></div>
+                    <div className="graph-container">
+                    <Pie data={incomeDataChart} options={options} className="responsive-pie-chart" />
+                    </div>
                     <div className="categories-list-container">
                         <ul className="category-breakdown">
                             {Object.entries(incomeCategories).map(
