@@ -11,12 +11,12 @@ function EditBudget() {
     const { budget } = location.state;
     const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<BudgetFormData>({
-    amount: budget.targetAmount.toString(),
-    month: budget.month.toString(), 
-    year: budget.year.toString(), 
-    id: budget._id, 
-});
+    const [formData, setFormData] = useState<BudgetFormData>({
+        amount: budget.targetAmount.toString(),
+        month: budget.month.toString(),
+        year: budget.year.toString(),
+        id: budget._id,
+    });
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -49,7 +49,6 @@ function EditBudget() {
         }
     };
 
-
     // Generate month options using Date API
     const months = Array.from({ length: 12 }, (_, index) => {
         return new Date(2000, index, 1).toLocaleString("default", {
@@ -66,9 +65,9 @@ function EditBudget() {
             <article className="crud-form-container">
                 <h1 className="text-center pb-2">Edit  Budget</h1>
                 <form className="crud-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                <label htmlFor="amount">Amount</label>
-                <input
+                    <div className="form-group">
+                        <label htmlFor="amount">Amount</label>
+                        <input
                             type="number"
                             step="0.01"
                             min="0"
@@ -118,9 +117,11 @@ function EditBudget() {
                         </select>
                     </div>
 
-                    <button type="submit" className="primary-button button">
-                        Edit Budget
-                    </button>
+                    
+                        <button type="submit" className="primary-button button me-3">
+                            Edit Budget
+                        </button>
+
                 </form>
             </article>
         </section>

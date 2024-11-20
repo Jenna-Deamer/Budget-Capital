@@ -102,6 +102,23 @@ router.put("/edit-budget", isAuthenticated, async (req, res, next) => {
       return res.status(500).json({ error: err.message });
     }
   });
+
+// DELETE: /budget/delete-budget => delete selected budget
+router.delete("/delete-budget", isAuthenticated, async (req, res) => {
+    console.log("Got request to delete budget");
+    const { id } = req.body;
+    try {
+        const budget = await Budget.findByIdAndDelete(id);
+        if (!budget) {
+            return res.status(404).json({ error: "Budget not found" });
+        }
+        return res.status(200).json({ message: "Budget deleted successfully" });
+    } catch (err) {
+        console.error("Error deleting budget:", err);
+        return res.status(500).json({ error: err.message });
+    }
+});
+  
   
 
 module.exports = router;
