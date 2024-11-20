@@ -4,8 +4,22 @@ import DatePicker from "./DatePicker";
 import TransactionContext from "../context/TransactionContext";
 import { Transaction } from "../types/Transaction";
 import Budget from "./budget/Budget";
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 function Dashboard() {
+    ChartJS.register(ArcElement, Tooltip, Legend);
+
+    const prepareChartData = (){
+        // labels
+
+        // datasets
+
+        // incomeData
+
+        // ExpenseData
+    }
+
     const {
         totalIncome,
         totalExpense,
