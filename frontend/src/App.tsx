@@ -156,7 +156,7 @@ function App() {
                                 }
                             />
                                <Route
-                                path="/edit-budget"
+                                path="/edit-budget/:id"
                                 element={
                                     <ProtectedRoute user={user}>
                                         <EditBudget />

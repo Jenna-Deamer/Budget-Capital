@@ -80,4 +80,28 @@ router.post("/create-budget", isAuthenticated, async (req, res) => {
     }
 });
 
+
+/* PUT: /api/budget/edit-budget => update selected budget */
+router.put("/edit-budget", isAuthenticated, async (req, res, next) => {
+    console.log("Got request to edit budget");
+    const { id, amount, ...updatedData } = req.body;
+  
+    // Manually map 'amount' to 'targetAmount' before updating
+    updatedData.targetAmount = amount;
+  
+    try {
+      const budget = await Budget.findByIdAndUpdate(id, updatedData, { new: true });
+  
+      if (!budget) {
+        return res.status(404).json({ error: "Budget not found" });
+      }
+  
+      return res.json(budget).status(200);
+    } catch (err) {
+      console.error("Error updating budget:", err);
+      return res.status(500).json({ error: err.message });
+    }
+  });
+  
+
 module.exports = router;

@@ -64,7 +64,7 @@ function Budget() {
                     {isOverBudget ? "Over" : "Under"} Budget
                 </span> 
             </p>
-            <Link to="/edit-budget" className="button primary-button mt-2" title="edit budget">
+            <Link to={`/edit-budget/${budget._id}`} state={{ budget }} className="button primary-button mt-2" title="edit budget">
                 Edit Budget
             </Link>
         </div>
