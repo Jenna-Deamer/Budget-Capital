@@ -116,6 +116,21 @@
     text-align: left;
     width: 100%;
 }
+/*Pie Charts*/
+.graph-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 400px;
+    margin-bottom: 1em;
+}
+
+@media (max-width: 400px) {
+    .graph-container {
+        max-width: 200px; 
+    }
+}
+
 /*Highlight cards Mobile*/
 @media screen and (max-width: 900px){
     .highlight-container{

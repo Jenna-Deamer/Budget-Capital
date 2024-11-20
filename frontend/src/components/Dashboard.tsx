@@ -4,8 +4,11 @@ import DatePicker from "./DatePicker";
 import TransactionContext from "../context/TransactionContext";
 import { Transaction } from "../types/Transaction";
 import Budget from "./budget/Budget";
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 function Dashboard() {
+    ChartJS.register(ArcElement, Tooltip, Legend);
     const {
         totalIncome,
         totalExpense,
@@ -46,6 +49,35 @@ function Dashboard() {
         "#483d8b", // DarkSlateBlue
         "#ffdead", // NavajoWhite
     ];
+    const options = {
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    };
+
+    const incomeDataChart = {
+        labels: Object.keys(incomeCategories),
+        datasets: [{
+            data: Object.values(incomeCategories),
+             // Use the categoryColors array and map it to the categories, repeating colors if needed
+            backgroundColor: Object.keys(incomeCategories).map((_, index) => categoryColors[index % categoryColors.length]),
+            borderColor: "rgba(255, 255, 255, 0.75)",
+            borderWidth: 1,
+        }],
+    }
+
+    const expenseDataChart = {
+        labels: Object.keys(expenseCategories),
+        datasets: [{
+            data: Object.values(expenseCategories),
+              // Use the categoryColors array and map it to the categories, repeating colors if needed
+            backgroundColor: Object.keys(expenseCategories).map((_, index) => categoryColors[index % categoryColors.length]),
+            borderColor: "rgba(255, 255, 255, 0.75)",
+            borderWidth: 1,
+        }],
+    }
 
     return (
         <div className="dashboard-page">
@@ -78,7 +110,10 @@ function Dashboard() {
             <section className="breakdown-section">
                 <div className="breakdown-container">
                     <p>Total Expenses</p>
-                    <div className="graph-container"></div>
+                    <div className="graph-container">
+                    <Pie data={expenseDataChart} options={options} className="responsive-pie-chart" />
+
+                    </div>
                     <div className="categories-list-container">
                         <ul className="category-breakdown">
                             {Object.entries(expenseCategories).map(
@@ -116,7 +151,9 @@ function Dashboard() {
 
                 <div className="breakdown-container mt-4">
                     <p>Total Income</p>
-                    <div className="graph-container"></div>
+                    <div className="graph-container">
+                    <Pie data={incomeDataChart} options={options} className="responsive-pie-chart" />
+                    </div>
                     <div className="categories-list-container">
                         <ul className="category-breakdown">
                             {Object.entries(incomeCategories).map(
