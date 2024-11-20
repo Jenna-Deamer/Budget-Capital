@@ -10,7 +10,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 function Dashboard() {
     ChartJS.register(ArcElement, Tooltip, Legend);
 
-    const prepareChartData = (){
+    const prepareChartData = () => {
         // labels
 
         // datasets
