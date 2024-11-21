@@ -13,12 +13,23 @@ const User = require("./models/user");
 
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
+
     require("dotenv").config();
 
-    // CORS in dev mode to accept requests from localhost:4200
+    // CORS in dev mode to accept requests from local frontend
     app.use(
         cors({
-            origin: "http://localhost:5173",
+            origin: process.env.LOCAL_FRONTEND_ADDRESS,
+            methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
+            credentials: true,
+        })
+    );
+    
+}else{
+    // CORS in prod mode to accept requests from hosted frontend
+    app.use(
+        cors({
+            origin: process.env.HOSTED_FRONTEND_ADDRESS,
             methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
             credentials: true,
         })
