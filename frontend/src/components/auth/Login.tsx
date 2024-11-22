@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleButton from "react-google-button";
 import "../../styles/forms/AuthForms.css";
 
-interface User {
-    id: string;
-    username: string;
-    email: string;
-}
-
-function Login({ setUser }: { setUser: (user: User) => void }) {
-    // Pass setUser as a prop
+function Login({ setUser }: { setUser: (user: any) => void }) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
@@ -28,7 +22,6 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         try {
             const response = await axios.post(
                 "http://localhost:3000/auth/login",
@@ -37,48 +30,30 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    withCredentials: true, // Send cookies with the request
+                    withCredentials: true,
                 }
             );
 
             if (response.data.success) {
-                console.log(response.data.user);
-                setUser(response.data.user); // Update the user state
-                // Redirect to the homepage
+                setUser(response.data.user);
                 navigate("/");
                 window.location.reload();
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                // error message returned from the backend
                 const errorMessage =
                     error.response?.data?.message ||
                     "An error occurred. Please try again.";
-                setFormError(errorMessage); // Set the error message to display to the user
+                setFormError(errorMessage);
             } else {
                 setFormError("An unexpected error occurred. Please try again.");
             }
         }
     };
 
-    useEffect(() => {
-        // On component mount (when views change) add event listener to Google button
-        const googleButton = document.querySelector(".google-btn");
-        if (googleButton) {
-            googleButton.addEventListener("click", () => {
-                window.location.href = "http://localhost:3000/auth/google";
-            });
-        }
-
-        // If there was already an event listener on the Google button, remove it to avoid duplicates
-        return () => {
-            if (googleButton) {
-                googleButton.removeEventListener("click", () => {
-                    window.location.href = "http://localhost:3000/auth/google";
-                });
-            }
-        };
-    }, []);
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:3000/auth/google";
+    };
 
     return (
         <section className="form-page">
@@ -112,7 +87,6 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                             required
                         />
                     </div>
-
                     <div className="form-btn-wrapper">
                         <button
                             type="submit"
@@ -129,7 +103,13 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                     </div>
                 </form>
                 <h3>- OR -</h3>
-                <button className="google-btn">Sign in with Google</button>
+                <div className="button-container">
+                <GoogleButton
+                    onClick={handleGoogleLogin}
+                    label="Sign in with Google"
+                />
+                </div>
+              
             </div>
         </section>
     );

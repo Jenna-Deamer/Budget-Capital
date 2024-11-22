@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
+import GoogleButton from "react-google-button";
 
 function Signup() {
     const navigate = useNavigate();
@@ -59,25 +60,11 @@ function Signup() {
         }
     };
 
-    useEffect(() => {
-        // On component mount (when views change) add event listener to Google button
-        const googleButton = document.querySelector(".google-btn");
-        if (googleButton) {
-            googleButton.addEventListener("click", () => {
-                window.location.href = "http://localhost:3000/auth/google";
-            });
-        }
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:3000/auth/google";
+    };
 
-        // If there was already an event listener on the Google button, remove it to avoid duplicates
-        return () => {
-            if (googleButton) {
-                googleButton.removeEventListener("click", () => {
-                    window.location.href = "http://localhost:3000/auth/google";
-                });
-            }
-        };
-    }, []);
-
+  
     return (
         <section className="form-page">
             <div className="form-container">
@@ -90,7 +77,7 @@ function Signup() {
                 <p className="text-center">
                     Don't want to create an account?{" "}
                     <Link to="/demoLogin" id="demo-link">
-                        Login as a Demo Account
+                        Login as Demo User
                     </Link>
                 </p>
 
@@ -148,7 +135,12 @@ function Signup() {
                     </div>
                 </form>
                 <h3>- OR -</h3>
-                <button className="google-btn">Sign-up with Google</button>
+                <div className="button-container">
+                <GoogleButton
+                    onClick={handleGoogleLogin}
+                    label="Sign in with Google"
+                />
+                </div>
             </div>
         </section>
     );

@@ -34,6 +34,9 @@
     flex-direction: column;
 }
 
+input{
+    padding: 2px;
+}
 
 .form-btn-wrapper {
     grid-column: span 2;
@@ -43,11 +46,12 @@
     margin-top: 12px;
 }
 
-.google-btn {
-    display: block;
-    margin: 0 auto;
-
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .error-message{
     color: var(--red-label);
     font-size: 18px;
