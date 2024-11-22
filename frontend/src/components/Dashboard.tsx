@@ -1,8 +1,7 @@
 import "../styles/Dashboard.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import DatePicker from "./DatePicker";
 import TransactionContext from "../context/TransactionContext";
-import { Transaction } from "../types/Transaction";
 import Budget from "./budget/Budget";
 
 function Dashboard() {
@@ -16,7 +15,9 @@ function Dashboard() {
     } = useContext(TransactionContext)!;
 
     // Extract month and year from selected date for displaying in the header
-    const selectedMonth = selectedDate.toLocaleString("default", { month: "long" });
+    const selectedMonth = selectedDate.toLocaleString("default", {
+        month: "long",
+    });
     const selectedYear = selectedDate.getFullYear();
 
     const categoryColors: string[] = [
@@ -85,9 +86,9 @@ function Dashboard() {
                                 ([category, total], index) => {
                                     const percentage = totalExpense
                                         ? (
-                                            (total / totalExpense) *
-                                            100
-                                        ).toFixed(2)
+                                              (total / totalExpense) *
+                                              100
+                                          ).toFixed(2)
                                         : "0.00";
                                     const categoryColor =
                                         index < categoryColors.length
@@ -123,9 +124,9 @@ function Dashboard() {
                                 ([category, total], index) => {
                                     const percentage = totalExpense
                                         ? (
-                                            (total / totalExpense) *
-                                            100
-                                        ).toFixed(2)
+                                              (total / totalExpense) *
+                                              100
+                                          ).toFixed(2)
                                         : "0.00";
                                     const categoryColor =
                                         index < categoryColors.length

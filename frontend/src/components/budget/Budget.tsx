@@ -40,15 +40,19 @@ function Budget() {
     }
 
     const handleDelete = async () => {
-        const confirmed = window.confirm("Are you sure you want to delete your budget for this month?");
+        const confirmed = window.confirm(
+            "Are you sure you want to delete your budget for this month?"
+        );
         if (confirmed) {
             try {
+                const month = selectedDate.getMonth() + 1;
+                const year = selectedDate.getFullYear();
+
                 const response = await axios.delete(
                     `http://localhost:3000/budget/budget?month=${month}&year=${year}`,
                     { withCredentials: true }
                 );
                 if (response.status === 200) {
-                    // If delete is successful, set budget to null
                     setBudget(null);
                 }
             } catch (error) {
@@ -62,7 +66,11 @@ function Budget() {
         return (
             <div className="budget-widget">
                 <p>No budget set for this month.</p>
-                <Link to="/create-budget" className="button primary-button mt-2" title="create budget">
+                <Link
+                    to="/create-budget"
+                    className="button primary-button mt-2"
+                    title="create budget"
+                >
                     Create Budget
                 </Link>
             </div>
@@ -78,17 +86,25 @@ function Budget() {
                 You are <strong>${Math.abs(difference).toFixed(2)} </strong>
                 <span className={isOverBudget ? "over-budget" : "under-budget"}>
                     {isOverBudget ? "Over" : "Under"}&nbsp;Budget
-                </span> 
+                </span>
             </p>
             <div className="button-container mt-3">
-            <Link to={`/edit-budget/${budget._id}`} state={{ budget }} className="button primary-button" title="edit budget">
-                Edit Budget
-            </Link>
-            <button type="button" className="danger-button button ms-3" onClick={handleDelete}>
-                            Delete Budget
-                        </button>
+                <Link
+                    to={`/edit-budget/${budget._id}`}
+                    state={{ budget }}
+                    className="button primary-button"
+                    title="edit budget"
+                >
+                    Edit Budget
+                </Link>
+                <button
+                    type="button"
+                    className="danger-button button ms-3"
+                    onClick={handleDelete}
+                >
+                    Delete Budget
+                </button>
             </div>
-           
         </div>
     );
 }
