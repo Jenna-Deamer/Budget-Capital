@@ -7,6 +7,7 @@ export interface Budget {
 }
 
 export interface BudgetFormData {
+    _id: string;
     amount: string;
     month: string;
     year: string;

@@ -80,4 +80,49 @@ router.post("/create-budget", isAuthenticated, async (req, res) => {
     }
 });
 
+
+/* PUT: /api/budget/edit-budget => update selected budget */
+router.put("/edit-budget", isAuthenticated, async (req, res, next) => {
+    console.log("Got request to edit budget");
+    const { id, amount, ...updatedData } = req.body;
+
+    // Manually map 'amount' to 'targetAmount' before updating
+    updatedData.targetAmount = amount;
+
+    try {
+        const budget = await Budget.findByIdAndUpdate(id, updatedData, { new: true });
+
+        if (!budget) {
+            return res.status(404).json({ error: "Budget not found" });
+        }
+
+        return res.json(budget).status(200);
+    } catch (err) {
+        console.error("Error updating budget:", err);
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+// DELETE: /budget/delete-budget => delete selected budget
+router.delete("/budget", isAuthenticated, async (req, res) => {
+    try {
+        const month = req.query.month;
+        const year = parseInt(req.query.year);
+
+        const budget = await Budget.findOneAndDelete({
+            user: req.user._id,
+            month: month,
+            year: year
+        });
+
+        if (!budget) {
+            return res.status(404).json({ error: "Budget not found" });
+        }
+        return res.status(200).json({ message: "Budget deleted successfully" });
+    } catch (err) {
+        console.error("Error deleting budget:", err);
+        return res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

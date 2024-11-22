@@ -179,6 +179,7 @@ tbody{
 @media screen and (max-width: 550px) {
     .table-wrapper {
       overflow-x: auto;
+      padding-left: 16px;
     }
   
     .transactions-table {

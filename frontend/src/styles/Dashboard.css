@@ -9,15 +9,21 @@
 
 .header-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    /* This spreads out the elements */
     align-items: center;
     position: relative;
     padding-top: 24px;
+    margin-bottom: 20px;
+    /* Add space between header and content */
 }
 
 .header {
-    flex-grow: 1;
-    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    /* Let the width be determined by content */
 }
 
 .calendar-button-container {
@@ -25,6 +31,8 @@
     align-items: center;
     justify-content: flex-end;
     position: relative;
+    margin-left: auto;
+    /* Pushes the calendar to the right */
 }
 
 #dashboard-title {
@@ -33,10 +41,30 @@
 
 .calendar-button-container>button {
     position: absolute;
+    margin-right: 70px;
 }
 
-.calendar-button-container>button {
-    margin-right: 70px;
+@media screen and (max-width: 700px) {
+    .header {
+        position: static;
+        transform: none;
+        left: auto;
+    }
+
+    .header-container {
+        justify-content: flex-start;
+    }
+
+    .calendar-button-container {
+        width: 100%;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .calendar-button-container>button {
+        position: static;
+        margin-right: 0;
+    }
 }
 
 .highlight-container {
@@ -66,143 +94,147 @@
 }
 
 .highlight-box p {
-    margin: unset !important;
-}
-
-.expense-label {
-    color: var(--red-label);
-    font-size: 18px;
-}
-
-.income-label {
-    color: var(--green-label);
-    font-size: 18px;
-}
-
-
-/*Highlight cards Mobile*/
-@media screen and (max-width: 900px) {
-    .highlight-container {
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        margin-bottom: 40px;
-        margin-top: 20px;
+    .highlight-box p {
+        margin: unset !important;
     }
 
-    .budget-widget {
-        order: -1;
-        grid-column: span 2
-    }
-}
-
-@media screen and (max-width: 450px) {
-    .highlight-container {
-        grid-template-columns: 1fr;
-
+    .expense-label {
+        color: var(--red-label);
+        font-size: 18px;
     }
 
-    .budget-widget {
-        grid-column: span 1;
-        /* Remove spanning across columns */
+    .income-label {
+        color: var(--green-label);
+        font-size: 18px;
     }
-}
 
-/*breakdown section*/
-.breakdown-section {
-    padding: 0 100px;
-}
 
-.breakdown-container {
-    background-color: var(--foreground);
-    padding: 24px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 2000px;
-    width: 100%;
+    /*Highlight cards Mobile*/
+    @media screen and (max-width: 900px) {
+        .highlight-container {
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
 
-}
-
-.breakdown-container p {
-    grid-column: 1 / -1;
-}
-
-.category-breakdown {
-    padding: unset;
-    margin: unset;
-  
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-}
-
-.category-breakdown li {
-    background-color: var(--background);
-    padding: 10px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.category i {
-    padding-right: 8px;
-}
-
-/*Pie Charts*/
-.graph-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-height: 400px;
-    margin-bottom: 1em;
-}
-
-@media (max-width: 400px) {
-    .graph-container {
-        max-width: 200px;
+        .budget-widget {
+            order: -1;
+            grid-column: span 2
+        }
     }
-}
 
-/*Break down chart Mobile*/
-@media screen and (max-width: 1300px) {
-    .dashboard-page {
-        padding-left: 70px;
-        padding-right: 70px;
-     }
-    
+    @media screen and (max-width: 450px) {
+        .highlight-container {
+            grid-template-columns: 1fr;
+
+        }
+
+        .budget-widget {
+            grid-column: span 1;
+            /* Remove spanning across columns */
+        }
+    }
+
+    /*breakdown section*/
+    .breakdown-section {
+        padding: 0 100px;
+    }
+
     .breakdown-container {
-        grid-template-columns: 1fr;
-    }
-    .breakdown-section{
-        padding: 0 30px;
-    }
-}
-
-@media screen and (max-width: 900px) {
-    .dashboard-page {
-        padding-left: 20px;
-        padding-right: 20px;
-     }
-    
-    .category-breakdown {
+        background-color: var(--foreground);
+        padding: 24px;
+        display: grid;
         grid-template-columns: 1fr 1fr;
- 
+        max-width: 2000px;
+        width: 100%;
+
     }
-}
 
-@media screen and (max-width: 700px) {
+    .breakdown-container p {
+        grid-column: 1 / -1;
+    }
 
-  .graph-container{
-    max-height: 250px;
-  }
     .category-breakdown {
-        grid-template-columns: 1fr;
- 
+        padding: unset;
+        margin: unset;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        width: 100%;
     }
-}
-/* 
+
+    .category-breakdown li {
+        background-color: var(--background);
+        padding: 10px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .category i {
+        padding-right: 8px;
+    }
+
+    /*Pie Charts*/
+    .graph-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-height: 400px;
+        margin-bottom: 1em;
+    }
+
+    @media (max-width: 400px) {
+        .graph-container {
+            max-width: 200px;
+        }
+    }
+
+    /*Break down chart Mobile*/
+    @media screen and (max-width: 1300px) {
+        .dashboard-page {
+            padding-left: 70px;
+            padding-right: 70px;
+        }
+
+        .breakdown-container {
+            grid-template-columns: 1fr;
+        }
+
+        .breakdown-section {
+            padding: 0 30px;
+        }
+    }
+
+    @media screen and (max-width: 900px) {
+        .dashboard-page {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .category-breakdown {
+            grid-template-columns: 1fr 1fr;
+
+        }
+    }
+
+    @media screen and (max-width: 700px) {
+
+        .graph-container {
+            max-height: 250px;
+        }
+
+        .category-breakdown {
+            grid-template-columns: 1fr;
+
+        }
+    }
+
+    /* 
 @media screen and (max-width: 850px) {
     .graph-container{
         max-height: 150px;
@@ -214,63 +246,100 @@
 
 
 
-/* @media screen and (max-width: 1100px) {
-    .breakdown-container {
-        grid-template-columns: 1fr;
-    }
-    .breakdown-section{
-        padding: 0 30px;
-    }
-    .category-breakdown {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    .category-breakdown li span {
-        width: 150px;
-
-    }
-
+    /* @media screen and (max-width: 1100px) {
+.category-breakdown li span {
+    text-align: left;
+    width: 100%;
 }
 
-@media screen and (max-width: 700px) {
-    .dashboard-page {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-    .category-breakdown {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
+/*Highlight cards Mobile*/
+    @media screen and (max-width: 900px) {
+        .highlight-container {
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
+        .budget-widget {
+            order: -1;
+            grid-column: span 2
+        }
     }
 
-    .category-breakdown li {
-        background-color: var(--background);
-        padding: 10px; 
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center; 
-      
+    @media screen and (max-width: 450px) {
+        .highlight-container {
+            grid-template-columns: 1fr;
+
+        }
+
+        .budget-widget {
+            grid-column: span 1;
+            /* Remove spanning across columns */
+        }
     }
 
-    .category {
-        grid-column: span 2;
+    /*Break down chart Mobile*/
+    @media screen and (max-width: 1100px) {
+        .breakdown-container {
+            grid-template-columns: 1fr;
+        }
+
+        .breakdown-section {
+            padding: 0 30px;
+        }
+
+        .category-breakdown {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .category-breakdown li span {
+            width: 150px;
+
+        }
+
     }
 
-    .category-breakdown li span {
-        text-align: center;
-    }
-}
+    @media screen and (max-width: 700px) {
+        .dashboard-page {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
 
-@media screen and (max-width: 450px) {
- 
-    .category-breakdown {
-        grid-template-columns: 1fr;
-        gap: unset;
+        .category-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .category-breakdown li {
+            background-color: var(--background);
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+
+        .category {
+            grid-column: span 2;
+        }
+
+        .category-breakdown li span {
+            text-align: center;
+        }
     }
 
-} */
+    @media screen and (max-width: 450px) {
+
+        .category-breakdown {
+            grid-template-columns: 1fr;
+            gap: unset;
+        }
+
+    }

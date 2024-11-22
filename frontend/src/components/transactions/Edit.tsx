@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import TransactionContext from "../../context/TransactionContext";
+import { Transaction } from "../../types/Transaction";
 import "../../styles/forms/TransactionEdit.css";
 import axios from "axios";
 
@@ -30,7 +31,7 @@ const EditTransaction = () => {
   const { transaction } = location.state;
   const navigate = useNavigate();
   const [categories, setCategories] = useState<string[]>([]);
-
+  const { setTransactions } = useContext(TransactionContext)!;
   const [formData, setFormData] = useState({
     name: "",
     amount: 0,
@@ -95,21 +96,35 @@ const EditTransaction = () => {
 
       console.log("Success:", response.data);
 
-      // if _id is returned, it means the transaction was created successfully
-      if (response.data._id) {
-        // Redirect to the homepage
-        navigate("/transactions");
-      } else {
-        console.log("Edit Failed: ", response.data.message);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Error message:", error.message);
-      } else {
-        console.error("Unexpected error:", error);
-      }
+    // if _id is returned, it means the transaction was created successfully
+    if (response.data._id) {
+      const updatedTransaction = {
+        ...response.data,
+        formattedDate: new Date(response.data.date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      };
+
+      // Update the transactions in context 
+      setTransactions(prevTransactions => [
+        // Filter  and keep all transactions except the one that was updated
+        ...prevTransactions.filter(transaction => transaction._id !== response.data._id),
+        updatedTransaction
+      ]);
+      navigate("/transactions");
+    } else {
+      console.log("Edit Failed: ", response.data.message);
     }
-  };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error message:", error.message);
+    } else {
+      console.error("Unexpected error:", error);
+    }
+  }
+};
   return (
     <>
       <section className="crud-page-wrapper">

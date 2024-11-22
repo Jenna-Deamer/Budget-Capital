@@ -154,6 +154,15 @@ main {
   border: solid 0 var(--secondary-action);
 }
 
+.danger-button{
+  color: var(--white);
+  background-color: var(--red-label);
+  border: solid 0 var(--red-label);
+}
+.danger-button:hover{
+  background-color: var(--red-hover);
+  border-color: var(--red-hover);
+}
 .primary-button:hover {
   background-color: var(--action-hover);
   border-color: var(--action-hover);
