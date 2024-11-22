@@ -7,6 +7,7 @@
     padding-bottom: 50px;
 }
 
+
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -37,6 +38,7 @@
 
 #dashboard-title {
     margin: unset !important;
+    text-align: center;
 }
 
 .calendar-button-container>button {
@@ -66,7 +68,6 @@
         margin-right: 0;
     }
 }
-
 .highlight-container {
     display: grid;
     grid-template-columns: 1fr 1.2fr 1fr;
@@ -94,252 +95,139 @@
 }
 
 .highlight-box p {
-    .highlight-box p {
-        margin: unset !important;
-    }
+    margin: unset !important;
+}
 
-    .expense-label {
-        color: var(--red-label);
-        font-size: 18px;
-    }
+.expense-label {
+    color: var(--red-label);
+    font-size: 18px;
+}
 
-    .income-label {
-        color: var(--green-label);
-        font-size: 18px;
-    }
+.income-label {
+    color: var(--green-label);
+    font-size: 18px;
+}
 
 
-    /*Highlight cards Mobile*/
-    @media screen and (max-width: 900px) {
-        .highlight-container {
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 40px;
-            margin-top: 20px;
-        }
-
-        .budget-widget {
-            order: -1;
-            grid-column: span 2
-        }
-    }
-
-    @media screen and (max-width: 450px) {
-        .highlight-container {
-            grid-template-columns: 1fr;
-
-        }
-
-        .budget-widget {
-            grid-column: span 1;
-            /* Remove spanning across columns */
-        }
-    }
-
-    /*breakdown section*/
-    .breakdown-section {
-        padding: 0 100px;
-    }
-
-    .breakdown-container {
-        background-color: var(--foreground);
-        padding: 24px;
-        display: grid;
+/*Highlight cards Mobile*/
+@media screen and (max-width: 900px) {
+    .highlight-container {
         grid-template-columns: 1fr 1fr;
-        max-width: 2000px;
-        width: 100%;
-
+        gap: 16px;
+        margin-bottom: 40px;
+        margin-top: 20px;
     }
 
-    .breakdown-container p {
-        grid-column: 1 / -1;
+    .budget-widget {
+        order: -1;
+        grid-column: span 2
     }
+}
 
-    .category-breakdown {
-        padding: unset;
-        margin: unset;
-
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 8px;
-        width: 100%;
-    }
-
-    .category-breakdown li {
-        background-color: var(--background);
-        padding: 10px;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .category i {
-        padding-right: 8px;
-    }
-
-    /*Pie Charts*/
-    .graph-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        max-height: 400px;
-        margin-bottom: 1em;
-    }
-
-    @media (max-width: 400px) {
-        .graph-container {
-            max-width: 200px;
-        }
-    }
-
-    /*Break down chart Mobile*/
-    @media screen and (max-width: 1300px) {
-        .dashboard-page {
-            padding-left: 70px;
-            padding-right: 70px;
-        }
-
-        .breakdown-container {
-            grid-template-columns: 1fr;
-        }
-
-        .breakdown-section {
-            padding: 0 30px;
-        }
-    }
-
-    @media screen and (max-width: 900px) {
-        .dashboard-page {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .category-breakdown {
-            grid-template-columns: 1fr 1fr;
-
-        }
-    }
-
-    @media screen and (max-width: 700px) {
-
-        .graph-container {
-            max-height: 250px;
-        }
-
-        .category-breakdown {
-            grid-template-columns: 1fr;
-
-        }
-    }
-
-    /* 
-@media screen and (max-width: 850px) {
-    .graph-container{
-        max-height: 150px;
-    }
-    .category-breakdown {
+@media screen and (max-width: 450px) {
+    .highlight-container {
         grid-template-columns: 1fr;
+
     }
-} */
 
+    .budget-widget {
+        grid-column: span 1;
+        /* Remove spanning across columns */
+    }
+}
 
+/*breakdown section*/
+.breakdown-section {
+    padding: 0 100px;
+}
 
-    /* @media screen and (max-width: 1100px) {
-.category-breakdown li span {
-    text-align: left;
+.breakdown-container {
+    background-color: var(--foreground);
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 2000px;
+    width: 100%;
+
+}
+
+.breakdown-container p {
+    grid-column: 1 / -1;
+}
+
+.category-breakdown {
+    padding: unset;
+    margin: unset;
+  
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
     width: 100%;
 }
 
-/*Highlight cards Mobile*/
-    @media screen and (max-width: 900px) {
-        .highlight-container {
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 40px;
-            margin-top: 20px;
-        }
+.category-breakdown li {
+    background-color: var(--background);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
 
-        .budget-widget {
-            order: -1;
-            grid-column: span 2
-        }
+.category i {
+    padding-right: 8px;
+}
+
+/*Pie Charts*/
+.graph-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 400px;
+    margin-bottom: 1em;
+}
+
+@media (max-width: 400px) {
+    .graph-container {
+        max-width: 200px;
     }
+}
 
-    @media screen and (max-width: 450px) {
-        .highlight-container {
-            grid-template-columns: 1fr;
-
-        }
-
-        .budget-widget {
-            grid-column: span 1;
-            /* Remove spanning across columns */
-        }
+/*Break down chart Mobile*/
+@media screen and (max-width: 1300px) {
+    .dashboard-page {
+        padding-left: 70px;
+        padding-right: 70px;
+     }
+    
+    .breakdown-container {
+        grid-template-columns: 1fr;
     }
-
-    /*Break down chart Mobile*/
-    @media screen and (max-width: 1100px) {
-        .breakdown-container {
-            grid-template-columns: 1fr;
-        }
-
-        .breakdown-section {
-            padding: 0 30px;
-        }
-
-        .category-breakdown {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        .category-breakdown li span {
-            width: 150px;
-
-        }
-
+    .breakdown-section{
+        padding: 0 30px;
     }
+}
 
-    @media screen and (max-width: 700px) {
-        .dashboard-page {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .category-breakdown {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .category-breakdown li {
-            background-color: var(--background);
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-        }
-
-        .category {
-            grid-column: span 2;
-        }
-
-        .category-breakdown li span {
-            text-align: center;
-        }
+@media screen and (max-width: 900px) {
+    .dashboard-page {
+        padding-left: 20px;
+        padding-right: 20px;
+     }
+    
+    .category-breakdown {
+        grid-template-columns: 1fr 1fr;
+ 
     }
+}
 
-    @media screen and (max-width: 450px) {
+@media screen and (max-width: 700px) {
 
-        .category-breakdown {
-            grid-template-columns: 1fr;
-            gap: unset;
-        }
-
+  .graph-container{
+    max-height: 250px;
+  }
+    .category-breakdown {
+        grid-template-columns: 1fr;
+ 
     }
+}
