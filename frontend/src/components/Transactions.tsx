@@ -1,4 +1,3 @@
-import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Transactions.css";
 import DatePicker from "./DatePicker";
@@ -6,6 +5,7 @@ import axios from "axios";
 import TransactionContext from "../context/TransactionContext"; 
 import { Transaction } from "../types/Transaction";
 import Budget from "./budget/Budget";
+import { useContext, useState } from "react";
 
 function Transactions() {
   // Use transaction context to set transactions & date
@@ -32,10 +32,16 @@ function Transactions() {
     const nextSortOrder = sortOrder === "asc" ? "desc" : "asc";
 
     const sortedTransactions = [...transactions].sort((a, b) => {
-      if (nextSortOrder === "asc") {
-        return a[sortType] < b[sortType] ? -1 : 1;
-      } else {
-        return a[sortType] > b[sortType] ? -1 : 1;
+      // Check that the sort typ ein the transaction object is not undefined
+      if(a[sortType] != undefined && b[sortType] != undefined){
+        if (nextSortOrder === "asc") {
+          return a[sortType] < b[sortType] ? -1 : 1;
+        } else {
+          return a[sortType] > b[sortType] ? -1 : 1;
+        }
+      }else{
+        // If the sort type is undefined, return 1
+        return 1;
       }
     });
 

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 // Import Types
-import Budget from "../../types/Budget";
 import { BudgetFormData } from "../../types/Budget";
 
 
@@ -15,7 +14,7 @@ function EditBudget() {
         amount: budget.targetAmount.toString(),
         month: budget.month.toString(),
         year: budget.year.toString(),
-        id: budget._id,
+        _id: budget._id,
     });
 
     const handleChange = (
