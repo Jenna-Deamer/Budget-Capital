@@ -14,7 +14,7 @@
     /* This spreads out the elements */
     align-items: center;
     position: relative;
-    padding-top: 24px;
+    padding-top: 20px;
     margin-bottom: 20px;
     /* Add space between header and content */
 }
