@@ -3,14 +3,19 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import "../../styles/forms/AuthForms.css";
-import User from "../../App.tsx";
+import { User } from "../../types/User";
 
-function Login({ setUser }: { setUser: (user:typeof User) => void }) {
+interface LoginProps {
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
+
+function Login({ setUser }: LoginProps) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
         password: "",
     });
+    
     const [formError, setFormError] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

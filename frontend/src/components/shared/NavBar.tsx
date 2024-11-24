@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom";
-import LogoutButton from "../auth/Logout";
+import Logout from "../auth/Logout";
+import { Dispatch, SetStateAction } from "react";
+import {User} from "../../types/User";
 
-interface User {
-    id: string;
-    username: string | null;
-    firstName: string;
-    lastName: string;
-}
+
 interface NavBarProps {
     user: User | null;
-    setUser: (user: User | null) => void;
+    setUser: Dispatch<SetStateAction<User | null>>;
 }
 
 function NavBar({ user, setUser }: NavBarProps) {
@@ -70,7 +67,7 @@ function NavBar({ user, setUser }: NavBarProps) {
                                 <span>Welcome, {user.firstName}</span>
                             </li>
                             <li className="nav-item">
-                                <LogoutButton setUser={setUser} />
+                                <Logout setUser={setUser} />
                             </li>
                         </>
                     ) : (

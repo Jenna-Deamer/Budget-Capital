@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
+import { User } from "../../types/User";
 
-interface User {
-    id: string;
-    username: string;
-    email: string;
+interface DemoLoginProps {  
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
+
+function DemoLogin({ setUser }: DemoLoginProps) {
     const navigate = useNavigate();
     const [formError, setFormError] = useState("");
 

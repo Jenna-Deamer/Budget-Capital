@@ -25,13 +25,8 @@ import CreateBudget from "./components/budget/Create";
 import EditBudget from "./components/budget/Edit";
 // Context
 import { TransactionProvider } from "./context/TransactionContext";
-
-interface User {
-    id: string;
-    username: string | null;
-    firstName: string;
-    lastName: string;
-}
+//types
+import {User} from "./types/User";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);

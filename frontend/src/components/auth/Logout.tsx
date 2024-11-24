@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-interface LogoutButtonProps {
+interface LogoutProps {
     setUser: (user: null) => void;
 }
 
-function Logout({ setUser }: LogoutButtonProps) {
+function Logout({ setUser }: LogoutProps) {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -20,22 +20,19 @@ function Logout({ setUser }: LogoutButtonProps) {
 
             console.log(response.data);
             if (response.status === 200) {
+                setUser(null); // Clear the user state
                 navigate("/"); // Redirect to the homepage
                 window.location.reload();
             } else {
                 console.error("Logout failed:", response.data.message);
             }
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error("Error message:", error.message);
-            } else {
-                console.error("Unexpected error during logout", error);
-            }
+            console.error("Logout error:", error);
         }
     };
 
     return (
-        <button onClick={handleLogout} className="logout-btn nav-link">
+        <button onClick={handleLogout} className="btn btn-link nav-link">
             Logout
         </button>
     );

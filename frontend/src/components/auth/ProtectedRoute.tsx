@@ -1,9 +1,9 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import User from "../../App.tsx";
+import { User } from "../../types/User.tsx";
 
 interface ProtectedRouteProps {
-    user: typeof User;
+    user: User | null;
     children: React.ReactNode;
 }
 
