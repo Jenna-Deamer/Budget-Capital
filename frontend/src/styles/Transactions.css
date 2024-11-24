@@ -7,7 +7,13 @@
     padding-bottom: 50px;
 }
 
-
+.transactions-page h1{
+    text-align: center;
+}
+.header-container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 /* .header-container {
     display: flex;
     justify-content: center;
