@@ -17,9 +17,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // CORS configuration
-const allowedOrigins = [
-    "http://localhost:5173",
-];
+const allowedOrigins = ["http://localhost:5173", "http://localhost:4173"];
 
 app.use(
     cors({
@@ -35,9 +33,9 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            secure: false, // Set to true if using HTTPS
+            secure: process.env.NODE_ENV === "production", // Set to true only in production
             httpOnly: true, // Mitigates the risk of client-side script accessing the cookie
-            sameSite: 'lax', // Allow cross-origin cookie usage
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "lax", // Allow cross-origin cookie usage in production
             maxAge: 3600000, // 1 hour
         },
     })
