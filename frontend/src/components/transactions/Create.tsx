@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TransactionContext from "../../context/TransactionContext";
-import { Transaction } from "../../types/Transaction";
 import "../../styles/forms/TransactionCreate.css";
 
 const incomeCategories = [

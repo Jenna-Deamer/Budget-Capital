@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
@@ -7,7 +7,10 @@ interface User {
     id: string;
     username: string;
     email: string;
+    firstName: string;
+    lastName: string;
 }
+
 
 function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
     const navigate = useNavigate();

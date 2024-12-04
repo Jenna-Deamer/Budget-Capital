@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Transactions.css";
 import DatePicker from "./DatePicker";
@@ -33,8 +33,14 @@ function Transactions() {
 
     const sortedTransactions = [...transactions].sort((a, b) => {
       if (nextSortOrder === "asc") {
+        if (a[sortType] === undefined || b[sortType] === undefined) {
+          return 0;
+        }
         return a[sortType] < b[sortType] ? -1 : 1;
       } else {
+        if (a[sortType] === undefined || b[sortType] === undefined) {
+          return 0;
+        }
         return a[sortType] > b[sortType] ? -1 : 1;
       }
     });

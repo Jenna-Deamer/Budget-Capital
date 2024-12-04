@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import TransactionContext from "../../context/TransactionContext";
-import { Transaction } from "../../types/Transaction";
 import "../../styles/forms/TransactionEdit.css";
 import axios from "axios";
 

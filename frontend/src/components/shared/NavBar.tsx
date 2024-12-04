@@ -12,7 +12,7 @@ interface NavBarProps {
     setUser: (user: User | null) => void;
 }
 
-function NavBar({ user, setUser }: NavBarProps) {
+function NavBar({ user }: NavBarProps) {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark shadow">
             <Link
@@ -70,7 +70,7 @@ function NavBar({ user, setUser }: NavBarProps) {
                                 <span>Welcome, {user.firstName}</span>
                             </li>
                             <li className="nav-item">
-                                <LogoutButton setUser={setUser} />
+                                <LogoutButton />
                             </li>
                         </>
                     ) : (

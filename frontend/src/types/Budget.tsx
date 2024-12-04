@@ -6,9 +6,15 @@ export interface Budget {
     year: number;
 }
 
+
 export interface BudgetFormData {
-    _id: string;
+
     amount: string;
+
     month: string;
+
     year: string;
+
+    id: string;
+
 }

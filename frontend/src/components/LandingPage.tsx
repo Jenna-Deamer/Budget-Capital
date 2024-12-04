@@ -1,8 +1,10 @@
 import "../styles/landing.css";
 
+
 interface LandingPageProps {
-    user: { id: string; name: string } | null;
+    user: { id: string; username: string | null; firstName: string; lastName: string } | null;
 }
+
 
 function LandingPage({ user }: LandingPageProps) {
     return (

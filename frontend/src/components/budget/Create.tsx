@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // Import Types
-import Budget from "../../types/Budget";
 import { BudgetFormData } from "../../types/Budget";
 
 function CreateBudget() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<BudgetFormData>({
+        id: "",
         amount: "",
         month: new Date().getMonth() + 1 + "", // Current month
         year: new Date().getFullYear() + "", // Current year

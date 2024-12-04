@@ -1,11 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-interface LogoutButtonProps {
-    setUser: (user: null) => void;
-}
 
-function Logout({ setUser }: LogoutButtonProps) {
+function Logout (){
     const navigate = useNavigate();
 
     const handleLogout = async () => {
