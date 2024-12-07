@@ -5,12 +5,19 @@ const mongoose = require("mongoose");
 
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    console.log("User is authenticated:", req.user);
-    return next(); // Proceed to the next middleware or route handler
+  const token = req.headers.authorization?.split(" ")[1]; // Get token from Authorization header
+
+  if (!token) {
+      return res.status(401).json({ message: "No token provided" });
   }
-  console.log("User is not authenticated");
-  return res.status(401).json({ message: "Not authorized" });
+
+  try {
+      const decoded = verifyToken(token);
+      req.user = decoded; // Add decoded user data to request
+      next();
+  } catch (err) {
+      return res.status(403).json({ message: "Invalid or expired token" });
+  }
 }
 
 /** GET: /transactions => show all transactions */

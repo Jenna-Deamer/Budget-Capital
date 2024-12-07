@@ -25,13 +25,7 @@ import CreateBudget from "./components/budget/Create";
 import EditBudget from "./components/budget/Edit";
 // Context
 import { TransactionProvider } from "./context/TransactionContext";
-
-interface User {
-    id: string;
-    username: string | null;
-    firstName: string;
-    lastName: string;
-}
+import { User } from "./types/User";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -79,7 +73,7 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <BrowserRouter>
                 <div className="app-container">
-                    <NavBar user={user} setUser={setUser} />
+                    <NavBar user={user} />
                     <main className="main-content">
                         <Routes>
                             <Route

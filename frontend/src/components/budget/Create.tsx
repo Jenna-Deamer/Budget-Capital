@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// Import Types
 import { BudgetFormData } from "../../types/Budget";
 
 function CreateBudget() {
@@ -9,8 +8,8 @@ function CreateBudget() {
     const [formData, setFormData] = useState<BudgetFormData>({
         id: "",
         amount: "",
-        month: new Date().getMonth() + 1 + "", // Current month
-        year: new Date().getFullYear() + "", // Current year
+        month: (new Date().getMonth() + 1).toString(), // Current month
+        year: new Date().getFullYear().toString(), // Current year
     });
 
     const handleChange = (
@@ -24,37 +23,38 @@ function CreateBudget() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+    
         try {
-            // Format data to match backend expectations
             const budgetData = {
                 amount: parseFloat(formData.amount),
                 month: formData.month,
                 year: parseInt(formData.year),
             };
-
+    
+            const token = localStorage.getItem("jwtToken"); // Get token 
+    
+            // If there's no token, navigate to login
+            if (!token) {
+                return navigate("/login");
+            }
+    
             const response = await axios.post(
                 "http://localhost:3000/budget/create-budget",
                 budgetData,
                 {
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`, // Include token in Authorization header
                     },
-                    withCredentials: true,
                 }
             );
-
+    
             if (response.status === 201) {
                 navigate("/dashboard");
             }
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response) {
-                console.error(
-                    "Failed to create budget:",
-                    error.response.data.message
-                );
-                // Handle error message display to user here
-            } else {
-                console.error("Failed to create budget:", error);
+            if (axios.isAxiosError(error)) {
+                console.error("Failed to create budget:", error.response?.data?.message);
             }
         }
     };

@@ -30,9 +30,9 @@ export const TransactionProvider: React.FC<TransactionProviderProps> = ({ childr
     const fetchUserId = async () => {
       try {
         axios.defaults.withCredentials = true;
-        const response = await axios.get("http://localhost:3000/auth/current-user");
+        const response = await axios.get("http://localhost:3000/auth/check-auth");
         if (response.data) {
-          setUserId(response.data.userId);
+          setUserId(response.data.user.id)
         }
       } catch (error) {
         console.error("Failed to fetch user ID:", error);

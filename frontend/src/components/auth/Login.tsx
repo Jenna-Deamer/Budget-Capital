@@ -3,8 +3,9 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import "../../styles/forms/AuthForms.css";
+import { User } from "../../types/User";
 
-function Login({ setUser }: { setUser: (user: any) => void }) {
+function Login({ setUser }: { setUser: (user: User) => void }) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
@@ -29,15 +30,14 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                    },
-                    withCredentials: true,
+                    }
                 }
             );
 
             if (response.data.success) {
+                localStorage.setItem("jwtToken", response.data.token);
                 setUser(response.data.user);
-                navigate("/");
-                window.location.reload();
+                navigate("/dashboard");
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -104,12 +104,11 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
                 </form>
                 <h3>- OR -</h3>
                 <div className="button-container">
-                <GoogleButton
-                    onClick={handleGoogleLogin}
-                    label="Sign in with Google"
-                />
+                    <GoogleButton
+                        onClick={handleGoogleLogin}
+                        label="Sign in with Google"
+                    />
                 </div>
-              
             </div>
         </section>
     );

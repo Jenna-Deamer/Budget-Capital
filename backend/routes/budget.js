@@ -3,16 +3,26 @@ const router = express.Router();
 const Transaction = require("../models/transaction");
 const mongoose = require("mongoose");
 const Budget = require("../models/budget");
-
+const { verifyToken } = require("../utils/jwt");
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        console.log("User is authenticated:", req.user);
-        return next(); // Proceed to the next middleware or route handler
+    const token = req.headers.authorization?.split(" ")[1]; // Get token from Authorization header
+
+    if (!token) {
+        return res.status(401).json({ message: "No token provided" });
     }
-    console.log("User is not authenticated");
-    return res.status(401).json({ message: "Not authorized" });
+
+    try {
+        const decoded = verifyToken(token); // Decode the token
+        console.log("Decoded token:", decoded); // Log decoded token to verify its contents
+        req.user = decoded; // Attach decoded token data to the request object
+        next();
+    } catch (err) {
+        console.error("Token decoding failed:", err); // Log any error in decoding
+        return res.status(403).json({ message: "Invalid or expired token" });
+    }
 }
+
 
 // Get budget for selected MM/YYYY
 router.get("/budget", isAuthenticated, async (req, res) => {
@@ -47,36 +57,23 @@ router.get("/budget", isAuthenticated, async (req, res) => {
 
 // POST: Create a new budget
 router.post("/create-budget", isAuthenticated, async (req, res) => {
-    console.log("Budget route called");
     try {
         const { amount, month, year } = req.body;
-
-        // Check if budget already exists for this month/year
-        const existingBudget = await Budget.findOne({
-            user: req.user._id,
-            month: month,
-            year: year
+        
+        const budget = new Budget({
+            amount,
+            month,
+            year,
+            user: user.id // user's ID from JWT
         });
 
-        if (existingBudget) {
-            return res.status(400).json({
-                message: "Budget already exists for this month"
-            });
-        }
-
-        // Create new budget
-        const budget = await Budget.create({
-            user: req.user._id,
-            month: month,
-            year: year,
-            targetAmount: amount,
-            actualAmount: 0 // Start with 0, will be updated as transactions are added
+        await budget.save();
+        res.status(201).json({ success: true, budget });
+    } catch (error) {
+        res.status(400).json({ 
+            success: false, 
+            message: "Error creating budget: " + error.message 
         });
-
-        res.status(201).json(budget);
-    } catch (err) {
-        console.error("Error creating budget:", err);
-        res.status(500).json({ message: "Error creating budget" });
     }
 });
 

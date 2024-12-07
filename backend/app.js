@@ -6,9 +6,6 @@ const port = 3000;
 const authRouter = require("./routes/auth");
 const transactionRouter = require("./routes/transaction");
 const budgetRouter = require("./routes/budget");
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
-var session = require("express-session");
 const User = require("./models/user");
 
 // Use dotenv in non-production environments
@@ -26,29 +23,6 @@ app.use(
         credentials: true,
     })
 );
-
-app.use(
-    session({
-        secret: process.env.SECRET_KEY,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            secure: process.env.NODE_ENV === "production", // Set to true only in production
-            httpOnly: true, // Mitigates the risk of client-side script accessing the cookie
-            sameSite: process.env.NODE_ENV === "production" ? "None" : "lax", // Allow cross-origin cookie usage in production
-            maxAge: 3600000, // 1 hour
-        },
-    })
-);
-
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Configure Passport to use Local Strategy
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 // Use JSON middleware and URL-encoded parser
 app.use(express.json());
@@ -72,9 +46,32 @@ async function run() {
 run().catch(console.dir);
 
 // Define routers
-app.use("/auth", authRouter);
+app.use("/auth", authRouter); 
 app.use("/transaction", transactionRouter);
-app.use("/budget", budgetRouter);
+app.use("/budget", budgetRouter); 
+
+
+app.use("/protected", (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1]; // Get token from Authorization header
+
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized access" });
+    }
+
+    try {
+        // Verify the token
+        const decoded = require("./utils/jwt").verifyToken(token); 
+        req.user = decoded; // Attach decoded user to the request object
+        next();
+    } catch (err) {
+        return res.status(403).json({ message: "Invalid or expired token" });
+    }
+});
+
+// Test protected route
+app.get("/protected", (req, res) => {
+    res.json({ message: "This is protected data", user: req.user });
+});
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

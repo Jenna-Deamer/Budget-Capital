@@ -1,16 +1,10 @@
 import { Link } from "react-router-dom";
 import LogoutButton from "../auth/Logout";
-
-interface User {
-    id: string;
-    username: string | null;
-    firstName: string;
-    lastName: string;
-}
+import { User } from "../../types/User";
 interface NavBarProps {
     user: User | null;
-    setUser: (user: User | null) => void;
 }
+
 
 function NavBar({ user }: NavBarProps) {
     return (
