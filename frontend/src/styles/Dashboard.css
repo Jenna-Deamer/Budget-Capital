@@ -136,6 +136,7 @@
     }
 }
 
+
 /*breakdown section*/
 .breakdown-section {
     padding: 0 100px;
@@ -148,7 +149,15 @@
     grid-template-columns: 1fr 1fr;
     max-width: 2000px;
     width: 100%;
+}
 
+.no-transactions-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 2em;
 }
 
 .breakdown-container p {
@@ -186,6 +195,10 @@
     align-items: center;
     max-height: 400px;
     margin-bottom: 1em;
+}
+/* Make it span full width when containing no-transactions */
+.graph-container:has(.no-transactions-container) {
+    grid-column: 1 / -1; 
 }
 
 @media (max-width: 400px) {

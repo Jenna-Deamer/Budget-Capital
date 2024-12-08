@@ -54,7 +54,7 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
     };
     
     const handleGoogleLogin = () => {
-        window.location.href = `${API_URL}auth/google`;
+        window.location.href = `${API_URL}/auth/google`;
     };
 
     return (
