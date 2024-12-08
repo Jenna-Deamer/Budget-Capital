@@ -14,12 +14,28 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
+// Environment configuration
+const isProduction = process.env.NODE_ENV === 'production';
+
 // CORS configuration
-const allowedOrigins = ["http://localhost:5173", "http://localhost:4173"];
+const allowedOrigins = [
+    "http://localhost:5173", 
+    "http://localhost:4173"
+];
+
+if (isProduction) {
+    allowedOrigins.push("https://budget-capital-frontend.onrender.com");
+}
 
 app.use(
     cors({
-        origin: allowedOrigins,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
         credentials: true,
     })
@@ -30,22 +46,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// MongoDB connection
 const uri = process.env.CONNECTION_STRING;
 const clientOptions = {
     serverApi: { version: "1", strict: true, deprecationErrors: true },
 };
 
-// MongoDB connection
-async function run() {
+async function connectDB() {
     try {
-        await mongoose.connect(uri, clientOptions);
-        await mongoose.connection.db.admin().command({ ping: 1 });
-        console.log("mongodb connection successful");
-    } catch (e) {
-        console.error(e);
+        const client = await mongoose.connect(uri, clientOptions);
+        console.log(`MongoDB connected: ${isProduction ? 'Production' : 'Development'} mode`);
+        
+        // Validate connection in production
+        if (isProduction) {
+            await client.db.admin().ping();
+            console.log("Database ping successful");
+        }
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+        process.exit(1);
     }
 }
-run().catch(console.dir);
+
+connectDB();
 
 // Define routers
 app.use("/auth", authRouter); 
