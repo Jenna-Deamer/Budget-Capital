@@ -55,14 +55,17 @@ const connectDB = async () => {
         }
 
         await mongoose.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
+            // Modern connection options
+            serverSelectionTimeoutMS: 5000, // Timeout after 5s
+            maxPoolSize: 10, // Maintain up to 10 socket connections
+            family: 4 // Use IPv4, skip trying IPv6
         });
 
         console.log(`MongoDB connected: ${isProduction ? 'Production' : 'Development'} mode`);
     } catch (err) {
         console.error('MongoDB connection error:', err.message);
-        process.exit(1);
+        // Attempt to reconnect
+        setTimeout(connectDB, 5000);
     }
 };
 
