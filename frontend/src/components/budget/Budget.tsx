@@ -11,30 +11,50 @@ function Budget() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchBudget = async () => {
-            try {
-                const token = localStorage.getItem('jwtToken');
-                if (!token) {
-                    throw new Error('No authentication token found');
-                }
+       const fetchBudget = async () => {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
 
-                const month = selectedDate.getMonth() + 1;
-                const year = selectedDate.getFullYear();
-                const response = await axios.get(
-                    `http://localhost:3000/budget/budget?month=${month}&year=${year}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-                setBudget(response.data);
-            } catch (error) {
-                console.error("Failed to fetch budget:", error);
-            } finally {
-                setLoading(false);
+        const month = selectedDate.getMonth() + 1;
+        const year = selectedDate.getFullYear();
+
+        console.log('Fetching budget for:', { month, year });
+
+        const response = await axios.get(
+            `http://localhost:3000/budget/budget?month=${month}&year=${year}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
+        );
+
+        // Map API response to expected format
+        const budgetData = {
+            ...response.data,
+            targetAmount: parseFloat(response.data.amount) || 0
         };
+
+        console.log("Fetched budget:", budgetData);
+
+        if (!isNaN(budgetData.targetAmount)) {
+            setBudget(budgetData);
+        } else {
+            console.error('Invalid budget targetAmount:', response.data.targetAmount);
+            setBudget(null);
+        }
+
+    } catch (error) {
+        console.error("Failed to fetch budget:", error);
+        setBudget(null);
+    } finally {
+        setLoading(false);
+    }
+};
+
 
         fetchBudget();
     }, [selectedDate]);
