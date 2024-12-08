@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import LogoutButton from "../auth/Logout";
 import { User } from "../../types/User";
+import logo from "../../assets/logo.png";
 interface NavBarProps {
     user: User | null;
 }
@@ -9,13 +10,17 @@ interface NavBarProps {
 function NavBar({ user }: NavBarProps) {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark shadow">
-            <Link
+               <Link
                 to="/"
                 className="navbar-brand mx-3"
                 id="home"
                 title="Go to Homepage"
             >
-                <img src="/images/logo.png" alt="Logo placeholder" />
+                <img 
+                    src={logo} 
+                    alt="Budget Capital Logo" 
+                    style={{ height: "40px", width: "auto" }} 
+                />
             </Link>
 
             <button
