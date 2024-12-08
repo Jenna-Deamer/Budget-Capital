@@ -7,7 +7,6 @@ const port = 3000;
 const authRouter = require("./routes/auth");
 const transactionRouter = require("./routes/transaction");
 const budgetRouter = require("./routes/budget");
-const User = require("./models/user");
 
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
@@ -71,9 +70,9 @@ const connectDB = async () => {
 connectDB();
 
 // Define routers
-app.use("/auth", authRouter); 
+app.use("/auth", authRouter);
 app.use("/transaction", transactionRouter);
-app.use("/budget", budgetRouter); 
+app.use("/budget", budgetRouter);
 
 
 app.use("/protected", (req, res, next) => {
@@ -85,7 +84,7 @@ app.use("/protected", (req, res, next) => {
 
     try {
         // Verify the token
-        const decoded = require("./utils/jwt").verifyToken(token); 
+        const decoded = require("./utils/jwt").verifyToken(token);
         req.user = decoded; // Attach decoded user to the request object
         next();
     } catch (err) {
