@@ -46,28 +46,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// MongoDB connection
-const uri = process.env.CONNECTION_STRING;
-const clientOptions = {
-    serverApi: { version: "1", strict: true, deprecationErrors: true },
-};
-
-async function connectDB() {
+// MongoDB Connection Setup
+const connectDB = async () => {
     try {
-        const client = await mongoose.connect(uri, clientOptions);
-        console.log(`MongoDB connected: ${isProduction ? 'Production' : 'Development'} mode`);
-        
-        // Validate connection in production
-        if (isProduction) {
-            await client.db.admin().ping();
-            console.log("Database ping successful");
+        const mongoURI = process.env.MONGODB_URI;
+        if (!mongoURI) {
+            throw new Error('MongoDB URI is not defined in environment variables');
         }
+
+        await mongoose.connect(mongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        console.log(`MongoDB connected: ${isProduction ? 'Production' : 'Development'} mode`);
     } catch (err) {
-        console.error('MongoDB connection error:', err);
+        console.error('MongoDB connection error:', err.message);
         process.exit(1);
     }
-}
+};
 
+// Initialize database connection
 connectDB();
 
 // Define routers
