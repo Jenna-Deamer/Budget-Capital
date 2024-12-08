@@ -10,9 +10,7 @@ function Logout() {
             const response = await axios.post(
                 `${API_URL}/auth/logout`,
                 {},
-                {
-                    withCredentials: true,
-                }
+             
             );
 
             localStorage.removeItem("jwtToken");

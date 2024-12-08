@@ -60,7 +60,7 @@ function Budget() {
         };
 
         fetchBudget();
-    }, [selectedDate]);
+    }, [selectedDate, API_URL]);
 
     if (loading) {
         return (

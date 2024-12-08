@@ -98,20 +98,31 @@ router.post("/create-budget", isAuthenticated, async (req, res) => {
 
 /* PUT: /api/budget/edit-budget => update selected budget */
 router.put("/edit-budget", isAuthenticated, async (req, res, next) => {
-    console.log("Got request to edit budget");
+    console.log("Got request to edit budget with data:", req.body);
+
     const { id, amount, ...updatedData } = req.body;
 
-    // Manually map 'amount' to 'targetAmount' before updating
-    updatedData.targetAmount = amount;
+    // Validate required fields
+    if (!id || !amount) {
+        return res.status(400).json({ error: "ID and amount are required" });
+    }
+
+    // Ensure amount is a number
+    updatedData.amount = parseFloat(amount);
 
     try {
-        const budget = await Budget.findByIdAndUpdate(id, updatedData, { new: true });
+        const budget = await Budget.findByIdAndUpdate(id, updatedData, { 
+            new: true, 
+            runValidators: true 
+        });
 
         if (!budget) {
             return res.status(404).json({ error: "Budget not found" });
         }
 
-        return res.json(budget).status(200);
+        console.log("Updated Budget:", budget);
+        // Send the updated budget as the response
+        return res.status(200).json(budget);
     } catch (err) {
         console.error("Error updating budget:", err);
         return res.status(500).json({ error: err.message });

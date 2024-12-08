@@ -31,7 +31,7 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                    },   withCredentials: true
+                    }
 
                 }
             );

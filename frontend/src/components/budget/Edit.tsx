@@ -12,7 +12,7 @@ function EditBudget() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<BudgetFormData>({
-        amount: budget.targetAmount.toString(),
+        amount: budget.amount.toString(),
         month: budget.month.toString(),
         year: budget.year.toString(),
         id: budget._id,
@@ -29,17 +29,20 @@ function EditBudget() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log("Form Data on Submit:", formData);
         try {
-            console.log("Form data before submit:", formData);
-
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                throw new Error("No authentication token found");
+            }
+    
             const response = await axios.put(
                 `${API_URL}/budget/edit-budget`,
                 formData,
                 {
                     headers: {
-                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
                     },
-                    withCredentials: true,
                 }
             );
             console.log("Success:", response.data);
