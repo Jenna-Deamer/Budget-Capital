@@ -117,24 +117,30 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 
 // Route to check if user is authenticated
 router.get("/check-auth", (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1]; // Get token from Authorization header
+    console.log("Headers:", req.headers); // Debug headers
+    const token = req.headers.authorization?.split(" ")[1];
+    
+    console.log("Received token:", token); // Debug token
 
     if (!token) {
+        console.log("No token found"); // Debug missing token
         return res.status(401).json({ success: false, message: "Not authenticated" });
     }
 
     try {
-        const user = verifyToken(token); // Verify the token
+        const user = verifyToken(token);
+        console.log("Verified user:", user); // Debug decoded user
         res.json({
             isAuthenticated: true,
             user: {
-                id: user._id,
+                id: user.userId,
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName
             }
         });
     } catch (err) {
+        console.log("Token verification error:", err); // Debug verification error
         res.status(403).json({ success: false, message: "Invalid or expired token" });
     }
 });

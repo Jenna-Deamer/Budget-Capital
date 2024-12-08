@@ -60,12 +60,18 @@ const CreateTransaction = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
       const response = await axios.post(
         "http://localhost:3000/transaction/create-transaction",
         formData,
         {
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
           withCredentials: true,
         }

@@ -35,14 +35,17 @@ function App() {
     useEffect(() => {
         const fetchAuthStatus = async () => {
             try {
+                const token = localStorage.getItem('jwtToken');
                 const response = await axios.get(
                     "http://localhost:3000/auth/check-auth",
                     {
-                        withCredentials: true,
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     }
                 );
                 if (response.data.user) {
-                    setUser(response.data.user); // Set the user state if authenticated
+                    setUser(response.data.user);
                 } else {
                     setUser(null);
                 }
@@ -50,7 +53,6 @@ function App() {
                 console.error("Error fetching auth status:", error);
                 setUser(null);
             } finally {
-                // Timeout to avoid flickering
                 setTimeout(() => {
                     setLoading(false);
                 }, 250);

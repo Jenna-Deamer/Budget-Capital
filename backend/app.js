@@ -1,6 +1,7 @@
 const cors = require("cors");
 const mongoose = require("mongoose");
 const express = require("express");
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 const authRouter = require("./routes/auth");
@@ -27,6 +28,7 @@ app.use(
 // Use JSON middleware and URL-encoded parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const uri = process.env.CONNECTION_STRING;
 const clientOptions = {

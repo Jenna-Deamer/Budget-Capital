@@ -6,15 +6,18 @@ const Budget = require("../models/budget");
 const { verifyToken } = require("../utils/jwt");
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
+    console.log("Auth Header:", req.headers.authorization); // Debug: Check auth header
     const token = req.headers.authorization?.split(" ")[1]; // Get token from Authorization header
 
     if (!token) {
+        console.log("No token found in header");
         return res.status(401).json({ message: "No token provided" });
     }
 
     try {
         const decoded = verifyToken(token); // Decode the token
         console.log("Decoded token:", decoded); // Log decoded token to verify its contents
+        console.log("User ID from token:", decoded._id); // Debug: Check if _id exists
         req.user = decoded; // Attach decoded token data to the request object
         next();
     } catch (err) {
@@ -33,7 +36,7 @@ router.get("/budget", isAuthenticated, async (req, res) => {
 
         // Find budget for the specified month/year and user
         const budget = await Budget.findOne({
-            user: req.user._id,
+            user: req.user.userId,
             month: month,
             year: year
         });
@@ -59,12 +62,26 @@ router.get("/budget", isAuthenticated, async (req, res) => {
 router.post("/create-budget", isAuthenticated, async (req, res) => {
     try {
         const { amount, month, year } = req.body;
-        
+
+        // Check if a budget already exists for this month/year
+        const existingBudget = await Budget.findOne({
+            user: req.user.userId,
+            month: month,
+            year: year
+        });
+
+        if (existingBudget) {
+            return res.status(400).json({
+                success: false,
+                message: "A budget already exists for this month and year"
+            });
+        }
+
         const budget = new Budget({
             amount,
             month,
             year,
-            user: user.id // user's ID from JWT
+            user: req.user.userId
         });
 
         await budget.save();
@@ -76,6 +93,7 @@ router.post("/create-budget", isAuthenticated, async (req, res) => {
         });
     }
 });
+
 
 
 /* PUT: /api/budget/edit-budget => update selected budget */

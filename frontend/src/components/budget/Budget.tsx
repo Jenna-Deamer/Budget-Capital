@@ -10,20 +10,28 @@ function Budget() {
     const [budget, setBudget] = useState<BudgetType | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // Fetch budget for the selected month/year when selectedDate changes
     useEffect(() => {
         const fetchBudget = async () => {
             try {
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                    throw new Error('No authentication token found');
+                }
+
                 const month = selectedDate.getMonth() + 1;
                 const year = selectedDate.getFullYear();
                 const response = await axios.get(
                     `http://localhost:3000/budget/budget?month=${month}&year=${year}`,
-                    { withCredentials: true }
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
                 );
                 setBudget(response.data);
-                setLoading(false);
             } catch (error) {
                 console.error("Failed to fetch budget:", error);
+            } finally {
                 setLoading(false);
             }
         };

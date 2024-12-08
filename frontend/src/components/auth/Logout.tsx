@@ -15,6 +15,8 @@ function Logout (){
                 }
             );
 
+            localStorage.removeItem("jwtToken");
+
             console.log(response.data);
             if (response.status === 200) {
                 navigate("/"); // Redirect to the homepage

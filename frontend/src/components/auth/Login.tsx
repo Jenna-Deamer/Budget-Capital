@@ -33,10 +33,10 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                     }
                 }
             );
-
+    
             if (response.data.success) {
                 localStorage.setItem("jwtToken", response.data.token);
-                setUser(response.data.user);
+                setUser(response.data.user);  // Set the user data after successful login
                 navigate("/dashboard");
             }
         } catch (error) {
@@ -50,7 +50,7 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
             }
         }
     };
-
+    
     const handleGoogleLogin = () => {
         window.location.href = "http://localhost:3000/auth/google";
     };

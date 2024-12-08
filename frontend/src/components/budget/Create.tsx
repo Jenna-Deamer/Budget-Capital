@@ -23,38 +23,47 @@ function CreateBudget() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+
         try {
+            const token = localStorage.getItem("jwtToken");
+            console.log("Token from localStorage:", token ? "Token exists" : "No token"); // Debug
+
+            if (!token) {
+                navigate("/login");
+                return;
+            }
+
             const budgetData = {
                 amount: parseFloat(formData.amount),
-                month: formData.month,
+                month: parseInt(formData.month),
                 year: parseInt(formData.year),
             };
-    
-            const token = localStorage.getItem("jwtToken"); // Get token 
-    
-            // If there's no token, navigate to login
-            if (!token) {
-                return navigate("/login");
-            }
-    
+            
+            console.log("Sending budget data:", budgetData); // Debug
+            console.log("Authorization header:", `Bearer ${token}`); // Debug
+
             const response = await axios.post(
                 "http://localhost:3000/budget/create-budget",
                 budgetData,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`, // Include token in Authorization header
+                        Authorization: `Bearer ${token}`
                     },
                 }
             );
-    
+
+            console.log("Response:", response.data); // Debug
+            
             if (response.status === 201) {
                 navigate("/dashboard");
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error("Failed to create budget:", error.response?.data?.message);
+                console.error("Full error response:", error.response); // Debug: Full error details
+                const errorMessage = error.response?.data?.message || "Failed to create budget";
+                console.error(errorMessage);
+                // You might want to show this error to the user through some UI component
             }
         }
     };

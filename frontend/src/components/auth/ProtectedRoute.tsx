@@ -1,42 +1,62 @@
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { User } from '../../types/User';
+import axios from "axios";
+import { User } from "../../types/User";
 
 interface ProtectedRouteProps {
   user: User | null;
   children: React.ReactNode;
 }
-interface DecodedToken {
-  userId: string;
-  exp: number;
-}
+
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  // Get the token from localStorage
-  const token = localStorage.getItem("jwtToken"); // Ensure token key matches what's stored
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // If there's no token, redirect to login page
-  if (!token) {
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken"); // Ensure the token key matches what's stored
+
+    if (!token) {
+      setIsAuthenticated(false);
+      setLoading(false);
+      return;
+    }
+
+    // Verify token by calling the backend
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/auth/check-auth", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data.isAuthenticated) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // If not authenticated, redirect to login
+  if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
-  // Decode the token to check its expiration
-  let decodedToken: DecodedToken | null = null;
-  try {
-    decodedToken = jwtDecode<DecodedToken>(token);
-  } catch (error) {
-    console.error("Invalid token:", error);
-    return <Navigate to="/login" />;
-  }
-
-  // Check if the token has expired
-  const currentTime = Date.now() / 1000; // Current time in seconds
-  if (!decodedToken || decodedToken.exp < currentTime) {
-    console.log("Token has expired");
-    return <Navigate to="/login" />;
-  }
-
-  // If user is authenticated, render the children (protected route)
+  // If authenticated, render the protected route children
   return <>{children}</>;
-}
+};
 
 export default ProtectedRoute;
