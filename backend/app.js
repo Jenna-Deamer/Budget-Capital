@@ -17,27 +17,25 @@ if (process.env.NODE_ENV !== "production") {
 // Environment configuration
 const isProduction = process.env.NODE_ENV === 'production';
 
-// CORS configuration
-const allowedOrigins = [
-    "http://localhost:5173", 
-    "http://localhost:4173"
-];
-
-if (isProduction) {
-    allowedOrigins.push("https://budget-capital-frontend.onrender.com");
-}
-
 app.use(
     cors({
         origin: (origin, callback) => {
+            const allowedOrigins = [
+                "http://localhost:5173",
+                "http://localhost:4173",
+                "https://budget-capital-frontend.onrender.com"
+            ];
+            
             if (!origin || allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
                 callback(new Error('Not allowed by CORS'));
             }
         },
-        methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
+        // Add these options
         credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
 
