@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { BudgetFormData } from "../../types/Budget";
 
 function CreateBudget() {
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const navigate = useNavigate();
     const [formData, setFormData] = useState<BudgetFormData>({
         id: "",
@@ -26,7 +28,10 @@ function CreateBudget() {
 
         try {
             const token = localStorage.getItem("jwtToken");
-            console.log("Token from localStorage:", token ? "Token exists" : "No token"); // Debug
+            console.log(
+                "Token from localStorage:",
+                token ? "Token exists" : "No token"
+            ); // Debug
 
             if (!token) {
                 navigate("/login");
@@ -38,32 +43,32 @@ function CreateBudget() {
                 month: parseInt(formData.month),
                 year: parseInt(formData.year),
             };
-            
-            console.log("Sending budget data:", budgetData); // Debug
-            console.log("Authorization header:", `Bearer ${token}`); // Debug
+
+            // console.log("Sending budget data:", budgetData); // Debug
+            // console.log("Authorization header:", `Bearer ${token}`); // Debug
 
             const response = await axios.post(
-                "http://localhost:3000/budget/create-budget",
+                `${API_URL}/budget/create-budget`,
                 budgetData,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
 
-            console.log("Response:", response.data); // Debug
-            
+            // console.log("Response:", response.data); // Debug
+
             if (response.status === 201) {
                 navigate("/dashboard");
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error("Full error response:", error.response); // Debug: Full error details
-                const errorMessage = error.response?.data?.message || "Failed to create budget";
+                const errorMessage =
+                    error.response?.data?.message || "Failed to create budget";
                 console.error(errorMessage);
-                // You might want to show this error to the user through some UI component
             }
         }
     };

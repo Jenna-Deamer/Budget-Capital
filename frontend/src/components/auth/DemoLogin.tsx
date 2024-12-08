@@ -11,8 +11,9 @@ interface User {
     lastName: string;
 }
 
-
 function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const navigate = useNavigate();
     const [formError, setFormError] = useState("");
 
@@ -25,7 +26,7 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
 
             try {
                 const response = await axios.post(
-                    "http://localhost:3000/auth/login",
+                    `${API_URL}/auth/login`,
                     demoCredentials,
                     {
                         headers: {
@@ -43,22 +44,28 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
                 }
             } catch (error) {
                 if (axios.isAxiosError(error)) {
-                    const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+                    const errorMessage =
+                        error.response?.data?.message ||
+                        "An error occurred. Please try again.";
                     setFormError(errorMessage);
                 } else {
-                    setFormError("An unexpected error occurred. Please try again.");
+                    setFormError(
+                        "An unexpected error occurred. Please try again."
+                    );
                 }
             }
         };
 
         loginAsDemoUser();
-    }, [navigate, setUser]); 
+    }, [navigate, setUser]);
 
     return (
         <section className="form-page">
             <div className="form-container">
                 <h1>Logging in as Demo User...</h1>
-                {formError && <p className="error-message text-center">{formError}</p>}
+                {formError && (
+                    <p className="error-message text-center">{formError}</p>
+                )}
             </div>
         </section>
     );

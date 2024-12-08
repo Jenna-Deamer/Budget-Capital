@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
-function Logout (){
+function Logout() {
     const navigate = useNavigate();
-
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const handleLogout = async () => {
         try {
             const response = await axios.post(
-                "http://localhost:3000/auth/logout",
+                `${API_URL}/auth/logout`,
                 {},
                 {
                     withCredentials: true,

@@ -28,6 +28,8 @@ import { TransactionProvider } from "./context/TransactionContext";
 import { User } from "./types/User";
 
 function App() {
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -35,15 +37,12 @@ function App() {
     useEffect(() => {
         const fetchAuthStatus = async () => {
             try {
-                const token = localStorage.getItem('jwtToken');
-                const response = await axios.get(
-                    "http://localhost:3000/auth/check-auth",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
+                const token = localStorage.getItem("jwtToken");
+                const response = await axios.get(`${API_URL}/auth/check-auth`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 if (response.data.user) {
                     setUser(response.data.user);
                 } else {
@@ -65,110 +64,111 @@ function App() {
     if (loading) {
         return (
             <div className="loading-container">
-             <span className="loader"></span>
+                <span className="loader"></span>
             </div>
-          );
+        );
     }
 
     return (
         <TransactionProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <BrowserRouter>
-                <div className="app-container">
-                    <NavBar user={user} />
-                    <main className="main-content">
-                        <Routes>
-                            <Route
-                                path="/"
-                                element={<LandingPage user={user} />}
-                            />
-                            <Route
-                                path="/transactions"
-                                element={
-                                    <ProtectedRoute user={user}>
-                                        <Transactions />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/dashboard"
-                                element={
-                                    <ProtectedRoute user={user}>
-                                        <Dashboard/>
-                                    </ProtectedRoute>
-                                }
-                            />
-                            {!user ? (
-                                <>
-                                    <Route
-                                        path="/signup"
-                                        element={<SignUp />}
-                                    />
-                                    <Route
-                                        path="/login"
-                                        element={<Login setUser={setUser} />}
-                                    />
-                                    <Route
-                                        path="/demoLogin"
-                                        element={
-                                            <DemoLogin setUser={setUser} />
-                                        }
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <Route
-                                        path="/signup"
-                                        element={<Navigate to="/" />}
-                                    />
-                                    <Route
-                                        path="/login"
-                                        element={<Navigate to="/" />}
-                                    />
-                                </>
-                            )}
-                            <Route
-                                path="/create-transaction"
-                                element={
-                                    <ProtectedRoute user={user}>
-                                        <CreateTransaction />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/edit-transaction/:id"
-                                element={
-                                    <ProtectedRoute user={user}>
-                                        <EditTransaction />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            <Route
-                                path="/create-budget"
-                                element={
-                                    <ProtectedRoute user={user}>
-                                        <CreateBudget />
-                                    </ProtectedRoute>
-                                }
-                            />
-                               <Route
-                                path="/edit-budget/:id"
-                                element={
-                                    <ProtectedRoute user={user}>
-                                        <EditBudget />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            {/* Catch-all route for undefined routes */}
-                            <Route path="*" element={<ErrorPage />} />
-                        </Routes>
-                    </main>
-                    <Footer />
-                </div>
-            </BrowserRouter>
-        </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <BrowserRouter>
+                    <div className="app-container">
+                        <NavBar user={user} />
+                        <main className="main-content">
+                            <Routes>
+                                <Route
+                                    path="/"
+                                    element={<LandingPage user={user} />}
+                                />
+                                <Route
+                                    path="/transactions"
+                                    element={
+                                        <ProtectedRoute user={user}>
+                                            <Transactions />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/dashboard"
+                                    element={
+                                        <ProtectedRoute user={user}>
+                                            <Dashboard />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                {!user ? (
+                                    <>
+                                        <Route
+                                            path="/signup"
+                                            element={<SignUp />}
+                                        />
+                                        <Route
+                                            path="/login"
+                                            element={
+                                                <Login setUser={setUser} />
+                                            }
+                                        />
+                                        <Route
+                                            path="/demoLogin"
+                                            element={
+                                                <DemoLogin setUser={setUser} />
+                                            }
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <Route
+                                            path="/signup"
+                                            element={<Navigate to="/" />}
+                                        />
+                                        <Route
+                                            path="/login"
+                                            element={<Navigate to="/" />}
+                                        />
+                                    </>
+                                )}
+                                <Route
+                                    path="/create-transaction"
+                                    element={
+                                        <ProtectedRoute user={user}>
+                                            <CreateTransaction />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/edit-transaction/:id"
+                                    element={
+                                        <ProtectedRoute user={user}>
+                                            <EditTransaction />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/create-budget"
+                                    element={
+                                        <ProtectedRoute user={user}>
+                                            <CreateBudget />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/edit-budget/:id"
+                                    element={
+                                        <ProtectedRoute user={user}>
+                                            <EditBudget />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                {/* Catch-all route for undefined routes */}
+                                <Route path="*" element={<ErrorPage />} />
+                            </Routes>
+                        </main>
+                        <Footer />
+                    </div>
+                </BrowserRouter>
+            </LocalizationProvider>
         </TransactionProvider>
-
     );
 }
 

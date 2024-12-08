@@ -4,8 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 // Import Types
 import { BudgetFormData } from "../../types/Budget";
 
-
 function EditBudget() {
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const location = useLocation();
     const { budget } = location.state;
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ function EditBudget() {
             console.log("Form data before submit:", formData);
 
             const response = await axios.put(
-                "http://localhost:3000/budget/edit-budget",
+                `${API_URL}/budget/edit-budget`,
                 formData,
                 {
                     headers: {
@@ -62,7 +63,7 @@ function EditBudget() {
     return (
         <section className="crud-page-wrapper">
             <article className="crud-form-container">
-                <h1 className="text-center pb-2">Edit  Budget</h1>
+                <h1 className="text-center pb-2">Edit Budget</h1>
                 <form className="crud-form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="amount">Amount</label>
@@ -116,15 +117,16 @@ function EditBudget() {
                         </select>
                     </div>
 
-                    
-                        <button type="submit" className="primary-button button me-3">
-                            Edit Budget
-                        </button>
-
+                    <button
+                        type="submit"
+                        className="primary-button button me-3"
+                    >
+                        Edit Budget
+                    </button>
                 </form>
             </article>
         </section>
-    )
+    );
 }
 
 export default EditBudget;
