@@ -6,6 +6,7 @@ import "../../styles/forms/AuthForms.css";
 import { User } from "../../types/User";
 
 function Login({ setUser }: { setUser: (user: User) => void }) {
+    const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
@@ -25,12 +26,13 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
         e.preventDefault();
         try {
             const response = await axios.post(
-                "http://localhost:3000/auth/login",
+                `${API_URL}/auth/login`,
                 formData,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                    }
+                    },   withCredentials: true
+
                 }
             );
     
@@ -52,7 +54,7 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
     };
     
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:3000/auth/google";
+        window.location.href = `${API_URL}auth/google`;
     };
 
     return (

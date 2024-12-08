@@ -19,25 +19,25 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 app.use(
     cors({
-        origin: (origin, callback) => {
-            const allowedOrigins = [
-                "http://localhost:5173",
-                "http://localhost:4173",
-                "https://budget-capital-frontend.onrender.com"
-            ];
-            
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
-        },
-        // Add these options
+        origin: [
+            "http://localhost:5173",  // Local frontend dev
+            "http://localhost:4173",  // Local frontend preview
+            "https://budget-capital-frontend.onrender.com", // Production frontend
+        ],
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"]
+        allowedHeaders: ["Content-Type", "Authorization"],
+        exposedHeaders: ["Access-Control-Allow-Origin"],
+        optionsSuccessStatus: 200
     })
 );
+
+// Add security headers
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    next();
+});
 
 // Use JSON middleware and URL-encoded parser
 app.use(express.json());
