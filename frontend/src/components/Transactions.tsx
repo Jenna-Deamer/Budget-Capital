@@ -27,8 +27,18 @@ function Transactions() {
         );
         if (confirmed) {
             try {
+                const token = localStorage.getItem("jwtToken");
+                if (!token) {
+                    throw new Error("No authentication token found");
+                }
+
                 await axios.delete(
-                    `${API_URL}/transaction/delete-transaction/${transactionId}`
+                    `${API_URL}/transaction/delete-transaction/${transactionId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
                 setTransactions(
                     transactions.filter(

@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const Transaction = require("../models/transaction");
-const mongoose = require("mongoose");
 const Budget = require("../models/budget");
 const { verifyToken } = require("../utils/jwt");
 // Middleware to check if the user is authenticated
@@ -129,8 +127,8 @@ router.put("/edit-budget", isAuthenticated, async (req, res, next) => {
     }
 });
 
-// DELETE: /budget/delete-budget => delete selected budget
-router.delete("/budget", isAuthenticated, async (req, res) => {
+// DELETE: /delete-budget => delete selected budget
+router.delete("/delete-budget", isAuthenticated, async (req, res) => {
     try {
         const month = req.query.month;
         const year = parseInt(req.query.year);

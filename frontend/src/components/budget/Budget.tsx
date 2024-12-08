@@ -76,13 +76,22 @@ function Budget() {
         );
         if (confirmed) {
             try {
+                const token = localStorage.getItem("jwtToken");
+                if (!token) {
+                    throw new Error("No authentication token found");
+                }
                 const month = selectedDate.getMonth() + 1;
                 const year = selectedDate.getFullYear();
 
                 const response = await axios.delete(
-                    `${API_URL}/budget/budget?month=${month}&year=${year}`,
-                    { withCredentials: true }
+                    `${API_URL}/delete-budget?month=${month}&year=${year}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
+
                 if (response.status === 200) {
                     setBudget(null);
                 }

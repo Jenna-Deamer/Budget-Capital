@@ -20,7 +20,7 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
     useEffect(() => {
         const loginAsDemoUser = async () => {
             const demoCredentials = {
-                username: "demo@gmail.com",
+                username: "demo123@demo.com",
                 password: "demouser",
             };
 
@@ -37,8 +37,8 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
                 );
 
                 if (response.data.success) {
-                    console.log(response.data.user);
-                    setUser(response.data.user);
+                    localStorage.setItem("jwtToken", response.data.token);
+                    setUser(response.data.user);  // Set the user data after successful login
                     navigate("/transactions");
                     window.location.reload();
                 }
@@ -57,7 +57,7 @@ function DemoLogin({ setUser }: { setUser: (user: User) => void }) {
         };
 
         loginAsDemoUser();
-    }, [navigate, setUser]);
+    }, [API_URL, navigate, setUser]);
 
     return (
         <section className="form-page">
