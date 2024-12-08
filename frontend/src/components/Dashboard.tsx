@@ -82,7 +82,7 @@ function Dashboard() {
 
     return (
         <div className="dashboard-page">
-            <div className="header-container">
+            <div className="header-container mt-4">
                 <div className="header">
                     <h1 id="dashboard-title">
                         {selectedMonth} {selectedYear} Overview

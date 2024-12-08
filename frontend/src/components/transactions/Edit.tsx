@@ -84,12 +84,17 @@ const EditTransaction = () => {
     const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                throw new Error("No authentication token found");
+            }
             const response = await axios.put(
                 `${API_URL}/transaction/edit-transaction`,
                 formData,
                 {
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
                     },
                     withCredentials: true,
                 }
