@@ -84,7 +84,7 @@ function Budget() {
                 const year = selectedDate.getFullYear();
 
                 const response = await axios.delete(
-                    `${API_URL}/delete-budget?month=${month}&year=${year}`,
+                    `${API_URL}/budget/delete-budget?month=${month}&year=${year}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -95,8 +95,9 @@ function Budget() {
                 if (response.status === 200) {
                     setBudget(null);
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Failed to delete budget:", error);
+                alert(error.response?.data?.error || "Failed to delete budget");
             }
         }
     };

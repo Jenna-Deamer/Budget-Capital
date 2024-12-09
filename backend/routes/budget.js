@@ -85,9 +85,9 @@ router.post("/create-budget", isAuthenticated, async (req, res) => {
         await budget.save();
         res.status(201).json({ success: true, budget });
     } catch (error) {
-        res.status(400).json({ 
-            success: false, 
-            message: "Error creating budget: " + error.message 
+        res.status(400).json({
+            success: false,
+            message: "Error creating budget: " + error.message
         });
     }
 });
@@ -109,9 +109,9 @@ router.put("/edit-budget", isAuthenticated, async (req, res, next) => {
     updatedData.amount = parseFloat(amount);
 
     try {
-        const budget = await Budget.findByIdAndUpdate(id, updatedData, { 
-            new: true, 
-            runValidators: true 
+        const budget = await Budget.findByIdAndUpdate(id, updatedData, {
+            new: true,
+            runValidators: true
         });
 
         if (!budget) {
@@ -133,15 +133,28 @@ router.delete("/delete-budget", isAuthenticated, async (req, res) => {
         const month = req.query.month;
         const year = parseInt(req.query.year);
 
+        console.log('Delete budget request:', {
+            userId: req.user.userId,
+            month,
+            year
+        });
+
         const budget = await Budget.findOneAndDelete({
-            user: req.user._id,
+            user: req.user.userId,
             month: month,
             year: year
         });
 
         if (!budget) {
+            console.log('No budget found with criteria:', {
+                user: req.user.userId,
+                month,
+                year
+            });
             return res.status(404).json({ error: "Budget not found" });
         }
+
+        console.log('Successfully deleted budget:', budget);
         return res.status(200).json({ message: "Budget deleted successfully" });
     } catch (err) {
         console.error("Error deleting budget:", err);
