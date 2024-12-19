@@ -1,80 +1,101 @@
 const cors = require("cors");
 const mongoose = require("mongoose");
 const express = require("express");
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 const authRouter = require("./routes/auth");
 const transactionRouter = require("./routes/transaction");
 const budgetRouter = require("./routes/budget");
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
-var session = require("express-session");
-const User = require("./models/user");
 
 // Use dotenv in non-production environments
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
-// CORS configuration
-const allowedOrigins = ["http://localhost:5173", "http://localhost:4173"];
+// Environment configuration
+const isProduction = process.env.NODE_ENV === 'production';
 
 app.use(
     cors({
-        origin: allowedOrigins,
-        methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS",
+        origin: [
+            "http://localhost:5173",  // Local frontend dev
+            "http://localhost:4173",  // Local frontend preview
+            "https://budget-capital-frontend.onrender.com", // Production frontend
+        ],
         credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        exposedHeaders: ["Access-Control-Allow-Origin"],
+        optionsSuccessStatus: 200
     })
 );
 
-app.use(
-    session({
-        secret: process.env.SECRET_KEY,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            secure: process.env.NODE_ENV === "production", // Set to true only in production
-            httpOnly: true, // Mitigates the risk of client-side script accessing the cookie
-            sameSite: process.env.NODE_ENV === "production" ? "None" : "lax", // Allow cross-origin cookie usage in production
-            maxAge: 3600000, // 1 hour
-        },
-    })
-);
-
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Configure Passport to use Local Strategy
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// Add security headers
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    next();
+});
 
 // Use JSON middleware and URL-encoded parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-const uri = process.env.CONNECTION_STRING;
-const clientOptions = {
-    serverApi: { version: "1", strict: true, deprecationErrors: true },
+// MongoDB Connection Setup
+const connectDB = async () => {
+    try {
+        const mongoURI = process.env.MONGODB_URI;
+        if (!mongoURI) {
+            throw new Error('MongoDB URI is not defined in environment variables');
+        }
+
+        await mongoose.connect(mongoURI, {
+            // Modern connection options
+            serverSelectionTimeoutMS: 5000, // Timeout after 5s
+            maxPoolSize: 10, // Maintain up to 10 socket connections
+            family: 4 // Use IPv4, skip trying IPv6
+        });
+
+        console.log(`MongoDB connected: ${isProduction ? 'Production' : 'Development'} mode`);
+    } catch (err) {
+        console.error('MongoDB connection error:', err.message);
+        // Attempt to reconnect
+        setTimeout(connectDB, 5000);
+    }
 };
 
-// MongoDB connection
-async function run() {
-    try {
-        await mongoose.connect(uri, clientOptions);
-        await mongoose.connection.db.admin().command({ ping: 1 });
-        console.log("mongodb connection successful");
-    } catch (e) {
-        console.error(e);
-    }
-}
-run().catch(console.dir);
+// Initialize database connection
+connectDB();
 
 // Define routers
 app.use("/auth", authRouter);
 app.use("/transaction", transactionRouter);
 app.use("/budget", budgetRouter);
+
+
+app.use("/protected", (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1]; // Get token from Authorization header
+
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized access" });
+    }
+
+    try {
+        // Verify the token
+        const decoded = require("./utils/jwt").verifyToken(token);
+        req.user = decoded; // Attach decoded user to the request object
+        next();
+    } catch (err) {
+        return res.status(403).json({ message: "Invalid or expired token" });
+    }
+});
+
+// Test protected route
+app.get("/protected", (req, res) => {
+    res.json({ message: "This is protected data", user: req.user });
+});
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

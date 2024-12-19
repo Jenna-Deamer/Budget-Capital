@@ -3,8 +3,10 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import "../../styles/forms/AuthForms.css";
+import { User } from "../../types/User";
 
-function Login({ setUser }: { setUser: (user: any) => void }) {
+function Login({ setUser }: { setUser: (user: User) => void }) {
+    const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
@@ -24,20 +26,20 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
         e.preventDefault();
         try {
             const response = await axios.post(
-                "http://localhost:3000/auth/login",
+                `${API_URL}/auth/login`,
                 formData,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                    },
-                    withCredentials: true,
+                    }
+
                 }
             );
-
+    
             if (response.data.success) {
-                setUser(response.data.user);
-                navigate("/");
-                window.location.reload();
+                localStorage.setItem("jwtToken", response.data.token);
+                setUser(response.data.user);  // Set the user data after successful login
+                navigate("/dashboard");
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -50,9 +52,9 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
             }
         }
     };
-
+    
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:3000/auth/google";
+        window.location.href = `${API_URL}/auth/google`;
     };
 
     return (
@@ -104,12 +106,11 @@ function Login({ setUser }: { setUser: (user: any) => void }) {
                 </form>
                 <h3>- OR -</h3>
                 <div className="button-container">
-                <GoogleButton
-                    onClick={handleGoogleLogin}
-                    label="Sign in with Google"
-                />
+                    <GoogleButton
+                        onClick={handleGoogleLogin}
+                        label="Sign in with Google"
+                    />
                 </div>
-              
             </div>
         </section>
     );

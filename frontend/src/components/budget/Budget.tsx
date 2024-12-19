@@ -6,30 +6,61 @@ import type { Budget as BudgetType } from "../../types/Budget";
 import "../../styles/Budget.css";
 
 function Budget() {
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const { totalExpense, selectedDate } = useContext(TransactionContext)!;
     const [budget, setBudget] = useState<BudgetType | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // Fetch budget for the selected month/year when selectedDate changes
     useEffect(() => {
         const fetchBudget = async () => {
             try {
+                const token = localStorage.getItem("jwtToken");
+                if (!token) {
+                    throw new Error("No authentication token found");
+                }
+
                 const month = selectedDate.getMonth() + 1;
                 const year = selectedDate.getFullYear();
+
+                console.log("Fetching budget for:", { month, year });
+
                 const response = await axios.get(
-                    `http://localhost:3000/budget/budget?month=${month}&year=${year}`,
-                    { withCredentials: true }
+                    `${API_URL}/budget/budget?month=${month}&year=${year}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
-                setBudget(response.data);
-                setLoading(false);
+
+                // Map API response to expected format
+                const budgetData = {
+                    ...response.data,
+                    targetAmount: parseFloat(response.data.amount) || 0,
+                };
+
+                console.log("Fetched budget:", budgetData);
+
+                if (!isNaN(budgetData.targetAmount)) {
+                    setBudget(budgetData);
+                } else {
+                    console.error(
+                        "Invalid budget targetAmount:",
+                        response.data.targetAmount
+                    );
+                    setBudget(null);
+                }
             } catch (error) {
                 console.error("Failed to fetch budget:", error);
+                setBudget(null);
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchBudget();
-    }, [selectedDate]);
+    }, [selectedDate, API_URL]);
 
     if (loading) {
         return (
@@ -45,18 +76,28 @@ function Budget() {
         );
         if (confirmed) {
             try {
+                const token = localStorage.getItem("jwtToken");
+                if (!token) {
+                    throw new Error("No authentication token found");
+                }
                 const month = selectedDate.getMonth() + 1;
                 const year = selectedDate.getFullYear();
 
                 const response = await axios.delete(
-                    `http://localhost:3000/budget/budget?month=${month}&year=${year}`,
-                    { withCredentials: true }
+                    `${API_URL}/budget/delete-budget?month=${month}&year=${year}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
+
                 if (response.status === 200) {
                     setBudget(null);
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Failed to delete budget:", error);
+                alert(error.response?.data?.error || "Failed to delete budget");
             }
         }
     };

@@ -5,6 +5,7 @@ import TransactionContext from "../context/TransactionContext";
 import Budget from "./budget/Budget";
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
     ChartJS.register(ArcElement, Tooltip, Legend);
@@ -16,6 +17,8 @@ function Dashboard() {
         selectedDate,
         setSelectedDate,
     } = useContext(TransactionContext)!;
+
+    const navigate = useNavigate();
 
     // Extract month and year from selected date for displaying in the header
     const selectedMonth = selectedDate.toLocaleString("default", {
@@ -82,7 +85,7 @@ function Dashboard() {
 
     return (
         <div className="dashboard-page">
-            <div className="header-container">
+            <div className="header-container mt-4">
                 <div className="header">
                     <h1 id="dashboard-title">
                         {selectedMonth} {selectedYear} Overview
@@ -112,8 +115,19 @@ function Dashboard() {
                 <div className="breakdown-container">
                     <p>Total Expenses</p>
                     <div className="graph-container">
-                    <Pie data={expenseDataChart} options={options} className="responsive-pie-chart" />
-
+                        {Object.keys(expenseCategories).length > 0 ? (
+                            <Pie data={expenseDataChart} options={options} className="responsive-pie-chart" />
+                        ) : (
+                            <div className="no-transactions-container">
+                                <p>No expense transactions found</p>
+                                <button 
+                                    className="button secondary-button"
+                                    onClick={() => navigate('/create-transaction')}
+                                >
+                                    Create
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div className="categories-list-container">
                         <ul className="category-breakdown">
@@ -153,7 +167,19 @@ function Dashboard() {
                 <div className="breakdown-container mt-4">
                     <p>Total Income</p>
                     <div className="graph-container">
-                    <Pie data={incomeDataChart} options={options} className="responsive-pie-chart" />
+                        {Object.keys(incomeCategories).length > 0 ? (
+                            <Pie data={incomeDataChart} options={options} className="responsive-pie-chart" />
+                        ) : (
+                            <div className="no-transactions-container">
+                                <p>No income transactions found</p>
+                                <button 
+                                    className="button secondary-button"
+                                    onClick={() => navigate('/create-transaction')}
+                                >
+                                    Create
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div className="categories-list-container">
                         <ul className="category-breakdown">

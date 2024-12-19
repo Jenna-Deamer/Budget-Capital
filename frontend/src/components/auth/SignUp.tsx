@@ -1,10 +1,12 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
 import GoogleButton from "react-google-button";
 
 function Signup() {
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const navigate = useNavigate();
     const [formError, setFormError] = useState("");
     const [formData, setFormData] = useState({
@@ -31,7 +33,7 @@ function Signup() {
         }
         try {
             const response = await axios.post(
-                "http://localhost:3000/auth/signup",
+                `${API_URL}/auth/signup`,
                 formData,
                 {
                     headers: {
@@ -61,10 +63,9 @@ function Signup() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:3000/auth/google";
+        window.location.href = `${API_URL}/auth/google`;
     };
 
-  
     return (
         <section className="form-page">
             <div className="form-container">
@@ -136,10 +137,10 @@ function Signup() {
                 </form>
                 <h3>- OR -</h3>
                 <div className="button-container">
-                <GoogleButton
-                    onClick={handleGoogleLogin}
-                    label="Sign in with Google"
-                />
+                    <GoogleButton
+                        onClick={handleGoogleLogin}
+                        label="Sign in with Google"
+                    />
                 </div>
             </div>
         </section>

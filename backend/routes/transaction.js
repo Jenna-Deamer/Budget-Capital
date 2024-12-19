@@ -2,15 +2,26 @@ const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/transaction");
 const mongoose = require("mongoose");
+const { verifyToken } = require("../utils/jwt"); // Add this line
 
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    console.log("User is authenticated:", req.user);
-    return next(); // Proceed to the next middleware or route handler
-  }
-  console.log("User is not authenticated");
-  return res.status(401).json({ message: "Not authorized" });
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: "No token provided or invalid format" });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decoded = verifyToken(token);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        console.error("Token verification failed:", err);
+        return res.status(401).json({ message: "Invalid or expired token" });
+    }
 }
 
 /** GET: /transactions => show all transactions */
@@ -52,7 +63,7 @@ router.post("/create-transaction", isAuthenticated, async (req, res) => {
     // Create the transaction and associate it with the logged-in user
     const transaction = await Transaction.create({
       ...req.body,
-      user: req.user._id, // Ensure the transaction is associated with the authenticated user
+      user: req.user.userId, // Ensure the transaction is associated with the authenticated user
     });
     return res.status(201).json(transaction); // Respond with the created transaction
   } catch (err) {

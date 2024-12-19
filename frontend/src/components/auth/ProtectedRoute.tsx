@@ -1,21 +1,66 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { User } from "../../types/User";
 
 interface ProtectedRouteProps {
-    user: any;
+    user: User | null;
     children: React.ReactNode;
 }
 
-function ProtectedRoute({ user, children }: ProtectedRouteProps) {
-    console.log("checking for user", user);
-    if (user === null) {
-        console.log("user is null");
-        // Redirect to login if user is not authenticated
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
+        null
+    );
+    const [loading, setLoading] = useState<boolean>(true);
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
+    useEffect(() => {
+        const token = localStorage.getItem("jwtToken"); // Ensure the token key matches what's stored
+
+        if (!token) {
+            setIsAuthenticated(false);
+            setLoading(false);
+            return;
+        }
+
+        // Verify token by calling the backend
+        const checkAuth = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/auth/check-auth`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.data.isAuthenticated) {
+                    setIsAuthenticated(true);
+                } else {
+                    setIsAuthenticated(false);
+                }
+            } catch (error) {
+                console.error("Error verifying token:", error);
+                setIsAuthenticated(false);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkAuth();
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    // If not authenticated, redirect to login
+    if (!isAuthenticated) {
         return <Navigate to="/login" />;
     }
 
-    // If user is authenticated, render the children
+    // If authenticated, render the protected route children
     return <>{children}</>;
-}
+};
 
 export default ProtectedRoute;

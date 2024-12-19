@@ -4,12 +4,13 @@ const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const { generateToken, verifyToken } = require("../utils/jwt");
+const bcrypt = require('bcrypt');
 
-// Moved this out of app.js since its an auth thing
+// Moved this out of app.js since it's an auth thing
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    // this references the callback route that we have at the bottom
     callbackURL: "http://localhost:3000/auth/google/callback"
 },
     async function (token, tokenSecret, profile, done) {
@@ -32,7 +33,6 @@ passport.use(new GoogleStrategy({
     }
 ));
 
-// Signup route
 router.post("/signup", async (req, res) => {
     const { firstName, lastName, username, password } = req.body;
 
@@ -44,140 +44,121 @@ router.post("/signup", async (req, res) => {
         });
     }
 
-    // Check if the email already exists
+    // Check if the username already exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {
         return res.status(400).json({
             success: false,
-            message: "Email is already registered."
+            message: "Username is already registered."
         });
     }
 
     // Create new user
-    const newUser = new User({ firstName, lastName, username });
+    const newUser = new User({ firstName, lastName, username, password });
 
-    User.register(newUser, password, (err, user) => {
-        if (err) {
-            console.error("Error in user registration:", err);
-            return res.status(500).json({
-                success: false,
-                message: "An error occurred during registration."
-            });
-        }
+    try {
+        await newUser.save(); // Save the user, the password will be hashed by pre-save middleware
 
-        passport.authenticate("local")(req, res, () => {
-            res.status(201).json({
-                success: true,
-                message: "Your account has been created successfully."
-            });
+        // Generate JWT token
+        const token = generateToken(newUser);
+        return res.status(201).json({
+            success: true,
+            message: "Account created successfully",
+            token
         });
-    });
+    } catch (err) {
+        console.error("Error during registration:", err);
+        res.status(500).json({ message: "An error occurred during registration" });
+    }
 });
 
 // Login route
-router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) {
-            console.error("Error in authentication:", err);
-            return res.status(500).json({
-                success: false,
-                message: "An error occurred during authentication"
-            });
+router.post("/login", async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+        
+        if (!user || !await bcrypt.compare(password, user.password)) {
+            return res.status(401).json({ success: false, message: "Invalid credentials" });
         }
-        if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: info.message || "Authentication failed"
-            });
-        }
-        req.login(user, (loginErr) => {
-            if (loginErr) {
-                console.error("Error in login:", loginErr);
-                return res.status(500).json({
-                    success: false,
-                    message: "An error occurred during login"
-                });
+
+        const token = generateToken(user);
+        res.json({ 
+            success: true, 
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName
             }
-            console.log("User logged in successfully:", user);
-            return res.json({
-                success: true,
-                message: "Authentication successful"
-            });
         });
-    })(req, res, next);
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
 });
 
 // Logout route
 router.post("/logout", (req, res) => {
-    console.log("Logout route called"); // Debug log
-    req.logout((err) => {
-        if (err) {
-            console.error("Error in logout:", err);
-            return res.status(500).json({
-                success: false,
-                message: "An error occurred during logout: " + err.message
-            });
-        }
-        console.log("User logged out successfully");
-
-        req.session.destroy((sessionErr) => {
-            if (sessionErr) {
-                console.error("Error destroying session:", sessionErr);
-                return res.status(500).json({
-                    success: false,
-                    message: "Session could not be destroyed"
-                });
-            }
-            // Clear the cookie
-            res.clearCookie("connect.sid", { path: '/', domain: 'localhost' });
-            console.log("Cookie cleared successfully");
-            res.json({
-                success: true,
-                message: "Logged out successfully"
-            });
-        });
+    // Clear any stored token in client storage (handled in frontend)
+    res.json({
+        success: true,
+        message: "Logged out successfully"
     });
 });
 
 // Google Sign-in
-router.get('/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback',
-    passport.authenticate('google', {
-        // if it fails, redirect to login page
-        failureRedirect: 'http://localhost:5173/login',
-        // if it succeeds, redirect to transactions page
-        successRedirect: 'http://localhost:5173/transactions'
-    })
-);
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    const token = generateToken(req.user); // Generate JWT after successful authentication
+    res.json({ success: true, token }); // Send JWT token to client
+});
 
 // Route to check if user is authenticated
 router.get("/check-auth", (req, res) => {
-    console.log("Check Auth Called");
-    console.log("Session:", req.session); // Log session data
-    console.log("User:", req.user); // Log user data
-    if (req.isAuthenticated()) {
+    console.log("Headers:", req.headers); // Debug headers
+    const token = req.headers.authorization?.split(" ")[1];
+    
+    console.log("Received token:", token); // Debug token
+
+    if (!token) {
+        console.log("No token found"); // Debug missing token
+        return res.status(401).json({ success: false, message: "Not authenticated" });
+    }
+
+    try {
+        const user = verifyToken(token);
+        console.log("Verified user:", user); // Debug decoded user
         res.json({
             isAuthenticated: true,
             user: {
-                id: req.user._id,
-                username: req.user.username,
-                firstName: req.user.firstName,
-                lastName: req.user.lastName
+                id: user.userId,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName
             }
         });
-    } else {
-        res.json({ isAuthenticated: false });
+    } catch (err) {
+        console.log("Token verification error:", err); // Debug verification error
+        res.status(403).json({ success: false, message: "Invalid or expired token" });
     }
 });
 
-router.get("/current-user", (req, res) => {
-    if (req.isAuthenticated()) {
-        return res.status(200).json({ userId: req.user._id });
+// Protect route with JWT middleware
+router.get("/protected", (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1]; // Extract token from the header
+
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized access" });
     }
-    return res.status(401).json({ message: "Not authorized" });
+
+    try {
+        const user = verifyToken(token); // Verify the token
+        res.json({ message: "This is protected data", user });
+    } catch (err) {
+        res.status(403).json({ message: "Invalid or expired token" });
+    }
 });
 
 module.exports = router;

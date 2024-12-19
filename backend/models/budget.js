@@ -1,12 +1,24 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
-const budgetSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    month: { type: String, required: true },
-    year: { type: Number, required: true },
-    targetAmount: { type: Number, required: true },
-    actualAmount: { type: Number, default: 0 },
+const budgetSchema = new mongoose.Schema({
+    amount: { 
+        type: Number, 
+        required: true 
+    },
+    month: { 
+        type: String, 
+        required: true 
+    },
+    year: { 
+        type: Number, 
+        required: true 
+    },
+    user: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true 
+    }
 });
 
-module.exports = mongoose.model("Budget", budgetSchema);
+module.exports = mongoose.model('Budget', budgetSchema);
+

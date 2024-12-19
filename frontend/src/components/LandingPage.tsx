@@ -1,4 +1,4 @@
-import "../styles/landing.css";
+import "../styles/LandingPage.css";
 
 
 interface LandingPageProps {
