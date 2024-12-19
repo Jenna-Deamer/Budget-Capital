@@ -53,9 +53,9 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
         }
     };
     
-    const handleGoogleLogin = () => {
-        window.location.href = `${API_URL}/auth/google`;
-    };
+    // const handleGoogleLogin = () => {
+    //     window.location.href = `${API_URL}/auth/google`;
+    // };
 
     return (
         <section className="form-page">
@@ -104,13 +104,13 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                         </Link>
                     </div>
                 </form>
-                <h3>- OR -</h3>
+                {/* <h3>- OR -</h3>
                 <div className="button-container">
                     <GoogleButton
                         onClick={handleGoogleLogin}
                         label="Sign in with Google"
                     />
-                </div>
+                </div> */}
             </div>
         </section>
     );
