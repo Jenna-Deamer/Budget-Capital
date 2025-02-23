@@ -15,12 +15,6 @@ function Transactions() {
         useContext(TransactionContext)!;
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-    // Extract month & year from date for displaying in header
-    const selectedMonth = selectedDate.toLocaleString("default", {
-        month: "long",
-    });
-    const selectedYear = selectedDate.getFullYear();
-
     const handleDelete = async (transactionId: string) => {
         const confirmed = window.confirm(
             "Are you sure you want to delete this transaction?"
@@ -76,7 +70,7 @@ function Transactions() {
         <div className="transactions-page">
             <section className="header-container">
                 <div className="header">
-                    <h1 id="transactions-title">{`${selectedMonth} ${selectedYear} Transactions`}</h1>
+                    <h1 id="transactions-title">Your Transactions</h1>
                 </div>
                 <div className="calendar-button-container">
                     <DatePicker

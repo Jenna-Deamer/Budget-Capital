@@ -3,9 +3,9 @@ import { useContext } from "react";
 import DatePicker from "./DatePicker";
 import TransactionContext from "../context/TransactionContext";
 import Budget from "./budget/Budget";
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { useNavigate } from 'react-router-dom';
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
     ChartJS.register(ArcElement, Tooltip, Legend);
@@ -19,12 +19,6 @@ function Dashboard() {
     } = useContext(TransactionContext)!;
 
     const navigate = useNavigate();
-
-    // Extract month and year from selected date for displaying in the header
-    const selectedMonth = selectedDate.toLocaleString("default", {
-        month: "long",
-    });
-    const selectedYear = selectedDate.getFullYear();
 
     const categoryColors: string[] = [
         "#ff6347", // Tomato
@@ -56,40 +50,46 @@ function Dashboard() {
     const options = {
         plugins: {
             legend: {
-                display: false
-            }
-        }
+                display: false,
+            },
+        },
     };
 
     const incomeDataChart = {
         labels: Object.keys(incomeCategories),
-        datasets: [{
-            data: Object.values(incomeCategories),
-             // Use the categoryColors array and map it to the categories, repeating colors if needed
-            backgroundColor: Object.keys(incomeCategories).map((_, index) => categoryColors[index % categoryColors.length]),
-            borderColor: "rgba(255, 255, 255, 0.75)",
-            borderWidth: 1,
-        }],
-    }
+        datasets: [
+            {
+                data: Object.values(incomeCategories),
+                // Use the categoryColors array and map it to the categories, repeating colors if needed
+                backgroundColor: Object.keys(incomeCategories).map(
+                    (_, index) => categoryColors[index % categoryColors.length]
+                ),
+                borderColor: "rgba(255, 255, 255, 0.75)",
+                borderWidth: 1,
+            },
+        ],
+    };
 
     const expenseDataChart = {
         labels: Object.keys(expenseCategories),
-        datasets: [{
-            data: Object.values(expenseCategories),
-              // Use the categoryColors array and map it to the categories, repeating colors if needed
-            backgroundColor: Object.keys(expenseCategories).map((_, index) => categoryColors[index % categoryColors.length]),
-            borderColor: "rgba(255, 255, 255, 0.75)",
-            borderWidth: 1,
-        }],
-    }
+        datasets: [
+            {
+                data: Object.values(expenseCategories),
+                // Use the categoryColors array and map it to the categories, repeating colors if needed
+                backgroundColor: Object.keys(expenseCategories).map(
+                    (_, index) => categoryColors[index % categoryColors.length]
+                ),
+                borderColor: "rgba(255, 255, 255, 0.75)",
+                borderWidth: 1,
+            },
+        ],
+    };
 
     return (
         <div className="dashboard-page">
             <div className="header-container mt-4">
                 <div className="header">
-                    <h1 id="dashboard-title">
-                        {selectedMonth} {selectedYear} Overview
-                    </h1>
+                    <h1 id="dashboard-title">Financial Summary</h1>
                 </div>
                 <div className="calendar-button-container">
                     <DatePicker
@@ -116,13 +116,19 @@ function Dashboard() {
                     <p>Total Expenses</p>
                     <div className="graph-container">
                         {Object.keys(expenseCategories).length > 0 ? (
-                            <Pie data={expenseDataChart} options={options} className="responsive-pie-chart" />
+                            <Pie
+                                data={expenseDataChart}
+                                options={options}
+                                className="responsive-pie-chart"
+                            />
                         ) : (
                             <div className="no-transactions-container">
                                 <p>No expense transactions found</p>
-                                <button 
+                                <button
                                     className="button secondary-button"
-                                    onClick={() => navigate('/create-transaction')}
+                                    onClick={() =>
+                                        navigate("/create-transaction")
+                                    }
                                 >
                                     Create
                                 </button>
@@ -168,13 +174,19 @@ function Dashboard() {
                     <p>Total Income</p>
                     <div className="graph-container">
                         {Object.keys(incomeCategories).length > 0 ? (
-                            <Pie data={incomeDataChart} options={options} className="responsive-pie-chart" />
+                            <Pie
+                                data={incomeDataChart}
+                                options={options}
+                                className="responsive-pie-chart"
+                            />
                         ) : (
                             <div className="no-transactions-container">
                                 <p>No income transactions found</p>
-                                <button 
+                                <button
                                     className="button secondary-button"
-                                    onClick={() => navigate('/create-transaction')}
+                                    onClick={() =>
+                                        navigate("/create-transaction")
+                                    }
                                 >
                                     Create
                                 </button>
