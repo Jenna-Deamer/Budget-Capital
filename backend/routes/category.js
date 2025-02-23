@@ -70,14 +70,14 @@ router.post("/create-default-categories", isAuthenticated, async (req, res) => {
         // Map the default categories to inlucde User ID & isDefault flag
         const incomeCategories = defaultCategories.income.map((category) => ({
             ...category,
-            type: "income",
+            type: "Income",
             user: req.user.userId,
             isDefault: true,
         }));
 
         const expenseCategories = defaultCategories.expense.map((category) => ({
             ...category,
-            type: "expense",
+            type: "Expense",
             user: req.user.userId,
             isDefault: true,
         }));
