@@ -6,7 +6,6 @@ const User = require("../models/user");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const { generateToken, verifyToken } = require("../utils/jwt");
 const bcrypt = require("bcrypt");
-const axios = require("axios");
 
 // Moved this out of app.js since it's an auth thing
 passport.use(
@@ -66,17 +65,6 @@ router.post("/signup", async (req, res) => {
 
         // Generate JWT token
         const token = generateToken(newUser);
-
-        // Create default categories for the new user
-        await axios.post(
-            `${req.protocol}://${req.get(
-                "host"
-            )}/category/create-default-categories`,
-            {},
-            {
-                headers: { Authorization: `Bearer ${token}` },
-            }
-        );
 
         // send success response
         return res.status(201).json({
