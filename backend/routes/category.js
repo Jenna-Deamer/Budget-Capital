@@ -51,9 +51,53 @@ function isAuthenticated(req, res, next) {
 // GET all categories (custom & defaults)
 router.get("/categories", isAuthenticated, async (req, res) => {
     try {
+        console.log("User ID from token:", req.user.userId); // Debug user ID
         const categories = await Category.find({ user: req.user.userId });
+        console.log("Found categories:", categories); // Debug categories
+
+        if (!categories || categories.length === 0) {
+            // If no categories found, create defaults
+            const defaultCategories = {
+                income: [
+                    { name: "Salary", type: "Income", color: "#4CAF50" },
+                    { name: "Investments", type: "Income", color: "#2196F3" },
+                    { name: "Bonus", type: "Income", color: "#9C27B0" },
+                    { name: "Other", type: "Income", color: "#607D8B" },
+                ],
+                expense: [
+                    { name: "Housing", type: "Expense", color: "#F44336" },
+                    { name: "Food", type: "Expense", color: "#E91E63" },
+                    {
+                        name: "Transportation",
+                        type: "Expense",
+                        color: "#673AB7",
+                    },
+                    { name: "Other", type: "Expense", color: "#607D8B" },
+                ],
+            };
+
+            const categoriesToCreate = [
+                ...defaultCategories.income.map((cat) => ({
+                    ...cat,
+                    user: req.user.userId,
+                    isDefault: true,
+                })),
+                ...defaultCategories.expense.map((cat) => ({
+                    ...cat,
+                    user: req.user.userId,
+                    isDefault: true,
+                })),
+            ];
+
+            const createdCategories = await Category.insertMany(
+                categoriesToCreate
+            );
+            return res.json(createdCategories);
+        }
+
         res.json(categories);
     } catch (err) {
+        console.error("Error in /categories route:", err);
         res.status(500).json({ message: err.message });
     }
 });
