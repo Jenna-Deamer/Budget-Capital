@@ -1,8 +1,9 @@
+function Footer() {
+    const CURRENTYEAR = new Date().getFullYear();
 
-function Footer (){
-    return(
+    return (
         <footer>
-             <p>&copy; 2024. All rights reserved.</p>
+            <p>&copy;{CURRENTYEAR}. All rights reserved.</p>
         </footer>
     );
 }

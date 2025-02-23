@@ -95,6 +95,7 @@ function Budget() {
                 if (response.status === 200) {
                     setBudget(null);
                 }
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 console.error("Failed to delete budget:", error);
                 alert(error.response?.data?.error || "Failed to delete budget");
