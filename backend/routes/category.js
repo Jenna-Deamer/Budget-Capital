@@ -26,7 +26,7 @@ function isAuthenticated(req, res, next) {
 }
 
 // GET all categories (custom & defaults)
-router.get("/", isAuthenticated, async (req, res) => {
+router.get("/categories", isAuthenticated, async (req, res) => {
     try {
         const categories = await Category.find({ user: req.user.userId });
         res.json(categories);
@@ -41,3 +41,5 @@ router.get("/", isAuthenticated, async (req, res) => {
 // Update custom category
 
 // Edit default category (Rename, Change color)
+
+module.exports = router;
