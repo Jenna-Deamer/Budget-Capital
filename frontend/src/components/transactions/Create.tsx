@@ -4,32 +4,17 @@ import { useNavigate } from "react-router-dom";
 import TransactionContext from "../../context/TransactionContext";
 import "../../styles/forms/TransactionCreate.css";
 
-const incomeCategories = [
-    "Salary",
-    "Investments",
-    "Bonus",
-    "Freelancing",
-    "Gifts",
-    "Other",
-];
-const expenseCategories = [
-    "Housing",
-    "Food",
-    "Healthcare",
-    "Transportation",
-    "Entertainment",
-    "Education",
-    "Debt Payments",
-    "Personal Care",
-    "Taxes",
-    "Other",
-];
-
 const CreateTransaction = () => {
     const API_URL =
         import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const navigate = useNavigate();
-    const [categories, setCategories] = useState<string[]>([]);
+    const [categories, setCategories] = useState<
+        Array<{
+            _id: string;
+            name: string;
+            type: string;
+        }>
+    >([]);
     const { setTransactions } = useContext(TransactionContext)!;
     const [formData, setFormData] = useState({
         name: "",
@@ -39,15 +24,29 @@ const CreateTransaction = () => {
         date: "",
     });
 
+    // Fetch categories when component mounts
     useEffect(() => {
-        if (formData.type === "Income") {
-            setCategories(incomeCategories);
-        } else if (formData.type === "Expense") {
-            setCategories(expenseCategories);
-        } else {
-            setCategories([]);
-        }
-    }, [formData.type]);
+        const fetchCategories = async () => {
+            try {
+                const token = localStorage.getItem("jwtToken");
+                const response = await axios.get(
+                    `${API_URL}/category/categories`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+                setCategories(response.data);
+            } catch (err) {
+                console.error("Error fetching categories:", err);
+            }
+        };
+        fetchCategories();
+    }, [API_URL]);
+
+    // Filter categories based on selected type
+    const filteredCategories = categories.filter(
+        (cat) => cat.type === formData.type
+    );
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -172,9 +171,9 @@ const CreateTransaction = () => {
                             required
                         >
                             <option value="">Select Category</option>
-                            {categories.map((category) => (
-                                <option key={category} value={category}>
-                                    {category}
+                            {filteredCategories.map((category) => (
+                                <option key={category._id} value={category._id}>
+                                    {category.name}
                                 </option>
                             ))}
                         </select>
