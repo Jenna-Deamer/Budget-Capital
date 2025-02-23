@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleButton from "react-google-button";
 import "../../styles/forms/AuthForms.css";
 import { User } from "../../types/User";
 
 function Login({ setUser }: { setUser: (user: User) => void }) {
-    const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+    const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
@@ -31,14 +31,13 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                    }
-
+                    },
                 }
             );
-    
+
             if (response.data.success) {
                 localStorage.setItem("jwtToken", response.data.token);
-                setUser(response.data.user);  // Set the user data after successful login
+                setUser(response.data.user); // Set the user data after successful login
                 navigate("/dashboard");
             }
         } catch (error) {
@@ -52,10 +51,6 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
             }
         }
     };
-    
-    // const handleGoogleLogin = () => {
-    //     window.location.href = `${API_URL}/auth/google`;
-    // };
 
     return (
         <section className="form-page">
@@ -104,13 +99,6 @@ function Login({ setUser }: { setUser: (user: User) => void }) {
                         </Link>
                     </div>
                 </form>
-                {/* <h3>- OR -</h3>
-                <div className="button-container">
-                    <GoogleButton
-                        onClick={handleGoogleLogin}
-                        label="Sign in with Google"
-                    />
-                </div> */}
             </div>
         </section>
     );
