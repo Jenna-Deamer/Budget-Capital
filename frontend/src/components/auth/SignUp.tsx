@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/forms/AuthForms.css";
-import GoogleButton from "react-google-button";
 
 function Signup() {
     const API_URL =
@@ -61,10 +60,6 @@ function Signup() {
             }
         }
     };
-
-    // const handleGoogleLogin = () => {
-    //     window.location.href = `${API_URL}/auth/google`;
-    // };
 
     return (
         <section className="form-page">
@@ -135,13 +130,6 @@ function Signup() {
                         </button>
                     </div>
                 </form>
-                {/* <h3>- OR -</h3>
-                <div className="button-container">
-                    <GoogleButton
-                        onClick={handleGoogleLogin}
-                        label="Sign in with Google"
-                    />
-                </div> */}
             </div>
         </section>
     );
