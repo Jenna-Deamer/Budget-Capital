@@ -1,15 +1,17 @@
 const mongoose = require("mongoose");
 const user = require("./user");
+const Category = require("./customCategory");
 const Schema = mongoose.Schema;
 
+// Keep default categories for reference and initial setup
 const incomeCategories = [
     "Salary",
     "Investments",
     "Bonus",
     "Freelancing",
     "Gifts",
-    "Other"
-]
+    "Other",
+];
 const expenseCategories = [
     "Housing",
     "Food",
@@ -20,41 +22,51 @@ const expenseCategories = [
     "Debt Payments",
     "Personal Care",
     "Taxes",
-    "Other"
+    "Other",
 ];
-
-// Custom validation for categories based on type
-const validateCategory = function (value, transactionType) {
-    if (transactionType === 'Income') {
-        return incomeCategories.includes(value);
-    } else if (transactionType === 'Expense') {
-        return expenseCategories.includes(value);
-    }
-    return false;
-};
 
 const transactionSchema = new Schema({
     name: { type: String, required: true, unique: false },
     type: {
         type: String,
-        enum: ['Expense', 'Income'],
+        enum: ["Expense", "Income"],
         required: true,
-        unique: false
+        unique: false,
     },
     amount: { type: Number, required: true, unique: false },
     date: { type: Date, required: true, unique: false },
-    // Category validation is based on the type of transaction
     category: {
-        type: String,
+        type: Schema.Types.Mixed, // Allows both String (for defaults) and ObjectId (for custom)
         required: true,
         validate: {
-            validator: function (value) {
-                return validateCategory(value, this.type); // `this` refers to the current document
+            validator: async function (value) {
+                if (typeof value === "string") {
+                    // Check if it's a default category
+                    if (this.type === "Income") {
+                        return incomeCategories.includes(value);
+                    } else {
+                        return expenseCategories.includes(value);
+                    }
+                } else {
+                    // Check if it's a valid custom category
+                    try {
+                        const category = await Category.findById(value);
+                        return category && category.type === this.type;
+                    } catch (err) {
+                        return false;
+                    }
+                }
             },
-            message: props => `${props.value} is not a valid category for ${props.instance.type}.`
-        }
+            message: (props) =>
+                `${props.value} is not a valid category for ${props.type}`,
+        },
     },
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true, unique: false }
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        unique: false,
+    },
 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+module.exports = mongoose.model("Transaction", transactionSchema);
