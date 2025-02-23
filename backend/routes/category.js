@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Category = require("../models/customCategory");
+const { verifyToken } = require("../utils/jwt");
 
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
