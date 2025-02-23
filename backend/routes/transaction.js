@@ -51,7 +51,7 @@ router.get("/transactions", isAuthenticated, async (req, res) => {
                 $lte: endOfMonth,
             },
         })
-            .populate("category", "name type color") // Populate category fields
+            .populate("category", "name type color") // replaces the category id with the acutal category data
             .sort({ date: -1 });
 
         // Map transactions to include category name instead of ID

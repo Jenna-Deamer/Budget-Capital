@@ -24,15 +24,11 @@ const CreateTransaction = () => {
         date: "",
     });
 
-    // Enhanced debugging for category fetching
+    // Fetch categories when component mounts
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const token = localStorage.getItem("jwtToken");
-                console.log("Attempting to fetch categories");
-                console.log("API URL:", `${API_URL}/category/categories`);
-                console.log("Token:", token);
-
                 const response = await axios.get(
                     `${API_URL}/category/categories`,
                     {
@@ -43,7 +39,6 @@ const CreateTransaction = () => {
                     }
                 );
 
-                console.log("Raw categories response:", response.data);
                 setCategories(response.data);
             } catch (err) {
                 console.error("Error fetching categories:", err);
@@ -57,17 +52,9 @@ const CreateTransaction = () => {
         fetchCategories();
     }, [API_URL]);
 
-    // Enhanced debugging for filtering
     const filteredCategories = useMemo(() => {
-        console.log("Current categories:", categories);
-        console.log("Current type:", formData.type);
         return categories.filter((cat) => cat.type === formData.type);
     }, [categories, formData.type]);
-
-    // Log whenever filtered categories change
-    useEffect(() => {
-        console.log("Updated filtered categories:", filteredCategories);
-    }, [filteredCategories]);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
