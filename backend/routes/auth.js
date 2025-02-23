@@ -6,6 +6,7 @@ const User = require("../models/user");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const { generateToken, verifyToken } = require("../utils/jwt");
 const bcrypt = require("bcrypt");
+const axios = require("axios");
 
 // Moved this out of app.js since it's an auth thing
 passport.use(
