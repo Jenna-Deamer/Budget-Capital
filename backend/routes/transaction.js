@@ -73,9 +73,21 @@ router.post("/create-transaction", isAuthenticated, async (req, res) => {
         // Create the transaction and associate it with the logged-in user
         const transaction = await Transaction.create({
             ...req.body,
-            user: req.user.userId, // Ensure the transaction is associated with the authenticated user
+            user: req.user.userId,
         });
-        return res.status(201).json(transaction); // Respond with the created transaction
+
+        // Populate the category details before sending response
+        const populatedTransaction = await Transaction.findById(
+            transaction._id
+        ).populate("category", "name type color");
+
+        // Convert category to name for frontend consistency
+        const responseTransaction = {
+            ...populatedTransaction.toObject(),
+            category: populatedTransaction.category.name,
+        };
+
+        return res.status(201).json(responseTransaction);
     } catch (err) {
         console.error("Error creating transaction:", err);
         return res.status(400).json({ error: "Error creating transaction" });
@@ -84,7 +96,6 @@ router.post("/create-transaction", isAuthenticated, async (req, res) => {
 
 /*PUT: /api/transactions/abc123 => update selected transaction */
 router.put("/edit-transaction", isAuthenticated, async (req, res, next) => {
-    console.log("Got request to edit transaction");
     const { id, ...updatedData } = req.body;
     try {
         const transaction = await Transaction.findByIdAndUpdate(
@@ -93,11 +104,18 @@ router.put("/edit-transaction", isAuthenticated, async (req, res, next) => {
             {
                 new: true,
             }
-        );
+        ).populate("category", "name type color");
+
         if (!transaction) {
             return res.status(404).json({ error: "Transaction not found" });
         }
-        return res.json(transaction).status(200);
+
+        const responseTransaction = {
+            ...transaction.toObject(),
+            category: transaction.category.name,
+        };
+
+        return res.json(responseTransaction);
     } catch (err) {
         console.error("Error updating transaction:", err);
         return res.status(500).json({ error: err.message });
