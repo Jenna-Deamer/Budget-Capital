@@ -50,7 +50,15 @@ router.get("/transactions", isAuthenticated, async (req, res) => {
                 $gte: startOfMonth,
                 $lte: endOfMonth,
             },
-        }).sort({ date: -1 });
+        })
+            .populate("category", "name type color") // Populate category fields
+            .sort({ date: -1 });
+
+        // Map transactions to include category name instead of ID
+        transactions = transactions.map((transaction) => ({
+            ...transaction.toObject(),
+            category: transaction.category.name, // Use category name instead of ID
+        }));
 
         return res.status(200).json(transactions); // Set status before sending response
     } catch (err) {
