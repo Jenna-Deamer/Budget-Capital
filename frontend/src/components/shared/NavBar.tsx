@@ -57,6 +57,15 @@ function NavBar({ user }: NavBarProps) {
                                     Dashboard
                                 </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link
+                                    to="/categories"
+                                    className="nav-link"
+                                    id="categories"
+                                >
+                                    Manage Categories
+                                </Link>
+                            </li>
                         </>
                     )}
                 </ul>

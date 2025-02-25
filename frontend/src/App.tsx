@@ -12,6 +12,7 @@ import Dashboard from "./components/Dashboard";
 import SignUp from "./components/auth/SignUp";
 import Login from "./components/auth/Login";
 import DemoLogin from "./components/auth/DemoLogin";
+import ManageCategories from "./components/transactions/categories/ManageCategories";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ErrorPage from "./components/ErrorPage";
 
@@ -157,6 +158,14 @@ function App() {
                                     element={
                                         <ProtectedRoute user={user}>
                                             <EditBudget />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                    <Route
+                                    path="/categories"
+                                    element={
+                                        <ProtectedRoute user={user}>
+                                            <ManageCategories />
                                         </ProtectedRoute>
                                     }
                                 />
