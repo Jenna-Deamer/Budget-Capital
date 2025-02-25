@@ -2,8 +2,8 @@ import "../../../styles/ManageCategories.css";
 const ManageCategories = () => {
 
     return (
-        <section className="manage-categories-section">
-            <h1>Manage Your Categories</h1>
+        <section className="manage-categories-page">
+                    <h1>Manage Categories</h1>
         </section>
     )
 };

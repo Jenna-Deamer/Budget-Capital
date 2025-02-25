@@ -1,4 +1,14 @@
-.manage-categories-section h1{
-    text-align: center;
+.manage-categories-page{
+    min-height: calc(100vh - 60px - 60px);
+    background-color: var(--background);
     color: var(--white);
+    padding-left: 70px;
+    padding-right: 70px;
+    padding-bottom: 50px;
+}
+
+.manage-categories-page h1{
+    text-align: center;
+    padding-top: 40px;
+    margin-bottom: 20px;
 }
