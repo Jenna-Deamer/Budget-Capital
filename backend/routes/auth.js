@@ -1,42 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 const User = require("../models/user");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const { generateToken, verifyToken } = require("../utils/jwt");
 const bcrypt = require("bcrypt");
-
-// Moved this out of app.js since it's an auth thing
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/google/callback",
-        },
-        async function (token, tokenSecret, profile, done) {
-            try {
-                let user = await User.findOne({
-                    username: profile.emails[0].value,
-                });
-
-                if (!user) {
-                    user = new User({
-                        firstName: profile.name.givenName || "N/A",
-                        lastName: profile.name.familyName || "N/A",
-                        username: profile.emails[0].value,
-                    });
-                    await user.save();
-                }
-
-                return done(null, user);
-            } catch (err) {
-                return done(err, null);
-            }
-        }
-    )
-);
 
 router.post("/signup", async (req, res) => {
     const { firstName, lastName, username, password } = req.body;
@@ -116,21 +83,6 @@ router.post("/logout", (req, res) => {
         message: "Logged out successfully",
     });
 });
-
-// Google Sign-in
-router.get(
-    "/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-router.get(
-    "/google/callback",
-    passport.authenticate("google", { failureRedirect: "/login" }),
-    (req, res) => {
-        const token = generateToken(req.user); // Generate JWT after successful authentication
-        res.json({ success: true, token }); // Send JWT token to client
-    }
-);
 
 // Route to check if user is authenticated
 router.get("/check-auth", (req, res) => {
