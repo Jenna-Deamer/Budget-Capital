@@ -1,20 +1,15 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
+import React, {useState, useContext, useMemo } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TransactionContext from "../../context/TransactionContext";
 import "../../styles/forms/TransactionCreate.css";
+import { useCategories } from "../../context/CategoryContext";
 
 const CreateTransaction = () => {
     const API_URL =
         import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const navigate = useNavigate();
-    const [categories, setCategories] = useState<
-        Array<{
-            _id: string;
-            name: string;
-            type: string;
-        }>
-    >([]);
+    const { categories } = useCategories();
     const { setTransactions } = useContext(TransactionContext)!;
     const [formData, setFormData] = useState({
         name: "",
@@ -24,33 +19,6 @@ const CreateTransaction = () => {
         date: "",
     });
 
-    // Fetch categories when component mounts
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const token = localStorage.getItem("jwtToken");
-                const response = await axios.get(
-                    `${API_URL}/category/categories`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-
-                setCategories(response.data);
-            } catch (err) {
-                console.error("Error fetching categories:", err);
-                if (axios.isAxiosError(err)) {
-                    console.error("Response data:", err.response?.data);
-                    console.error("Response status:", err.response?.status);
-                }
-            }
-        };
-
-        fetchCategories();
-    }, [API_URL]);
 
     const filteredCategories = useMemo(() => {
         return categories.filter((cat) => cat.type === formData.type);

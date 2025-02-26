@@ -28,7 +28,7 @@ export const CategoryProvider = ({ children }) => {
     }, [API_URL]);
 
     return (
-        <CategoryContext.Provider value={{ categories, addCategory, updateCategory, deleteCategory }}>
+        <CategoryContext.Provider value={{ categories }}>
             {children}
         </CategoryContext.Provider>
     );

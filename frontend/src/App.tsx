@@ -26,6 +26,8 @@ import CreateBudget from "./components/budget/Create";
 import EditBudget from "./components/budget/Edit";
 // Context
 import { TransactionProvider } from "./context/TransactionContext";
+import {CategoryProvider} from "./context/CategoryContext";
+// Types
 import { User } from "./types/User";
 
 function App() {
@@ -71,6 +73,7 @@ function App() {
     }
 
     return (
+        <CategoryProvider>
         <TransactionProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <BrowserRouter>
@@ -178,6 +181,7 @@ function App() {
                 </BrowserRouter>
             </LocalizationProvider>
         </TransactionProvider>
+        </CategoryProvider>
     );
 }
 

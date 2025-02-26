@@ -51,14 +51,24 @@ router.get("/transactions", isAuthenticated, async (req, res) => {
                 $lte: endOfMonth,
             },
         })
-            .populate("category", "name type color") // replaces the category id with the acutal category data
+            .populate("category", "name type color") // replaces the category id with the actual category data
             .sort({ date: -1 });
 
         // Map transactions to include category name instead of ID
-        transactions = transactions.map((transaction) => ({
-            ...transaction.toObject(),
-            category: transaction.category.name, // Use category name instead of ID
-        }));
+        transactions = transactions.map((transaction) => {
+            if (transaction.category && transaction.category.name) {
+                return {
+                    ...transaction.toObject(),
+                    category: transaction.category.name, // Use category name instead of ID
+                };
+            } else {
+                console.error("Category not found for transaction:", transaction);
+                return {
+                    ...transaction.toObject(),
+                    category: "Unknown", // Fallback category name
+                };
+            }
+        });
 
         return res.status(200).json(transactions); // Set status before sending response
     } catch (err) {
