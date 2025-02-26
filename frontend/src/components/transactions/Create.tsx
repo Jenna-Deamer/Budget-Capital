@@ -1,4 +1,4 @@
-import React, {useState, useContext, useMemo } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TransactionContext from "../../context/TransactionContext";
@@ -19,6 +19,10 @@ const CreateTransaction = () => {
         date: "",
     });
 
+    // Log to verify they are fetched correctly
+    useEffect(() => {
+        console.log("Fetched categories:", categories);
+    }, [categories]);
 
     const filteredCategories = useMemo(() => {
         return categories.filter((cat) => cat.type === formData.type);

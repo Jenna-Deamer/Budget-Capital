@@ -69,10 +69,10 @@ router.get("/categories", isAuthenticated, async (req, res) => {
                     isDefault: true,
                 })),
             ];
-
+       
             categories = await Category.insertMany(categoriesToCreate);
         }
-
+        console.log("Fetched categories from DB:", categories);
         res.json(categories);
     } catch (err) {
         console.error("Error fetching categories:", err);
